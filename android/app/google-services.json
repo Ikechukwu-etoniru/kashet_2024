@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "95990937939",
+    "project_id": "kasheto-mobile-app-df3cd",
+    "storage_bucket": "kasheto-mobile-app-df3cd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:95990937939:android:9a586ab8a1db9080c449a6",
+        "android_client_info": {
+          "package_name": "com.kasheto.kasheto_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "95990937939-5tueua74jj0rf5e8rj3gdkp8beojd6cs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kasheto.kasheto_flutter",
+            "certificate_hash": "67fe009196e2a04fa03aec3666f35906b1ff3d03"
+          }
+        },
+        {
+          "client_id": "95990937939-laojcgqj6m66t8p7721o6v3klbj93fn9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyfFDPfgy6U7olFl9TswNDW_klS1KFs5M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "95990937939-laojcgqj6m66t8p7721o6v3klbj93fn9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "95990937939-i7qa01r3rl74ma6kjsc54md3q11tfjsm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.kashetoFlutter"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
