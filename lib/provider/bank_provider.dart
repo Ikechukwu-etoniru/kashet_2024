@@ -67,9 +67,11 @@ class BankProvider with ChangeNotifier {
   }
 
   Future<void> getBankList(BuildContext context) async {
-    final userCountryInitial = Provider.of<AuthProvider>(context, listen: false)
-        .userList[0]
-        .countryInitial;
+    // final userCountryInitial = Provider.of<AuthProvider>(context, listen: false)
+    //     .userList[0]
+    //     .countryInitial;
+
+    const userCountryInitial = 'NG';
 
     try {
       final url = Uri.parse('${ApiUrl.baseURL}country/$userCountryInitial');

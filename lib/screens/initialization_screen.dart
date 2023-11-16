@@ -80,6 +80,8 @@ class _InitializationScreenState extends State<InitializationScreen> {
           .getReceivedMoneyReqestList();
       await Provider.of<PlatformChargesProvider>(context, listen: false)
           .getExchangeRate();
+      await Provider.of<AuthProvider>(context, listen: false)
+          .checkVerificationStatus();
       List<MoneyRequest> _pendingMr =
           Provider.of<MoneyRequestProvider>(context, listen: false)
               .pendingReceivedMoneyRequest;
@@ -124,7 +126,7 @@ class _InitializationScreenState extends State<InitializationScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children:  [
+                  children: [
                     LoadingSpinner(),
                   ],
                 ),

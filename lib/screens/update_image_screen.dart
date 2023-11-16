@@ -146,14 +146,12 @@ class _UpdateImageScreenState extends State<UpdateImageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user =
-        Provider.of<AuthProvider>(context).userList[0].fullName;
+    final user = Provider.of<AuthProvider>(context).userList[0].fullName;
     return widget.id == null
         ? WillPopScope(
             onWillPop: _closeApp,
             child: SafeArea(
               child: Scaffold(
-            
                 appBar: AppBar(
                   title: const Text('Add a Profile Image'),
                 ),
@@ -179,7 +177,7 @@ class _UpdateImageScreenState extends State<UpdateImageScreen> {
                                         context: context));
                                 return;
                               }
-            
+
                               final _isSavedToCloud = await _saveToCloudinary(
                                   imagePath!,
                                   "user: $user ${DateTime.now().microsecond}");
@@ -187,8 +185,8 @@ class _UpdateImageScreenState extends State<UpdateImageScreen> {
                                 final _isSavedToDatabase =
                                     await _sendImageToDatabase();
                                 if (_isSavedToDatabase) {
-                                  Navigator.of(context)
-                                      .pushNamed(InitializationScreen.routeName);
+                                  Navigator.of(context).pushNamed(
+                                      InitializationScreen.routeName);
                                 }
                               }
                             },
@@ -200,7 +198,7 @@ class _UpdateImageScreenState extends State<UpdateImageScreen> {
             ),
           )
         : SafeArea(
-          child: Scaffold(
+            child: Scaffold(
               appBar: AppBar(
                 title: const Text('Change Profile Image'),
               ),
@@ -226,7 +224,7 @@ class _UpdateImageScreenState extends State<UpdateImageScreen> {
                                       context: context));
                               return;
                             }
-        
+
                             final _isSavedToCloud = await _saveToCloudinary(
                                 imagePath!,
                                 "user: $user ${DateTime.now().microsecond}");
@@ -244,7 +242,7 @@ class _UpdateImageScreenState extends State<UpdateImageScreen> {
                 ),
               ),
             ),
-        );
+          );
   }
 }
 
@@ -304,7 +302,7 @@ class _ImagePickerBoxState extends State<ImagePickerBox> {
                         });
                       },
                       child: const Column(
-                        children:  [
+                        children: [
                           Icon(Icons.picture_in_picture),
                           SizedBox(
                             height: 5,
@@ -328,7 +326,7 @@ class _ImagePickerBoxState extends State<ImagePickerBox> {
                         }
                       },
                       child: const Column(
-                        children:  [
+                        children: [
                           Icon(Icons.camera),
                           SizedBox(
                             height: 5,

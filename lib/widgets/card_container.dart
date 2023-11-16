@@ -79,53 +79,56 @@ class WCardContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(
-        vertical: 10,
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      width: width * 0.9,
-      decoration: BoxDecoration(
-        color: Colors.grey.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        children: [
-          SizedBox(
-            width: width * 0.1,
-            child: Image.asset(
-              card.cardImageUrl,
-              fit: BoxFit.contain,
-            ),
-          ),
-          SizedBox(
-            width: width * 0.05,
-          ),
-          // Kasheto wallet show different from cards
-          if (card.id == '1' || card.id == '2')
-            Center(
-              child: Text(
-                card.bankName,
-                style: const TextStyle(color: Colors.black, fontSize: 16),
+    return GestureDetector(
+      onTap: action,
+      child: Container(
+        margin: const EdgeInsets.symmetric(
+          vertical: 10,
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        width: width * 0.9,
+        decoration: BoxDecoration(
+          color: Colors.grey.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          children: [
+            SizedBox(
+              width: width * 0.1,
+              child: Image.asset(
+                card.cardImageUrl,
+                fit: BoxFit.contain,
               ),
             ),
-          if (card.id != '1' && card.id != '2')
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  card.cardNumber.toString(),
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                  ),
-                ),
-                Text(card.bankName)
-              ],
+            SizedBox(
+              width: width * 0.05,
             ),
-          const Spacer(),
-        ],
+            // Kasheto wallet show different from cards
+            if (card.id == '1' || card.id == '2')
+              Center(
+                child: Text(
+                  card.bankName,
+                  style: const TextStyle(color: Colors.black, fontSize: 16),
+                ),
+              ),
+            if (card.id != '1' && card.id != '2')
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    card.cardNumber.toString(),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                    ),
+                  ),
+                  Text(card.bankName)
+                ],
+              ),
+            const Spacer(),
+          ],
+        ),
       ),
     );
   }

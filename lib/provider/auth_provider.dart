@@ -4,11 +4,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:kasheto_flutter/models/http_exceptions.dart';
+import 'package:kasheto_flutter/models/id_model.dart';
 import 'package:kasheto_flutter/models/user.dart';
 import 'package:kasheto_flutter/utils/alerts.dart';
 import 'package:kasheto_flutter/utils/api_url.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+
+enum IDStatus { pending, declined, approved, notSubmitted }
 
 class AuthProvider with ChangeNotifier {
   final List<User> _userList = [];
@@ -18,6 +21,9 @@ class AuthProvider with ChangeNotifier {
   List<User> get userList {
     return [..._userList];
   }
+
+  IdModel? userId;
+  IDStatus? userVerified;
 
   String get userCurrency {
     if (_userList[0].userCurrency == 'NGN') {
@@ -182,6 +188,58 @@ class AuthProvider with ChangeNotifier {
       }
     } catch (error) {
       return false;
+    }
+  }
+
+  Future checkVerificationStatus() async {
+    try {
+      final url = Uri.parse('${ApiUrl.baseURL}user/profile/verification');
+      final _header = await ApiUrl.setHeaders();
+      final response = await http.get(
+        url,
+        headers: _header,
+      );
+      final res = json.decode(response.body);
+      if (res['data'] == null) {
+        userVerified = IDStatus.notSubmitted;
+        return;
+      }
+      if (response.statusCode == 200 &&
+          res['data'] != null &&
+          (res['data']['status'] == '1' || res['data']['status'] == '0')) {
+        userId = IdModel(
+          id: res['data']['id'],
+          userId: res['data']['user_id'],
+          type: res['data']['type'],
+          frontImage: res['data']['doc_front'],
+          backImage: res['data']['doc_back'],
+          documentNumber: res['data']['doc_number'],
+          status: res['data']['status'],
+        );
+        if (res['data']['status'] == '1') {
+          userVerified = IDStatus.pending;
+        } else if (res['data']['status'] == '0') {
+          userVerified = IDStatus.approved;
+        }
+      } else if (response.statusCode == 200 &&
+          res['data'] != null &&
+          res['data']['status'] == '2') {
+        userId = IdModel(
+          id: res['data']['id'],
+          userId: res['data']['user_id'],
+          type: res['data']['type'],
+          frontImage: res['data']['doc_front'],
+          backImage: res['data']['doc_back'],
+          documentNumber: res['data']['doc_number'],
+          status: res['data']['status'],
+          remark: res['data']['remark'],
+        );
+        userVerified = IDStatus.declined;
+      }
+    } catch (error) {
+      print(error);
+    } finally {
+      notifyListeners();
     }
   }
 }

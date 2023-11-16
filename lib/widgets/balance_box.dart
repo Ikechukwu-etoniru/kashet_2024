@@ -18,8 +18,8 @@ class BalanceBox extends StatelessWidget {
   Widget build(BuildContext context) {
     final userBankStatus =
         Provider.of<BankProvider>(context, listen: false).userBankList.isEmpty;
-    final user =
-        Provider.of<AuthProvider>(context, listen: false).userList[0];
+    final user = Provider.of<AuthProvider>(context, listen: false).userList[0];
+    final userIdStatus = Provider.of<AuthProvider>(context).userVerified;
     return GestureDetector(
       onTap: () {
         if (id == 1) {
@@ -33,6 +33,8 @@ class BalanceBox extends StatelessWidget {
             Alert.cantDialog(context: context);
           } else if (userBankStatus == true) {
             Alert.mustAddBankDialog(context: context);
+          } else if (userIdStatus != IDStatus.approved) {
+            Alert.idMustBeVerifiedDialog(context: context);
           } else {
             Navigator.of(context).pushNamed(WithdrawMoneyScreen.routeName);
           }

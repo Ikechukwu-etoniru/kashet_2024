@@ -85,6 +85,7 @@ class _PersonalDetailScreenState extends State<PersonalDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final _user = Provider.of<AuthProvider>(context, listen: false).userList[0];
+    final userIdStatus = Provider.of<AuthProvider>(context).userVerified;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -106,18 +107,47 @@ class _PersonalDetailScreenState extends State<PersonalDetailScreen> {
                               fontWeight: FontWeight.bold, fontSize: 18),
                         ),
                         const Spacer(),
-                        IconButton(
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pushNamed(EditPersonalDetailsScreen.routeName);
-                          },
-                          icon: const Icon(
-                            Icons.mode_edit,
-                            size: 18,
-                            color: MyColors.primaryColor,
-                          ),
-                        )
+                        if (userIdStatus != IDStatus.approved)
+                          IconButton(
+                            onPressed: () {
+                              Navigator.of(context).pushNamed(
+                                  EditPersonalDetailsScreen.routeName);
+                            },
+                            icon: const Icon(
+                              Icons.mode_edit,
+                              size: 18,
+                              color: MyColors.primaryColor,
+                            ),
+                          )
                       ],
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    if (userIdStatus != IDStatus.approved)
+                      const Text(
+                          'Note - When your identity card is verified, you would not be able to change these details'),
+                    if (userIdStatus == IDStatus.approved)
+                      const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Identity Verified',
+                            style: TextStyle(
+                              color: Colors.green,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Icon(
+                            Icons.check,
+                            color: Colors.green,
+                          )
+                        ],
+                      ),
+                    const SizedBox(
+                      height: 5,
                     ),
                     ProfileRow(title: 'Name', content: _user.fullName),
                     ProfileRow(
@@ -154,7 +184,10 @@ class _PersonalDetailScreenState extends State<PersonalDetailScreen> {
                 GestureDetector(
                   onTap: () {
                     if (Provider.of<AuthProvider>(context, listen: false)
-                        .userList.first.country == null) {
+                            .userList
+                            .first
+                            .country ==
+                        null) {
                       _errorDialog();
                     } else {
                       Navigator.of(context).pushNamed(UserBankList.routeName);

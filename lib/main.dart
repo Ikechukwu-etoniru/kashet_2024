@@ -18,6 +18,7 @@ import 'package:kasheto_flutter/screens/edit_personal_details_screen.dart';
 import 'package:kasheto_flutter/screens/forgot_password_screen.dart';
 import 'package:kasheto_flutter/screens/future_update_screen.dart';
 import 'package:kasheto_flutter/screens/generate_statement_screen.dart';
+import 'package:kasheto_flutter/screens/id_declined_screen.dart';
 import 'package:kasheto_flutter/screens/initialization_screen.dart';
 import 'package:kasheto_flutter/screens/paypal_tx_screen.dart';
 import 'package:kasheto_flutter/screens/support_screen.dart';
@@ -25,6 +26,7 @@ import 'package:kasheto_flutter/screens/update_image_screen.dart';
 import 'package:kasheto_flutter/screens/user_bank_list.dart';
 import 'package:kasheto_flutter/screens/verify_bvn_screen.dart';
 import 'package:kasheto_flutter/screens/verify_email_screen.dart';
+import 'package:kasheto_flutter/screens/verify_id_card_screen.dart';
 import 'package:kasheto_flutter/screens/verify_number_screen.dart';
 import 'package:kasheto_flutter/utils/my_colors.dart';
 import 'package:kasheto_flutter/utils/notifications.dart';
@@ -179,8 +181,7 @@ class _MyAppState extends State<MyApp> {
             appBarTheme: const AppBarTheme(
               centerTitle: true,
               titleTextStyle: TextStyle(
-                  fontFamily: 'Raleway',
-                  fontSize: 18,
+                  fontSize: 17,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                   letterSpacing: 1),
@@ -189,6 +190,35 @@ class _MyAppState extends State<MyApp> {
               ),
               color: Colors.transparent,
               elevation: 0,
+            ),
+            inputDecorationTheme: InputDecorationTheme(
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 20,
+              ),
+              isDense: true,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(7),
+                borderSide: const BorderSide(
+                  width: 1,
+                  color: Colors.white,
+                ),
+              ),
+              fillColor: MyColors.textFieldColor,
+              filled: true,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(7),
+                borderSide: const BorderSide(
+                  width: 1,
+                  color: Colors.white,
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(7),
+                borderSide: const BorderSide(
+                  width: 1,
+                  color: MyColors.primaryColor,
+                ),
+              ),
             ),
           ),
           home: UpgradeAlert(
@@ -255,7 +285,9 @@ class _MyAppState extends State<MyApp> {
             EditEmailScreen.routeName: (ctx) => const EditEmailScreen(),
             UserBankList.routeName: (ctx) => const UserBankList(),
             SupportScreen.routeName: (ctx) => const SupportScreen(),
-            PaypalTxScreen.routeName: (ctx) => const PaypalTxScreen()
+            PaypalTxScreen.routeName: (ctx) => const PaypalTxScreen(),
+            VerifyIdCardScreen.routeName: (ctx) => const VerifyIdCardScreen(),
+            IdDeclinedScreen.routeName: (ctx) => const IdDeclinedScreen(),
           },
         ),
       ),

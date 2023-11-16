@@ -6,8 +6,6 @@ import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:kasheto_flutter/widgets/home_widgets/black_box.dart';
 import 'package:provider/provider.dart';
 
-
-
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -28,18 +26,12 @@ class _HomePageState extends State<HomePage> {
       child: ListView(
         children: [
           const HomeTopWidget(),
-          BlackBox(height: _deviceHeight * 0.23),
+          BlackBox(height: _deviceHeight * 0.2),
           HomeServiceMenu(height: _deviceHeight * 0.14),
+          const VerifyIdWidget(),
           const HomeMiddleWidget(),
           const HomeFundRequestContainer(),
           const HomePageBottomBar(),
-          TextButton(
-            onPressed: () {
-              
-
-            },
-            child: Text('jghfhfhfhjfjfjfjf'),
-          )
         ],
       ),
     );

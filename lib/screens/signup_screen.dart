@@ -91,7 +91,9 @@ class _SignupScreenState extends State<SignupScreen> {
                       const Text(
                         'Full Name',
                         style: TextStyle(
-                            fontWeight: FontWeight.w600, letterSpacing: 1.5),
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 1.5,
+                        ),
                       ),
                       const SizedBox(
                         height: 5,
@@ -120,7 +122,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         decoration: InputDecoration(
                           contentPadding: _textFieldContentPadding,
                           isDense: true,
-                          hintText: 'Start with first name',
+                          hintText: 'First name',
                           hintStyle: const TextStyle(
                             color: Colors.grey,
                           ),

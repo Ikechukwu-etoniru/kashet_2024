@@ -12,10 +12,7 @@ class CloudinaryHelper {
       resourceType: CloudinaryResourceType.image,
       folder: _folder,
       fileName: fileName,
-    );    
-
+    );
     return response;
   }
 }
-
-

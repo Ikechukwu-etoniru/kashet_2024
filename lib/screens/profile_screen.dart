@@ -93,53 +93,100 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<AuthProvider>(context).userList[0];
+    final userIdStatus = Provider.of<AuthProvider>(context).userVerified;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(),
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Column(
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                width: double.infinity,
-                child: Column(
+                height: 120,
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 10,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.white,
+                ),
+                child: Row(
                   children: [
-                    CircleAvatar(
-                      radius: 40,
-                      backgroundImage: NetworkImage(userData.imageUrl!),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CircleAvatar(
+                          radius: 35,
+                          backgroundImage: NetworkImage(userData.imageUrl!),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context)
+                                .push(MaterialPageRoute(builder: (_) {
+                              return const UpdateImageScreen(
+                                id: 1,
+                              );
+                            }));
+                          },
+                          child: const Text(
+                            'Change Image',
+                            style: TextStyle(
+                              color: Colors.green,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-                          return const  UpdateImageScreen(id: 1,);
-                        }));
-                      },
-                      child: const Text('Change Image'),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      userData.fullName,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(userData.emailAddress),
+                    const Spacer(),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          userData.fullName,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Text(userData.emailAddress),
+                        Text(
+                          userIdStatus == IDStatus.notSubmitted ||
+                                  userIdStatus == IDStatus.declined
+                              ? 'Unverified'
+                              : userIdStatus == IDStatus.pending
+                                  ? 'Verification Pending'
+                                  : 'Verified',
+                          style: TextStyle(
+                            color: userIdStatus == IDStatus.notSubmitted ||
+                                    userIdStatus == IDStatus.declined
+                                ? Colors.red
+                                : userIdStatus == IDStatus.pending
+                                    ? Colors.blue
+                                    : Colors.green,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      ],
+                    )
                   ],
                 ),
+              ),
+              const SizedBox(
+                height: 30,
               ),
               ProfileContainer(
                 title: 'User Settings',
                 option1: 'Personal Details',
                 option2: 'Security Settings',
                 option1F: () {
-                  Navigator.of(context).pushNamed(PersonalDetailScreen.routeName);
+                  Navigator.of(context)
+                      .pushNamed(PersonalDetailScreen.routeName);
                 },
                 option2F: () {
                   Navigator.of(context)
@@ -148,7 +195,8 @@ class ProfileScreen extends StatelessWidget {
               ),
               const Spacer(),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 child: TextButton(
                   onPressed: () async {
                     await _logout(context);

@@ -61,11 +61,11 @@ class _MyCardPageState extends State<MyCardPage> {
             child: Column(
               children: [
                 if (_usercardList.isEmpty)
-                 const Expanded(
+                  const Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children:  [
+                      children: [
                         FaIcon(
                           FontAwesomeIcons.faceMeh,
                           color: Colors.grey,

@@ -261,6 +261,54 @@ class Alert {
         });
   }
 
+  static Future idMustBeVerifiedDialog({required BuildContext context}) {
+    return showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) {
+          return Dialog(
+            elevation: 30,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    height: 100,
+                    width: 100,
+                    child: Image.asset(
+                      'images/unavailable_icon.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  const Text(
+                    'Your Identity Card must be verified before you can withdraw',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  DialogChip(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    text: 'Close',
+                    color: Colors.green,
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
   static Future<bool?> showExchangeUsdtoNairaDialog({
     required BuildContext context,
     required String totalAmount,
@@ -794,6 +842,62 @@ class Alert {
                           color: Colors.green)
                     ],
                   )
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  static Future showerrorDialog({
+    required BuildContext context,
+    required String text,
+    required VoidCallback onPressed,
+  }) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            elevation: 30,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                top: 20,
+                bottom: 10,
+                left: 20,
+                right: 20,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.error,
+                    color: Colors.red,
+                    size: 60,
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    text,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        fontSize: 15, fontWeight: FontWeight.w800),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  DialogChip(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      text: 'Close',
+                      color: Colors.red),
+                  const SizedBox(
+                    height: 5,
+                  ),
                 ],
               ),
             ),

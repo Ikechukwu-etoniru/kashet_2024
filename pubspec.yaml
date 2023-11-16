@@ -55,6 +55,7 @@ dependencies:
   liquid_pull_to_refresh: ^3.0.1
   dropdown_search: ^5.0.6
   printing: ^5.11.0
+  flutter_svg: ^2.0.7
 
   
 dependency_overrides:  
@@ -97,42 +98,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - images/onboarding_pic_1.png
-    - images/onboarding_pic_2.png
-    - images/onboarding_pic_3.png
-    - images/splash_screen_3.png
-    - images/splash_screen_2.png
-    - images/splash_screen_1.png
-    - images/wave.png
-    - images/airtime.png
-    - images/bell.png
-    - images/bill_payment.png
-    - images/book_flight.png
-    - images/crypto.png
-    - images/paypal.png
-    - images/send_money.png
-    - images/sport_betting.png
-    - images/visa_logo.png
-    - images/mastercard_logo.png
-    - images/dstv_logo.png
-    - images/electricity_logo.png
-    - images/gotv_logo.png
-    - images/startime_logo.png
-    - images/kasheto_icon.png
-    - images/call_pic.png
-    - images/email_pic.png
-    - images/user.png
-    - images/bank.png
-    - images/bvn_icon.png
-    - images/unavailable_icon.png
-    - images/done_icon.png
-    - images/confirmed_icon.png
-    - images/happy_icon.png
-    - images/auth_pic.png
-    - images/enable_2fa.png
-    - images/money_request.png
-    - images/support_icon.png
-      #   - images/a_dot_ham.jpegg
+    - images/
  
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

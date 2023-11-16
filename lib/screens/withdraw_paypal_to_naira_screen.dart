@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:kasheto_flutter/provider/auth_provider.dart';
 import 'package:kasheto_flutter/screens/bank_transfer_screen.dart';
 import 'package:kasheto_flutter/screens/bill_payment_scren.dart';
 import 'package:kasheto_flutter/screens/initialization_screen.dart';
 import 'package:kasheto_flutter/screens/withdraw_money_screen.dart';
+import 'package:kasheto_flutter/utils/alerts.dart';
+import 'package:provider/provider.dart';
 
 class WithdrawPaypalToNaira extends StatefulWidget {
   final String ktcValue;
@@ -73,7 +76,13 @@ class _WithdrawPaypalToNairaState extends State<WithdrawPaypalToNaira> {
               ),
               WhatNextContainer(
                 onpressed: () {
-                  Navigator.of(context).pushNamed(WithdrawMoneyScreen.routeName);
+                  if (Provider.of<AuthProvider>(context).userVerified ==
+                      IDStatus.approved) {
+                    Navigator.of(context)
+                        .pushNamed(WithdrawMoneyScreen.routeName);
+                  } else {
+                    Alert.idMustBeVerifiedDialog(context: context);
+                  }
                 },
                 title: 'Withdraw to your bank account',
               ),

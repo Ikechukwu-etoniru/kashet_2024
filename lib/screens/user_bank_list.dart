@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:kasheto_flutter/models/bank.dart';
+import 'package:kasheto_flutter/provider/auth_provider.dart';
 import 'package:kasheto_flutter/provider/bank_provider.dart';
 import 'package:kasheto_flutter/screens/add_bank_screen.dart';
 import 'package:kasheto_flutter/screens/edit_bank_screen.dart';
 import 'package:kasheto_flutter/screens/personal_details_screen.dart';
 import 'package:kasheto_flutter/utils/my_colors.dart';
 import 'package:provider/provider.dart';
+
+import '../utils/alerts.dart';
 
 class UserBankList extends StatefulWidget {
   static const routeName = '_user_bank_list.dart';
@@ -47,12 +50,26 @@ class _UserBankListState extends State<UserBankList> {
                         'You have not added any bank yet',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.of(context)
-                              .pushNamed(AddBankScreen.routeName);
+                          if (Provider.of<AuthProvider>(context, listen: false)
+                                  .userVerified !=
+                              IDStatus.approved) {
+                            Alert.showerrorDialog(
+                                context: context,
+                                text:
+                                    'Your account is under review or has not yet been verified. You can only carry out this action after your account has been verified. Please excercise patience and try again later',
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                });
+                          } else {
+                            Navigator.of(context)
+                                .pushNamed(AddBankScreen.routeName);
+                          }
                         },
                         child: const Text(
                           'Click here to add bank',
@@ -75,7 +92,19 @@ class _UserBankListState extends State<UserBankList> {
               ),
               child: IconButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed(AddBankScreen.routeName);
+                  if (Provider.of<AuthProvider>(context, listen: false)
+                          .userVerified !=
+                      IDStatus.approved) {
+                    Alert.showerrorDialog(
+                        context: context,
+                        text:
+                            'Your account is under review or has not yet been verified. You can only carry out this action after your account has been verified. Please excercise patience and try again later',
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        });
+                  } else {
+                    Navigator.of(context).pushNamed(AddBankScreen.routeName);
+                  }
                 },
                 icon: const Icon(
                   Icons.add,

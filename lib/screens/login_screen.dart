@@ -26,7 +26,10 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _textFieldContentPadding = const EdgeInsets.all(10);
+  final _textFieldContentPadding = const EdgeInsets.symmetric(
+    vertical: 13,
+    horizontal: 15,
+  );
   final _textFieldColor = Colors.grey[200];
   var _hidePassword = true;
   var _isLoading = false;
@@ -74,12 +77,10 @@ class _LoginScreenState extends State<LoginScreen> {
         }),
         headers: header,
       );
-
       final res = json.decode(response.body);
       //  Sign in was successful and Auth device was used
       if ((response.statusCode == 200 || response.statusCode == 201) &&
-          res["success"] == true &&
-          res["user"]["two_fa_status"].toString() == '0') {
+          (res["success"] == true || res["success"] == false)) {
         SharedPreferences localStorage = await SharedPreferences.getInstance();
         localStorage.remove('token');
         localStorage.setString('token', res['token']['token']);
@@ -87,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
             .pushReplacementNamed(InitializationScreen.routeName);
       } else if ((response.statusCode == 200 || response.statusCode == 201) &&
           res["success"] == false &&
-          res["user"]["two_fa_status"].toString() == '0') {
+          res["user"]["two_fa_status"].toString() == '1') {
         SharedPreferences localStorage = await SharedPreferences.getInstance();
         localStorage.remove('token');
         localStorage.setString('token', res['token']['token']);
@@ -95,10 +96,23 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.of(context).pushReplacementNamed(Auth2FaScreen.routeName);
         // Navigator.of(context)
         //     .pushReplacementNamed(InitializationScreen.routeName);
-        
       } else if (response.statusCode == 401) {
         ScaffoldMessenger.of(context).showSnackBar(
           Alert.snackBar(message: res['message'], context: context),
+        );
+      } else if (response.statusCode == 422) {
+        Alert.showerrorDialog(
+            context: context,
+            text: res['message'] ?? 'An error occured',
+            onPressed: (() {
+              Navigator.of(context).pop();
+            }));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          errorSnackBar(
+            errorMessage: 'Login unsuccessful, An error occured',
+            context: context,
+          ),
         );
       }
     } catch (error) {
@@ -183,13 +197,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     contentPadding: _textFieldContentPadding,
                     filled: true,
                     fillColor: _textFieldColor,
-                    hintText: 'sample@mail.com',
+                    hintText: 'Sample@mail.com',
                     hintStyle: const TextStyle(
                       color: Colors.grey,
                     ),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide.none),
                   ),
                 ),
                 const SizedBox(
@@ -242,9 +253,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     fillColor: _textFieldColor,
                     isDense: true,
                     contentPadding: _textFieldContentPadding,
-                    hintText: '........',
-                    hintStyle:
-                        const TextStyle(color: Colors.grey, letterSpacing: 5),
+                    hintText: 'Password',
+                    hintStyle: const TextStyle(
+                      color: Colors.grey,
+                    ),
                     border: const OutlineInputBorder(
                       borderSide: BorderSide.none,
                     ),

@@ -463,6 +463,19 @@ class _EditPersonalDetailsScreenState extends State<EditPersonalDetailsScreen> {
                           if (!_isButtonLoading)
                             SubmitButton(
                               action: () {
+                                if (Provider.of<AuthProvider>(context)
+                                        .userVerified ==
+                                    IDStatus.approved) {
+                                  Alert.showerrorDialog(
+                                      context: context,
+                                      text:
+                                          'You cant change your personal details after your identity has been verified',
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      });
+                                  return;
+                                }
+
                                 _updateProfile();
                               },
                               title: 'Update Profile',

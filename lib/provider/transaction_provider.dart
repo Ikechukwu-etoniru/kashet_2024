@@ -146,7 +146,6 @@ class TransactionProvider extends ChangeNotifier {
       var _httpResponse = await http.post(Uri.parse(url),
           body: json.encode(_body), headers: _header);
       final _response = json.decode(_httpResponse.body);
-     print(_response);
       if (_httpResponse.statusCode == 200) {
         return _response;
       } else {
