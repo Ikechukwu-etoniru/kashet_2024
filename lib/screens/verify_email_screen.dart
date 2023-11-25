@@ -76,6 +76,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
       final body = json.encode({"email": _email});
       final response = await http.post(url, body: body, headers: header);
       final res = json.decode(response.body);
+      print(res);
       if (response.statusCode == 200 && res['success'] == true) {
         ScaffoldMessenger.of(context).showSnackBar(
           Alert.snackBar(message: res["message"], context: context),
