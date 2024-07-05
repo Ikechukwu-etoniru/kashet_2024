@@ -10,7 +10,7 @@ import 'package:kasheto_flutter/utils/alerts.dart';
 import 'package:kasheto_flutter/utils/api_url.dart';
 import 'package:kasheto_flutter/widgets/loading_spinner.dart';
 import 'package:kasheto_flutter/widgets/submit_button.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
+// import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -68,7 +68,9 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
   }
 
   String _phoneNumber() {
-    return Provider.of<AuthProvider>(context, listen: false).userList[0].phoneNumber;
+    return Provider.of<AuthProvider>(context, listen: false)
+        .userList[0]
+        .phoneNumber;
   }
 
   SnackBar _snackBar({required String message}) {
@@ -92,14 +94,18 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
       return;
     }
 
-    final _userNumber = Provider.of<AuthProvider>(context, listen: false).userList[0].phoneNumber;
+    final _userNumber = Provider.of<AuthProvider>(context, listen: false)
+        .userList[0]
+        .phoneNumber;
     setState(() {
       _isLoading = true;
     });
     try {
       final _url = Uri.parse('${ApiUrl.baseURL}v1/enter-phone-code');
       final _header = await ApiUrl.setHeaders();
-      final _body = _isResend ? json.encode({'phone': _userNumber, 'resend': true}) : json.encode({'phone': _userNumber, 'resend': false});
+      final _body = _isResend
+          ? json.encode({'phone': _userNumber, 'resend': true})
+          : json.encode({'phone': _userNumber, 'resend': false});
       final httpResponse = await http.post(_url, body: _body, headers: _header);
 
       final response = json.decode(httpResponse.body);
@@ -133,35 +139,43 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
 
   Future<bool> _verifyNumber() async {
     if (_otp == null) {
-      ScaffoldMessenger.of(context).showSnackBar(Alert.snackBar(message: 'You have not received an OTP, Click send OTP', context: context));
+      ScaffoldMessenger.of(context).showSnackBar(Alert.snackBar(
+          message: 'You have not received an OTP, Click send OTP',
+          context: context));
       return false;
     } else {
       final _isValid = _formKey.currentState!.validate();
       if (_isValid == false) {
         return false;
       }
-      final _userNumber = Provider.of<AuthProvider>(context, listen: false).userList[0].phoneNumber;
+      final _userNumber = Provider.of<AuthProvider>(context, listen: false)
+          .userList[0]
+          .phoneNumber;
       setState(() {
         _isLoading1 = true;
       });
       try {
         const url = '${ApiUrl.baseURL}v1/verify-phone-code';
         final _header = await ApiUrl.setHeaders();
-        final httpResponse =
-            await http.post(Uri.parse(url), body: json.encode({"phone": _userNumber, "code": _textController.text}), headers: _header);
+        final httpResponse = await http.post(Uri.parse(url),
+            body: json
+                .encode({"phone": _userNumber, "code": _textController.text}),
+            headers: _header);
         final response = json.decode(httpResponse.body);
         if (httpResponse.statusCode == 200 && response["success"] == true) {
           ScaffoldMessenger.of(context).showSnackBar(
             _snackBar(message: response['message']),
           );
           return true;
-        } else if (httpResponse.statusCode == 200 && response["success"] == false) {
+        } else if (httpResponse.statusCode == 200 &&
+            response["success"] == false) {
           ScaffoldMessenger.of(context).showSnackBar(
             _snackBar(message: response['message']),
           );
           return false;
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(Alert.snackBar(message: ApiUrl.errorString, context: context));
+          ScaffoldMessenger.of(context).showSnackBar(
+              Alert.snackBar(message: ApiUrl.errorString, context: context));
           return false;
         }
       } catch (error) {
@@ -208,13 +222,15 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
                   ),
                   TextButton(
                     onPressed: () async {
-                      SharedPreferences localStorage = await SharedPreferences.getInstance();
+                      SharedPreferences localStorage =
+                          await SharedPreferences.getInstance();
                       if (localStorage.containsKey('token')) {
                         localStorage.remove('token');
                       }
                       Navigator.of(context).pop(true);
 
-                      Navigator.of(context).pushReplacementNamed(LoginScreen.routeName);
+                      Navigator.of(context)
+                          .pushReplacementNamed(LoginScreen.routeName);
                     },
                     child: const Text('Yes'),
                   )
@@ -261,7 +277,8 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
                   ),
                   Text(
                     _phoneNumber(),
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 20),
                   ),
                   TextButton(
                     onPressed: _sendOtp,
@@ -276,37 +293,37 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    child: PinCodeTextField(
-                      validator: (value) {
-                        if (value == null) {
-                          return 'Enter OTP sent to your email';
-                        } else if (value.length != 4) {
-                          return 'Enter complete OTP';
-                        } else if (value != _otp) {
-                          return 'Enter correct OTP sent to your email';
-                        } else {
-                          return null;
-                        }
-                      },
-                      appContext: context,
-                      length: 4,
-                      onChanged: (value) {},
-                      pinTheme: PinTheme(
-                        shape: PinCodeFieldShape.box,
-                        borderRadius: BorderRadius.circular(10),
-                        selectedColor: Colors.green[300],
-                        activeColor: Colors.green[700],
-                        inactiveColor: Colors.grey[200],
-                      ),
-                      animationDuration: const Duration(milliseconds: 200),
-                      animationType: AnimationType.fade,
-                      keyboardType: TextInputType.number,
-                      hapticFeedbackTypes: HapticFeedbackTypes.medium,
-                      controller: _textController,
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 40),
+                  //   child: PinCodeTextField(
+                  //     validator: (value) {
+                  //       if (value == null) {
+                  //         return 'Enter OTP sent to your email';
+                  //       } else if (value.length != 4) {
+                  //         return 'Enter complete OTP';
+                  //       } else if (value != _otp) {
+                  //         return 'Enter correct OTP sent to your email';
+                  //       } else {
+                  //         return null;
+                  //       }
+                  //     },
+                  //     appContext: context,
+                  //     length: 4,
+                  //     onChanged: (value) {},
+                  //     pinTheme: PinTheme(
+                  //       shape: PinCodeFieldShape.box,
+                  //       borderRadius: BorderRadius.circular(10),
+                  //       selectedColor: Colors.green[300],
+                  //       activeColor: Colors.green[700],
+                  //       inactiveColor: Colors.grey[200],
+                  //     ),
+                  //     animationDuration: const Duration(milliseconds: 200),
+                  //     animationType: AnimationType.fade,
+                  //     keyboardType: TextInputType.number,
+                  //     hapticFeedbackTypes: HapticFeedbackTypes.medium,
+                  //     controller: _textController,
+                  //   ),
+                  // ),
                   const Spacer(),
                   if (_isLoading1) const LoadingSpinnerWithMargin(),
                   if (!_isLoading1)
@@ -314,7 +331,8 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
                       action: () async {
                         final _isVerified = await _verifyNumber();
                         if (_isVerified) {
-                          Navigator.of(context).pushReplacementNamed(InitializationScreen.routeName);
+                          Navigator.of(context).pushReplacementNamed(
+                              InitializationScreen.routeName);
                         }
                       },
                       title: 'Verify',

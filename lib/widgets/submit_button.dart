@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:kasheto_flutter/utils/my_colors.dart';
 
 class SubmitButton extends StatelessWidget {
   final void Function()? action;
@@ -19,7 +19,7 @@ class SubmitButton extends StatelessWidget {
             ? const EdgeInsets.symmetric(vertical: 20)
             : const EdgeInsets.only(bottom: 5),
         decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor,
+          color: MyColors.primaryColor,
           borderRadius: BorderRadius.circular(5),
         ),
         child: Center(

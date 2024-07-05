@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
+// import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kasheto_flutter/provider/bank_provider.dart';
@@ -31,7 +31,7 @@ import 'package:kasheto_flutter/screens/verify_number_screen.dart';
 import 'package:kasheto_flutter/utils/my_colors.dart';
 import 'package:kasheto_flutter/utils/notifications.dart';
 import 'package:provider/provider.dart';
-import 'package:upgrader/upgrader.dart';
+// import 'package:upgrader/upgrader.dart';
 import '/screens/betting_screen.dart';
 import '/screens/book_flight_screen.dart';
 import '/screens/buy_sell_crypto_screen.dart';
@@ -70,17 +70,17 @@ void main() {
       statusBarIconBrightness: Brightness.light,
     ),
   );
-  AwesomeNotifications().initialize('resource://drawable/res_kasheto_icon', [
-    NotificationChannel(
-        channelKey: Notifications.basicChannelKey,
-        channelName: Notifications.basicChannelName,
-        channelDescription: Notifications.basicChannelDescription,
-        defaultColor: MyColors.primaryColor,
-        importance: NotificationImportance.Low,
-        channelShowBadge: true,
-        playSound: true,
-        enableVibration: true)
-  ]);
+  // AwesomeNotifications().initialize('resource://drawable/res_kasheto_icon', [
+  //   NotificationChannel(
+  //       channelKey: Notifications.basicChannelKey,
+  //       channelName: Notifications.basicChannelName,
+  //       channelDescription: Notifications.basicChannelDescription,
+  //       defaultColor: MyColors.primaryColor,
+  //       importance: NotificationImportance.Low,
+  //       channelShowBadge: true,
+  //       playSound: true,
+  //       enableVibration: true)
+  // ]);
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(const MyApp());
 }
@@ -123,9 +123,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   void navToHomePage(BuildContext context) {
-    navigatorKey.currentState!.pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
-        (Route<dynamic> route) => false);
+    // navigatorKey.currentState!.pushAndRemoveUntil(
+    //     MaterialPageRoute(builder: (context) => const LoginScreen()),
+    //     (Route<dynamic> route) => false);
   }
 
   @override
@@ -221,14 +221,16 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
           ),
-          home: UpgradeAlert(
-            child: const CheckAuthScreen(),
-            upgrader: Upgrader(
-              dialogStyle: Platform.isIOS
-                  ? UpgradeDialogStyle.cupertino
-                  : UpgradeDialogStyle.material,
-            ),
-          ),
+          home: const CheckAuthScreen(),
+
+          // UpgradeAlert(
+          //   child: const CheckAuthScreen(),
+          //   upgrader: Upgrader(
+          //     dialogStyle: Platform.isIOS
+          //         ? UpgradeDialogStyle.cupertino
+          //         : UpgradeDialogStyle.material,
+          //   ),
+          // ),
           routes: {
             SignupScreen.routeName: (ctx) => const SignupScreen(),
             LoginScreen.routeName: (ctx) => const LoginScreen(),

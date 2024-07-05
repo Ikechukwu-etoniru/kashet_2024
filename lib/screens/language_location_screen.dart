@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kasheto_flutter/utils/my_colors.dart';
 
 class LanguageLocationScreen extends StatefulWidget {
   static const routeName = '/language_location_screen.dart';
@@ -98,7 +99,7 @@ class _LanguageLocationScreenState extends State<LanguageLocationScreen> {
                   margin:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
+                    color: MyColors.primaryColor,
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: const Center(

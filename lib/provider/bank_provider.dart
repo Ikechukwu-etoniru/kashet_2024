@@ -5,10 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:kasheto_flutter/models/bank.dart';
 import 'package:kasheto_flutter/models/http_exceptions.dart';
-import 'package:kasheto_flutter/provider/auth_provider.dart';
 import 'package:kasheto_flutter/utils/alerts.dart';
 import 'package:kasheto_flutter/utils/api_url.dart';
-import 'package:provider/provider.dart';
 
 class BankProvider with ChangeNotifier {
   final List<Bank> _bankList = [];

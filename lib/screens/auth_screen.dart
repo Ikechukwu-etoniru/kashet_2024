@@ -15,7 +15,7 @@ import 'package:kasheto_flutter/utils/my_colors.dart';
 import 'package:kasheto_flutter/widgets/error_widget.dart';
 import 'package:kasheto_flutter/widgets/loading_spinner.dart';
 import 'package:kasheto_flutter/widgets/submit_button.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
+// import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -166,7 +166,8 @@ class _Auth2FaScreenState extends State<Auth2FaScreen> {
                   'Confirm Exit...!!!',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
-                content: const Text('Are you sure you want to go back to login'),
+                content:
+                    const Text('Are you sure you want to go back to login'),
                 actions: [
                   TextButton(
                     onPressed: () {
@@ -202,14 +203,14 @@ class _Auth2FaScreenState extends State<Auth2FaScreen> {
         : _isError
             ? const IsErrorScreen()
             : WillPopScope(
-              onWillPop: _goBackToLogin,
-              child: SafeArea(
+                onWillPop: _goBackToLogin,
+                child: SafeArea(
                   child: Scaffold(
                     resizeToAvoidBottomInset: false,
                     appBar: AppBar(),
                     body: Padding(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
                       child: Form(
                         key: _formKey,
                         child: Column(
@@ -243,7 +244,8 @@ class _Auth2FaScreenState extends State<Auth2FaScreen> {
                               height: 10,
                             ),
                             Text(
-                              getUser.phoneNumber.replaceRange(4, 10, '*******'),
+                              getUser.phoneNumber
+                                  .replaceRange(4, 10, '*******'),
                               style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -275,7 +277,7 @@ class _Auth2FaScreenState extends State<Auth2FaScreen> {
                                       : _delayResendCode
                                           ? 'Code sent'
                                           : 'Send Code',
-                                  style: const  TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                     letterSpacing: 3,
@@ -286,37 +288,38 @@ class _Auth2FaScreenState extends State<Auth2FaScreen> {
                             const SizedBox(
                               height: 20,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 40),
-                              child: PinCodeTextField(
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Enter the code sent to you';
-                                  } else if (value.length != 4) {
-                                    return 'Enter the four pin ode sent to you';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                errorTextSpace: 25,
-                                appContext: context,
-                                length: 4,
-                                onChanged: (value) {},
-                                pinTheme: PinTheme(
-                                  shape: PinCodeFieldShape.box,
-                                  borderRadius: BorderRadius.circular(10),
-                                  selectedColor: Colors.green[300],
-                                  activeColor: Colors.green[700],
-                                  inactiveColor: Colors.grey[200],
-                                ),
-                                animationDuration:
-                                    const Duration(milliseconds: 200),
-                                animationType: AnimationType.fade,
-                                keyboardType: TextInputType.number,
-                                hapticFeedbackTypes: HapticFeedbackTypes.medium,
-                                controller: _textController,
-                              ),
-                            ),
+                            // Note
+                            // Padding(
+                            //   padding: const EdgeInsets.symmetric(horizontal: 40),
+                            //   child: PinCodeTextField(
+                            //     validator: (value) {
+                            //       if (value == null || value.isEmpty) {
+                            //         return 'Enter the code sent to you';
+                            //       } else if (value.length != 4) {
+                            //         return 'Enter the four pin ode sent to you';
+                            //       } else {
+                            //         return null;
+                            //       }
+                            //     },
+                            //     errorTextSpace: 25,
+                            //     appContext: context,
+                            //     length: 4,
+                            //     onChanged: (value) {},
+                            //     pinTheme: PinTheme(
+                            //       shape: PinCodeFieldShape.box,
+                            //       borderRadius: BorderRadius.circular(10),
+                            //       selectedColor: Colors.green[300],
+                            //       activeColor: Colors.green[700],
+                            //       inactiveColor: Colors.grey[200],
+                            //     ),
+                            //     animationDuration:
+                            //         const Duration(milliseconds: 200),
+                            //     animationType: AnimationType.fade,
+                            //     keyboardType: TextInputType.number,
+                            //     hapticFeedbackTypes: HapticFeedbackTypes.medium,
+                            //     controller: _textController,
+                            //   ),
+                            // ),
                             const Spacer(),
                             if (_isButtonLoading)
                               const LoadingSpinnerWithMargin(),
@@ -333,6 +336,6 @@ class _Auth2FaScreenState extends State<Auth2FaScreen> {
                     ),
                   ),
                 ),
-            );
+              );
   }
 }

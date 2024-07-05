@@ -5,7 +5,7 @@ import 'package:kasheto_flutter/screens/initialization_screen.dart';
 import 'package:kasheto_flutter/widgets/loading_spinner.dart';
 import 'package:kasheto_flutter/widgets/submit_button.dart';
 import 'package:provider/provider.dart';
-import 'package:country_code_picker/country_code_picker.dart';
+// import 'package:country_code_picker/country_code_picker.dart';
 
 import '/models/user.dart';
 import '/screens/login_screen.dart';
@@ -194,15 +194,16 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       Row(
                         children: [
-                          CountryCodePicker(
-                            onChanged: (value) {
-                              countryCode = value.toString();
-                            },
-                            backgroundColor: _textFieldColor,
-                            initialSelection: 'US',
-                            dialogSize:
-                                Size(_deviceWidth * 0.8, _deviceHeight * 0.8),
-                          ),
+                          // Note
+                          // CountryCodePicker(
+                          //   onChanged: (value) {
+                          //     countryCode = value.toString();
+                          //   },
+                          //   backgroundColor: _textFieldColor,
+                          //   initialSelection: 'US',
+                          //   dialogSize:
+                          //       Size(_deviceWidth * 0.8, _deviceHeight * 0.8),
+                          // ),
                           Expanded(
                             child: TextFormField(
                               style: const TextStyle(letterSpacing: 3),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kasheto_flutter/utils/my_colors.dart';
 import 'package:kasheto_flutter/utils/my_padding.dart';
 import 'package:kasheto_flutter/widgets/submit_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -115,7 +116,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     height: 60,
                     width: 60,
                     decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
+                      color: MyColors.primaryColor,
                       shape: BoxShape.circle,
                     ),
                     child: const Center(

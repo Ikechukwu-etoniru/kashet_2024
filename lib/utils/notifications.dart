@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
+// import 'package:awesome_notifications/awesome_notifications.dart';
 
 class Notifications {
   static const basicChannelKey = 'basic_channel';
@@ -14,14 +14,14 @@ class Notifications {
 
   static Future notifyUser(
       {required String title, required String body}) async {
-    await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: createUniqueId(),
-        channelKey: Notifications.basicChannelKey,
-        title: title,
-        body: body,
-        notificationLayout: NotificationLayout.Default,
-      ),
-    );
+    // await AwesomeNotifications().createNotification(
+    //   content: NotificationContent(
+    //     id: createUniqueId(),
+    //     channelKey: Notifications.basicChannelKey,
+    //     title: title,
+    //     body: body,
+    //     notificationLayout: NotificationLayout.Default,
+    //   ),
+    // );
   }
 }

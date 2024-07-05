@@ -4,6 +4,7 @@ import 'package:kasheto_flutter/provider/auth_provider.dart';
 import 'package:kasheto_flutter/screens/add_money_screen.dart';
 import 'package:kasheto_flutter/screens/withdraw_money_screen.dart';
 import 'package:kasheto_flutter/utils/alerts.dart';
+import 'package:kasheto_flutter/utils/my_colors.dart';
 import 'package:provider/provider.dart';
 
 class BalanceBox extends StatelessWidget {
@@ -78,7 +79,7 @@ class BalanceBox extends StatelessWidget {
             FittedBox(
               child: Text(
                 text,
-                style: TextStyle(color: Theme.of(context).primaryColor),
+                style: const TextStyle(color: MyColors.primaryColor),
               ),
             ),
           ],

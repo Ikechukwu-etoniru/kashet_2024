@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kasheto_flutter/utils/my_colors.dart';
 import 'package:kasheto_flutter/widgets/balance_box.dart';
 import 'package:provider/provider.dart';
 
@@ -33,9 +34,9 @@ class BlackBox extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 child: Column(
                   children: [
-                    Text(
+                    const Text(
                       'Kasheto Balance',
-                      style: TextStyle(color: Theme.of(context).primaryColor),
+                      style: TextStyle(color: MyColors.primaryColor),
                     ),
                     const SizedBox(
                       height: 5,

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:kasheto_flutter/screens/withdraw_paypal_to_naira_screen.dart';
 import 'package:kasheto_flutter/utils/api_url.dart';
+import 'package:kasheto_flutter/utils/my_colors.dart';
 import 'package:kasheto_flutter/utils/notifications.dart';
 import 'package:kasheto_flutter/widgets/success_page.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
@@ -35,12 +36,12 @@ class _WebViewPagesState extends State<WebViewPages> {
         body: _dstReached
             ? const SuccessPage()
             : _isLoading
-                ? Column(
+                ? const Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SpinKitPianoWave(
-                        color: Theme.of(context).primaryColor,
+                        color: MyColors.primaryColor,
                         duration: const Duration(milliseconds: 400),
                         itemCount: 5,
                         size: 20,
