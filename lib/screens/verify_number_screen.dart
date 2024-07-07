@@ -10,7 +10,7 @@ import 'package:kasheto_flutter/utils/alerts.dart';
 import 'package:kasheto_flutter/utils/api_url.dart';
 import 'package:kasheto_flutter/widgets/loading_spinner.dart';
 import 'package:kasheto_flutter/widgets/submit_button.dart';
-// import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -293,37 +293,37 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  // Padding(
-                  //   padding: const EdgeInsets.symmetric(horizontal: 40),
-                  //   child: PinCodeTextField(
-                  //     validator: (value) {
-                  //       if (value == null) {
-                  //         return 'Enter OTP sent to your email';
-                  //       } else if (value.length != 4) {
-                  //         return 'Enter complete OTP';
-                  //       } else if (value != _otp) {
-                  //         return 'Enter correct OTP sent to your email';
-                  //       } else {
-                  //         return null;
-                  //       }
-                  //     },
-                  //     appContext: context,
-                  //     length: 4,
-                  //     onChanged: (value) {},
-                  //     pinTheme: PinTheme(
-                  //       shape: PinCodeFieldShape.box,
-                  //       borderRadius: BorderRadius.circular(10),
-                  //       selectedColor: Colors.green[300],
-                  //       activeColor: Colors.green[700],
-                  //       inactiveColor: Colors.grey[200],
-                  //     ),
-                  //     animationDuration: const Duration(milliseconds: 200),
-                  //     animationType: AnimationType.fade,
-                  //     keyboardType: TextInputType.number,
-                  //     hapticFeedbackTypes: HapticFeedbackTypes.medium,
-                  //     controller: _textController,
-                  //   ),
-                  // ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    child: PinCodeTextField(
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Enter OTP sent to your email';
+                        } else if (value.length != 4) {
+                          return 'Enter complete OTP';
+                        } else if (value != _otp) {
+                          return 'Enter correct OTP sent to your email';
+                        } else {
+                          return null;
+                        }
+                      },
+                      appContext: context,
+                      length: 4,
+                      onChanged: (value) {},
+                      pinTheme: PinTheme(
+                        shape: PinCodeFieldShape.box,
+                        borderRadius: BorderRadius.circular(10),
+                        selectedColor: Colors.green[300],
+                        activeColor: Colors.green[700],
+                        inactiveColor: Colors.grey[200],
+                      ),
+                      animationDuration: const Duration(milliseconds: 200),
+                      animationType: AnimationType.fade,
+                      keyboardType: TextInputType.number,
+                      hapticFeedbackTypes: HapticFeedbackTypes.medium,
+                      controller: _textController,
+                    ),
+                  ),
                   const Spacer(),
                   if (_isLoading1) const LoadingSpinnerWithMargin(),
                   if (!_isLoading1)

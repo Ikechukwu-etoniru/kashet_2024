@@ -11,6 +11,7 @@ import 'package:kasheto_flutter/utils/alerts.dart';
 import 'package:kasheto_flutter/utils/api_url.dart';
 import 'package:kasheto_flutter/widgets/loading_spinner.dart';
 import 'package:kasheto_flutter/widgets/submit_button.dart';
+import 'package:kasheto_flutter/widgets/text_field_text.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -73,11 +74,13 @@ class _LoginScreenState extends State<LoginScreen> {
         body: json.encode({
           "email": _emailController.text,
           "password": _passwordController.text,
-          "ip_address": _deviceInfo
+          "ip_address": _deviceInfo,
+          "device_name": _deviceInfo,
         }),
         headers: header,
       );
       final res = json.decode(response.body);
+      print(res);
       //  Sign in was successful and Auth device was used
       if ((response.statusCode == 200 || response.statusCode == 201) &&
           (res["success"] == true || res["success"] == false)) {
@@ -167,13 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: deviceHeight * 0.05,
                 ),
-                const Text(
-                  'Email Address',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.5,
-                  ),
-                ),
+                const TextFieldText(text: 'Email Address'),
                 const SizedBox(
                   height: 5,
                 ),
@@ -192,27 +189,25 @@ class _LoginScreenState extends State<LoginScreen> {
                       return null;
                     }
                   },
+                  style: const TextStyle(
+                    fontSize: 12,
+                  ),
                   decoration: InputDecoration(
                     isDense: true,
                     contentPadding: _textFieldContentPadding,
                     filled: true,
                     fillColor: _textFieldColor,
-                    hintText: 'Sample@mail.com',
+                    hintText: 'sample@mail.com',
                     hintStyle: const TextStyle(
                       color: Colors.grey,
+                      fontSize: 13,
                     ),
                   ),
                 ),
                 const SizedBox(
                   height: 30,
                 ),
-                const Text(
-                  'Password',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 1.5,
-                  ),
-                ),
+                const TextFieldText(text: 'Password'),
                 const SizedBox(
                   height: 5,
                 ),
@@ -229,6 +224,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   onFieldSubmitted: (value) {
                     FocusScope.of(context).unfocus();
                   },
+                  style: const TextStyle(
+                    fontSize: 12,
+                  ),
                   decoration: InputDecoration(
                     suffixIcon: IconButton(
                       onPressed: !_hidePassword
@@ -253,9 +251,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     fillColor: _textFieldColor,
                     isDense: true,
                     contentPadding: _textFieldContentPadding,
-                    hintText: 'Password',
+                    hintText: 'password',
                     hintStyle: const TextStyle(
                       color: Colors.grey,
+                      fontSize: 13,
                     ),
                     border: const OutlineInputBorder(
                       borderSide: BorderSide.none,
@@ -270,7 +269,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         Navigator.of(context)
                             .pushNamed(ForgotPasswordScreen.routeName);
                       },
-                      child: const Text('Forgot Password?'),
+                      child: const Text(
+                        'Forgot Password?',
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontSize: 13,
+                        ),
+                      ),
                     )
                   ],
                 ),
@@ -289,19 +294,26 @@ class _LoginScreenState extends State<LoginScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('Don\'t have an account?'),
+                    const Text(
+                      'Don\'t have an account?',
+                      style: TextStyle(
+                        fontSize: 13,
+                      ),
+                    ),
                     GestureDetector(
                       onTap: () {
                         Navigator.of(context).pushNamedAndRemoveUntil(
                             SignupScreen.routeName, (route) => false);
                       },
                       child: const Text(
-                        'Sign Up',
+                        ' Sign Up',
                         style: TextStyle(
-                            color: Colors.green,
-                            decoration: TextDecoration.underline,
-                            decorationColor: Colors.green,
-                            decorationThickness: 2),
+                          fontSize: 13,
+                          color: Colors.green,
+                          decoration: TextDecoration.underline,
+                          decorationColor: Colors.green,
+                          decorationThickness: 2,
+                        ),
                       ),
                     )
                   ],

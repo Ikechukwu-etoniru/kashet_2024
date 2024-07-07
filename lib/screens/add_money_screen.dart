@@ -46,6 +46,7 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
         return;
       }
       try {
+        print(paymentMethod);
         _formKey.currentState!.save();
         setState(() {
           _isLoading = true;
@@ -54,13 +55,14 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
         final header = await ApiUrl.setHeaders();
         final body = json.encode({
           "currency": "USD",
-          "payment_method":
-              paymentMethod == 'Payment Method' ? 'cashapp' : paymentMethod,
+          "payment_method": 'card',
+          // paymentMethod == 'Payment Method' ? 'cashapp' : paymentMethod,
           "amount": _amountController.text,
           "charges": _platformChargeForDeposit
         });
         final response = await http.post(url, body: body, headers: header);
         final res = json.decode(response.body);
+        print(res);
         if (response.statusCode == 200 &&
             paymentMethod.toLowerCase() == 'paypal') {
           final paypalWebviewLink = res['details']['links'][1]['href'];
@@ -364,7 +366,7 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
                         });
                       }
                     },
-                    hint: const Text('Choose a Payment Method'),
+                    hint: const Text('Pick a Payment Method'),
                     validator: (val) {
                       if (val == null) {
                         return 'Pick a payment method';

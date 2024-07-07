@@ -4,8 +4,9 @@ import 'package:kasheto_flutter/provider/auth_provider.dart';
 import 'package:kasheto_flutter/screens/initialization_screen.dart';
 import 'package:kasheto_flutter/widgets/loading_spinner.dart';
 import 'package:kasheto_flutter/widgets/submit_button.dart';
+import 'package:kasheto_flutter/widgets/text_field_text.dart';
 import 'package:provider/provider.dart';
-// import 'package:country_code_picker/country_code_picker.dart';
+import 'package:country_code_picker/country_code_picker.dart';
 
 import '/models/user.dart';
 import '/screens/login_screen.dart';
@@ -88,12 +89,8 @@ class _SignupScreenState extends State<SignupScreen> {
                 Expanded(
                   child: ListView(
                     children: [
-                      const Text(
-                        'Full Name',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 1.5,
-                        ),
+                      const TextFieldText(
+                        text: 'Full Name',
                       ),
                       const SizedBox(
                         height: 5,
@@ -123,9 +120,6 @@ class _SignupScreenState extends State<SignupScreen> {
                           contentPadding: _textFieldContentPadding,
                           isDense: true,
                           hintText: 'First name',
-                          hintStyle: const TextStyle(
-                            color: Colors.grey,
-                          ),
                           filled: true,
                           fillColor: Colors.grey[200],
                           border: OutlineInputBorder(
@@ -136,11 +130,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      const Text(
-                        'Email Address',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, letterSpacing: 1.5),
-                      ),
+                      const TextFieldText(text: 'Email Address'),
                       const SizedBox(
                         height: 5,
                       ),
@@ -168,9 +158,6 @@ class _SignupScreenState extends State<SignupScreen> {
                             borderRadius: BorderRadius.circular(5),
                           ),
                           hintText: 'sample@mail.com',
-                          hintStyle: const TextStyle(
-                            color: Colors.grey,
-                          ),
                         ),
                         onSaved: (value) {
                           _user = User(
@@ -184,26 +171,21 @@ class _SignupScreenState extends State<SignupScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      const Text(
-                        'Phone Number',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, letterSpacing: 1.5),
-                      ),
+                      const TextFieldText(text: 'Phone Number'),
                       const SizedBox(
                         height: 5,
                       ),
                       Row(
                         children: [
-                          // Note
-                          // CountryCodePicker(
-                          //   onChanged: (value) {
-                          //     countryCode = value.toString();
-                          //   },
-                          //   backgroundColor: _textFieldColor,
-                          //   initialSelection: 'US',
-                          //   dialogSize:
-                          //       Size(_deviceWidth * 0.8, _deviceHeight * 0.8),
-                          // ),
+                          CountryCodePicker(
+                            onChanged: (value) {
+                              countryCode = value.toString();
+                            },
+                            backgroundColor: _textFieldColor,
+                            initialSelection: 'US',
+                            dialogSize:
+                                Size(_deviceWidth * 0.8, _deviceHeight * 0.8),
+                          ),
                           Expanded(
                             child: TextFormField(
                               style: const TextStyle(letterSpacing: 3),
@@ -233,9 +215,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                 fillColor: _textFieldColor,
                                 isDense: true,
                                 hintText: 'xxx xxx xxxx',
-                                hintStyle: const TextStyle(
-                                  color: Colors.grey,
-                                ),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(5),
                                   borderSide: BorderSide.none,
@@ -256,10 +235,8 @@ class _SignupScreenState extends State<SignupScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      const Text(
-                        'Password',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, letterSpacing: 1.5),
+                      const TextFieldText(
+                        text: 'Password',
                       ),
                       const SizedBox(
                         height: 5,
@@ -327,10 +304,8 @@ class _SignupScreenState extends State<SignupScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      const Text(
-                        'Confirm Password',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, letterSpacing: 1.5),
+                      const TextFieldText(
+                        text: 'Confirm Password',
                       ),
                       const SizedBox(
                         height: 5,
@@ -399,7 +374,12 @@ class _SignupScreenState extends State<SignupScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('Already have an account?'),
+                    const Text(
+                      'Already have an account?',
+                      style: TextStyle(
+                        fontSize: 12,
+                      ),
+                    ),
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pushNamed(LoginScreen.routeName);
@@ -412,6 +392,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       child: const Text(
                         'Login',
                         style: TextStyle(
+                          fontSize: 12,
                           decoration: TextDecoration.underline,
                           decorationColor: Colors.green,
                           decorationThickness: 2,

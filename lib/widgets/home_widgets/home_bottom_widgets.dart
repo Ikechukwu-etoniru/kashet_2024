@@ -43,7 +43,7 @@ class HomeServiceMenu extends StatelessWidget {
                 spreadRadius: 20)
           ]),
       child: ListView.builder(
-          itemCount: 8,
+          itemCount: 5,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
             return ServiceIcons(

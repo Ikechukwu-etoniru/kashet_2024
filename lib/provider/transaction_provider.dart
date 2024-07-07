@@ -98,12 +98,14 @@ class TransactionProvider extends ChangeNotifier {
 
       const url = '${ApiUrl.baseURL}user/pay';
 
-      var _httpResponse = await http.post(Uri.parse(url),
+      var response = await http.post(Uri.parse(url),
           body: json.encode(_body), headers: _header);
-      final response = json.decode(_httpResponse.body);
+      final res = json.decode(response.body);
+      print('start');
+      print(res);
 
-      if (_httpResponse.statusCode == 200) {
-        final String ee = response['details']['original']['Response Body'];
+      if (response.statusCode == 200) {
+        final String ee = res['details']['original']['Response Body'];
 
         return ee
             .substring(60)
@@ -111,7 +113,7 @@ class TransactionProvider extends ChangeNotifier {
             .replaceAll(RegExp(r'}'), '');
 
         // Send transaction
-      } else if (_httpResponse.statusCode == 401) {
+      } else if (response.statusCode == 401) {
         throw AppException('An error occured');
       } else {
         throw AppException('An error occured');

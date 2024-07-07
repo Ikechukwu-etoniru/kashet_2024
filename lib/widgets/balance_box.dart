@@ -43,7 +43,7 @@ class BalanceBox extends StatelessWidget {
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12),
-        height: 40,
+        height: 35,
         width: width,
         color: Colors.white,
         child: Row(
@@ -52,11 +52,11 @@ class BalanceBox extends StatelessWidget {
             Stack(
               children: [
                 const CircleAvatar(
-                  radius: 12,
+                  radius: 9,
                   backgroundColor: Colors.yellow,
                   child: Center(
                     child: CircleAvatar(
-                      radius: 6,
+                      radius: 5,
                       backgroundColor: Colors.yellowAccent,
                     ),
                   ),
@@ -65,13 +65,14 @@ class BalanceBox extends StatelessWidget {
                   bottom: 0,
                   right: 0,
                   child: CircleAvatar(
-                    radius: 5,
+                    radius: 3,
                     backgroundColor: id == 1 ? Colors.blue : Colors.red,
                     child: FittedBox(
-                        child: Icon(
-                      id == 1 ? Icons.add : Icons.remove,
-                      color: Colors.white,
-                    )),
+                      child: Icon(
+                        id == 1 ? Icons.add : Icons.remove,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 )
               ],
@@ -79,7 +80,8 @@ class BalanceBox extends StatelessWidget {
             FittedBox(
               child: Text(
                 text,
-                style: const TextStyle(color: MyColors.primaryColor),
+                style:
+                    const TextStyle(color: MyColors.primaryColor, fontSize: 12),
               ),
             ),
           ],

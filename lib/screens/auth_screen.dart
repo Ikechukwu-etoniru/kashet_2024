@@ -15,7 +15,7 @@ import 'package:kasheto_flutter/utils/my_colors.dart';
 import 'package:kasheto_flutter/widgets/error_widget.dart';
 import 'package:kasheto_flutter/widgets/loading_spinner.dart';
 import 'package:kasheto_flutter/widgets/submit_button.dart';
-// import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -288,38 +288,38 @@ class _Auth2FaScreenState extends State<Auth2FaScreen> {
                             const SizedBox(
                               height: 20,
                             ),
-                            // Note
-                            // Padding(
-                            //   padding: const EdgeInsets.symmetric(horizontal: 40),
-                            //   child: PinCodeTextField(
-                            //     validator: (value) {
-                            //       if (value == null || value.isEmpty) {
-                            //         return 'Enter the code sent to you';
-                            //       } else if (value.length != 4) {
-                            //         return 'Enter the four pin ode sent to you';
-                            //       } else {
-                            //         return null;
-                            //       }
-                            //     },
-                            //     errorTextSpace: 25,
-                            //     appContext: context,
-                            //     length: 4,
-                            //     onChanged: (value) {},
-                            //     pinTheme: PinTheme(
-                            //       shape: PinCodeFieldShape.box,
-                            //       borderRadius: BorderRadius.circular(10),
-                            //       selectedColor: Colors.green[300],
-                            //       activeColor: Colors.green[700],
-                            //       inactiveColor: Colors.grey[200],
-                            //     ),
-                            //     animationDuration:
-                            //         const Duration(milliseconds: 200),
-                            //     animationType: AnimationType.fade,
-                            //     keyboardType: TextInputType.number,
-                            //     hapticFeedbackTypes: HapticFeedbackTypes.medium,
-                            //     controller: _textController,
-                            //   ),
-                            // ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 40),
+                              child: PinCodeTextField(
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Enter the code sent to you';
+                                  } else if (value.length != 4) {
+                                    return 'Enter the four pin ode sent to you';
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                                errorTextSpace: 25,
+                                appContext: context,
+                                length: 4,
+                                onChanged: (value) {},
+                                pinTheme: PinTheme(
+                                  shape: PinCodeFieldShape.box,
+                                  borderRadius: BorderRadius.circular(10),
+                                  selectedColor: Colors.green[300],
+                                  activeColor: Colors.green[700],
+                                  inactiveColor: Colors.grey[200],
+                                ),
+                                animationDuration:
+                                    const Duration(milliseconds: 200),
+                                animationType: AnimationType.fade,
+                                keyboardType: TextInputType.number,
+                                hapticFeedbackTypes: HapticFeedbackTypes.medium,
+                                controller: _textController,
+                              ),
+                            ),
                             const Spacer(),
                             if (_isButtonLoading)
                               const LoadingSpinnerWithMargin(),

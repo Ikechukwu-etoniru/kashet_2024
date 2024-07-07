@@ -42,7 +42,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           child: Column(
             children: [
               SizedBox(
-                height: _deviceHeight * 0.2,
+                height: _deviceHeight * 0.15,
               ),
               Expanded(
                 child: PageView(
@@ -96,7 +96,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
               ),
               const SizedBox(
-                height: 40,
+                height: 30,
               ),
               if (!_isLastPage)
                 GestureDetector(
@@ -115,7 +115,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   child: Container(
                     height: 60,
                     width: 60,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: MyColors.primaryColor,
                       shape: BoxShape.circle,
                     ),
@@ -130,7 +130,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
               if (!_isLastPage)
                 const SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
               if (_isLastPage)
                 SubmitButton(

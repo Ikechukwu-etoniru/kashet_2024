@@ -24,7 +24,7 @@ class MyDropDown extends StatelessWidget {
       decoration: InputDecoration(
         filled: true,
         contentPadding: const EdgeInsets.symmetric(
-          horizontal: 10,
+          horizontal: 5,
           vertical: 10,
         ),
         isDense: true,

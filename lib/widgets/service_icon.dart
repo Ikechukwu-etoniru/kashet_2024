@@ -23,9 +23,9 @@ class ServiceIcons extends StatelessWidget {
     'Bill Payment',
     'Send/Request Money',
     'Paypal Transactions',
-    'Book Flight',
-    'Buy/Sell Crypto',
-    'Sport Betting',
+    // 'Book Flight',
+    // 'Buy/Sell Crypto',
+    // 'Sport Betting',
     'Bank Transfer'
   ];
 
@@ -34,15 +34,14 @@ class ServiceIcons extends StatelessWidget {
     'images/bill_payment.png',
     'images/send_money.png',
     'images/paypal.png',
-    'images/book_flight.png',
-    'images/crypto.png',
-    'images/sport_betting.png'
+    // 'images/book_flight.png',
+    // 'images/crypto.png',
+    // 'images/sport_betting.png'
   ];
 
   @override
   Widget build(BuildContext context) {
-    final user =
-        Provider.of<AuthProvider>(context, listen: false).userList[0];
+    final user = Provider.of<AuthProvider>(context, listen: false).userList[0];
     return GestureDetector(
       onTap: () {
         if (index == 0 && user.userCurrency == null) {
@@ -59,13 +58,13 @@ class ServiceIcons extends StatelessWidget {
           Navigator.of(context).pushNamed(SendRequestMoneyScreen.routeName);
         } else if (index == 3) {
           Navigator.of(context).pushNamed(PaypalTxScreen.routeName);
+          // } else if (index == 4) {
+          //   Navigator.of(context).pushNamed(BookFlightScreen.routeName);
+          // } else if (index == 5) {
+          //   Navigator.of(context).pushNamed(BuySellCryptoScreen.routeName);
+          // } else if (index == 6) {
+          //   Navigator.of(context).pushNamed(FutureUpdate.routeName);
         } else if (index == 4) {
-          Navigator.of(context).pushNamed(BookFlightScreen.routeName);
-        } else if (index == 5) {
-          Navigator.of(context).pushNamed(BuySellCryptoScreen.routeName);
-        } else if (index == 6) {
-          Navigator.of(context).pushNamed(FutureUpdate.routeName);
-        } else if (index == 7) {
           Navigator.of(context).pushNamed(BankTransfer.routeName);
         }
       },
@@ -88,7 +87,7 @@ class ServiceIcons extends StatelessWidget {
                       offset: const Offset(1, 5),
                     )
                   ]),
-              child: index == 7
+              child: index == 4
                   ? Padding(
                       padding: const EdgeInsets.all(3),
                       child: FaIcon(

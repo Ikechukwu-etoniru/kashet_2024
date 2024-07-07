@@ -63,6 +63,7 @@ import 'provider/auth_provider.dart';
 import 'provider/wallet_provider.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.green,
@@ -177,14 +178,16 @@ class _MyAppState extends State<MyApp> {
           title: 'Kasheto',
           theme: ThemeData(
             primarySwatch: Colors.green,
+            primaryColor: Colors.green,
             fontFamily: 'Poppins',
             appBarTheme: const AppBarTheme(
               centerTitle: true,
               titleTextStyle: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                  letterSpacing: 1),
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+                letterSpacing: 1,
+              ),
               iconTheme: IconThemeData(
                 color: Colors.black,
               ),
@@ -192,6 +195,13 @@ class _MyAppState extends State<MyApp> {
               elevation: 0,
             ),
             inputDecorationTheme: InputDecorationTheme(
+              hintStyle: const TextStyle(
+                fontSize: 12,
+                color: Colors.grey,
+              ),
+              labelStyle: const TextStyle(
+                fontSize: 12,
+              ),
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 20,
               ),

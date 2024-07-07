@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kasheto_flutter/screens/login_screen.dart';
+import 'package:kasheto_flutter/utils/my_colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '/widgets/home_page.dart';
-import '/widgets/mycard_page.dart';
+// import '/widgets/mycard_page.dart';
 import '/widgets/service_page.dart';
 
 class MainScreen extends StatefulWidget {
@@ -19,7 +20,7 @@ class _MainScreenState extends State<MainScreen> {
   final List _pages = [
     const HomePage(),
     const ServicePage(),
-    const MyCardPage()
+    // const MyCardPage()
   ];
   int selectedPageIndex = 0;
 
@@ -76,20 +77,25 @@ class _MainScreenState extends State<MainScreen> {
       child: SafeArea(
         child: Scaffold(
             bottomNavigationBar: BottomNavigationBar(
+                selectedIconTheme: const IconThemeData(
+                  color: MyColors.primaryColor,
+                ),
+                selectedLabelStyle: const TextStyle(
+                  color: MyColors.primaryColor,
+                ),
                 currentIndex: selectedPageIndex,
                 onTap: _selectPage,
                 items: const [
                   BottomNavigationBarItem(
-                    icon: FaIcon(FontAwesomeIcons.house, size: 12),
+                    icon: FaIcon(
+                      FontAwesomeIcons.house,
+                      size: 12,
+                    ),
                     label: 'Home',
                   ),
                   BottomNavigationBarItem(
                     icon: FaIcon(FontAwesomeIcons.paperPlane, size: 12),
                     label: 'Services',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: FaIcon(FontAwesomeIcons.wallet, size: 12),
-                    label: 'My Cards',
                   ),
                 ]),
             appBar: AppBar(

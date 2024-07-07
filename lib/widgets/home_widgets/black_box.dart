@@ -45,7 +45,9 @@ class BlackBox extends StatelessWidget {
                       'K ${walletBalance.toStringAsFixed(2)}',
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 25,
+                        fontSize: 20,
+                        fontFamily: '',
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     const Spacer(),

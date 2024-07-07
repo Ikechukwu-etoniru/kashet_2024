@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kasheto_flutter/widgets/service_icon.dart';
 
-
 import '/screens/notification_screen.dart';
 
 class ServicePage extends StatelessWidget {
@@ -47,7 +46,7 @@ class ServicePage extends StatelessWidget {
         Expanded(
           child: GridView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 25),
-              itemCount: 8,
+              itemCount: 5,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   crossAxisSpacing: 20,
@@ -63,4 +62,3 @@ class ServicePage extends StatelessWidget {
     );
   }
 }
-
