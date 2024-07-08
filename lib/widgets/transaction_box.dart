@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:kasheto_flutter/models/transaction.dart';
+import 'package:kasheto_flutter/utils/my_colors.dart';
 
 class TransactionBox extends StatelessWidget {
   final Transaction transaction;
@@ -90,7 +91,7 @@ class TransactionBox extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -109,19 +110,23 @@ class TransactionBox extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 30,
                   ),
                   Row(
                     children: [
                       const Text(
                         'Title',
-                        style: TextStyle(fontSize: 15),
+                        style: TextStyle(
+                          fontSize: 11,
+                        ),
                       ),
                       const Spacer(),
                       Text(
                         txTitle,
                         style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 15),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
                       ),
                     ],
                   ),
@@ -132,18 +137,19 @@ class TransactionBox extends StatelessWidget {
                     children: [
                       const Text(
                         'Amount',
-                        style: TextStyle(fontSize: 15),
+                        style: TextStyle(fontSize: 11),
                       ),
                       const Spacer(),
                       Text(
                         '$txSymbol $txAmount',
                         style: TextStyle(
-                            fontFamily: '',
-                            color: transaction.type == TransactionType.credit
-                                ? Colors.green
-                                : Colors.red,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15),
+                          fontFamily: '',
+                          color: transaction.type == TransactionType.credit
+                              ? Colors.green
+                              : Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
                       ),
                     ],
                   ),
@@ -154,13 +160,15 @@ class TransactionBox extends StatelessWidget {
                     children: [
                       const Text(
                         'Date',
-                        style: TextStyle(fontSize: 15),
+                        style: TextStyle(fontSize: 11),
                       ),
                       const Spacer(),
                       Text(
                         _txDate(),
                         style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 15),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
                       ),
                     ],
                   ),
@@ -172,7 +180,7 @@ class TransactionBox extends StatelessWidget {
                       Text(
                         'Description',
                         style: TextStyle(
-                          fontSize: 15,
+                          fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -185,17 +193,25 @@ class TransactionBox extends StatelessWidget {
                   Text(
                     transaction.description,
                     textAlign: TextAlign.left,
-                    style: const TextStyle(fontSize: 15),
+                    style: const TextStyle(
+                      fontSize: 10,
+                    ),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                   Center(
                     child: TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('Close')),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text(
+                        'Close',
+                        style: TextStyle(
+                          color: MyColors.primaryColor,
+                        ),
+                      ),
+                    ),
                   )
                 ],
               ),
@@ -241,6 +257,7 @@ class TransactionBox extends StatelessWidget {
                   txTitle,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
+                    fontSize: 12,
                   ),
                 ),
                 const SizedBox(
@@ -250,7 +267,7 @@ class TransactionBox extends StatelessWidget {
                   _txDate(),
                   style: TextStyle(
                     color: Colors.grey[700],
-                    fontSize: 11,
+                    fontSize: 10,
                   ),
                 ),
               ],
@@ -259,12 +276,13 @@ class TransactionBox extends StatelessWidget {
             Text(
               '$txSymbol $txAmount',
               style: TextStyle(
-                  fontFamily: '',
-                  color: transaction.type == TransactionType.credit
-                      ? Colors.green
-                      : Colors.red,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12),
+                fontFamily: '',
+                color: transaction.type == TransactionType.credit
+                    ? Colors.green
+                    : Colors.red,
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
             ),
           ],
         ),

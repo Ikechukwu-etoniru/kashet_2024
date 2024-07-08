@@ -183,13 +183,14 @@ class _MyAppState extends State<MyApp> {
             appBarTheme: const AppBarTheme(
               centerTitle: true,
               titleTextStyle: TextStyle(
-                fontSize: 17,
+                fontSize: 15,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
                 letterSpacing: 1,
               ),
               iconTheme: IconThemeData(
                 color: Colors.black,
+                size: 16,
               ),
               color: Colors.transparent,
               elevation: 0,

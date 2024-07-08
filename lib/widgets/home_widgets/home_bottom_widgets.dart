@@ -406,7 +406,7 @@ class HomeFundRequestContainer extends StatelessWidget {
         child: Row(
           children: [
             SizedBox(
-              height: 150,
+              height: 100,
               width: constraints.maxWidth * 0.3,
               child: Image.asset(
                 'images/money_request.png',
@@ -432,12 +432,13 @@ class HomeFundRequestContainer extends StatelessWidget {
                             children: [
                               const Text(
                                 'You have received',
-                                style: TextStyle(fontSize: 12),
+                                style: TextStyle(fontSize: 10),
                               ),
                               Text(
                                 '${receivedMoneyRequest.length} fund request',
                                 style: const TextStyle(
                                   color: MyColors.primaryColor,
+                                  fontSize: 12,
                                 ),
                               ),
                             ],
@@ -446,14 +447,14 @@ class HomeFundRequestContainer extends StatelessWidget {
                         const Icon(
                           Icons.arrow_forward_ios,
                           color: MyColors.primaryColor,
-                          size: 15,
+                          size: 13,
                         ),
                       ],
                     ),
                   ),
                   const Divider(
                     color: MyColors.primaryColor,
-                    thickness: 1,
+                    thickness: 0.5,
                   ),
                   GestureDetector(
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
@@ -467,13 +468,12 @@ class HomeFundRequestContainer extends StatelessWidget {
                             children: [
                               const Text(
                                 'You have sent',
-                                style: TextStyle(fontSize: 12),
+                                style: TextStyle(fontSize: 10),
                               ),
                               Text(
                                 '${sentMoneyRequest.length} fund request',
                                 style: const TextStyle(
-                                  color: MyColors.primaryColor,
-                                ),
+                                    color: MyColors.primaryColor, fontSize: 12),
                               ),
                             ],
                           ),
@@ -481,7 +481,7 @@ class HomeFundRequestContainer extends StatelessWidget {
                         const Icon(
                           Icons.arrow_forward_ios,
                           color: MyColors.primaryColor,
-                          size: 15,
+                          size: 13,
                         ),
                       ],
                     ),
@@ -522,10 +522,11 @@ class HomePageBottomBar extends StatelessWidget {
                 const Text(
                   'Recent Transactions',
                   style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      wordSpacing: 2,
-                      fontFamily: 'Raleway',
-                      fontSize: 15),
+                    fontWeight: FontWeight.bold,
+                    wordSpacing: 2,
+                    fontFamily: 'Raleway',
+                    fontSize: 13,
+                  ),
                 ),
                 const Spacer(),
                 if (first10Transactions.isNotEmpty)

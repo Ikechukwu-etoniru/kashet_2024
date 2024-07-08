@@ -11,6 +11,7 @@ import 'package:kasheto_flutter/utils/api_url.dart';
 import 'package:kasheto_flutter/widgets/loading_spinner.dart';
 import 'package:kasheto_flutter/widgets/my_dropdown.dart';
 import 'package:kasheto_flutter/widgets/submit_button.dart';
+import 'package:kasheto_flutter/widgets/text_field_text.dart';
 import 'package:provider/provider.dart';
 
 import '../utils/my_colors.dart';
@@ -58,7 +59,6 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
           "payment_method": 'card',
           // paymentMethod == 'Payment Method' ? 'cashapp' : paymentMethod,
           "amount": _amountController.text,
-          "charges": _platformChargeForDeposit
         });
         final response = await http.post(url, body: body, headers: header);
         final res = json.decode(response.body);
@@ -206,194 +206,222 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    height: _deviceHeight * 0.03,
-                  ),
-                  const Text(
-                    'Amount',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
+                  const TextFieldText(text: 'Amount'),
                   const SizedBox(
                     height: 5,
                   ),
-                  Stack(
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      TextFormField(
-                        keyboardType: TextInputType.number,
-                        maxLength: 19,
-                        controller: _amountController,
-                        validator: ((value) {
-                          final isCashPayPal =
-                              _paymentMethodDropdown == 'Payment Method' ||
-                                  _paymentMethodDropdown == 'paypal';
-
-                          if (value == null || value.isEmpty) {
-                            return 'This field cannot be empty';
-                          } else {
-                            final amount = double.tryParse(value);
-                            if (amount == null) {
-                              return 'Enter a valid number';
-                            } else if (amount <= 0) {
-                              return 'Enter an amount greater than 0.9';
-                            } else if (isCashPayPal && amount < 20) {
-                              return 'Enter an amount greater than 19.99';
-                            } else if (amount <= 999.99 &&
-                                _dropDownValue == 'NGN' &&
-                                _paymentMethodDropdown == 'flutterwave') {
-                              return 'Enter an amount greater than 999.99';
-                            } else {
-                              return null;
-                            }
-                          }
-                        }),
-                        onChanged: (value) {
-                          setState(() {});
-                        },
-                        decoration: InputDecoration(
-                          counterText: '',
-                          errorStyle: const TextStyle(fontSize: 10),
-                          filled: true,
-                          fillColor: MyColors.textFieldColor,
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: constraints.maxWidth * 0.2),
-                          //  MyPadding.textFieldContentPadding,
-                          hintText: '0.00',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: BorderSide.none),
-                        ),
-                      ),
                       Container(
-                        alignment: Alignment.center,
-                        width: constraints.maxWidth * 0.15,
-                        height: 50,
-                        child: Text(
-                          _dropDownValue == 'NGN' ? '₦' : '\$',
-                          style: const TextStyle(
-                              color: Colors.grey, fontSize: 20, fontFamily: ''),
+                        decoration: BoxDecoration(
+                          color: MyColors.textFieldColor,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        width: constraints.maxWidth * 0.12,
+                        height: 40,
+                        child: Center(
+                          child: Text(
+                            _dropDownValue == 'NGN' ? '₦' : '\$',
+                            style: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 16,
+                              fontFamily: '',
+                            ),
+                          ),
                         ),
                       ),
-                      Positioned(
-                        right: 2,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          alignment: Alignment.center,
-                          width: constraints.maxWidth * 0.2,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(5),
+                      Expanded(
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          maxLength: 19,
+                          controller: _amountController,
+                          validator: ((value) {
+                            final isCashPayPal =
+                                _paymentMethodDropdown == 'Payment Method' ||
+                                    _paymentMethodDropdown == 'paypal';
+
+                            if (value == null || value.isEmpty) {
+                              return 'This field cannot be empty';
+                            } else {
+                              final amount = double.tryParse(value);
+                              if (amount == null) {
+                                return 'Enter a valid number';
+                              } else if (amount <= 0) {
+                                return 'Enter an amount greater than 0.9';
+                              } else if (isCashPayPal && amount < 20) {
+                                return 'Enter an amount greater than 19.99';
+                              } else if (amount <= 999.99 &&
+                                  _dropDownValue == 'NGN' &&
+                                  _paymentMethodDropdown == 'flutterwave') {
+                                return 'Enter an amount greater than 999.99';
+                              } else {
+                                return null;
+                              }
+                            }
+                          }),
+                          onChanged: (value) {
+                            setState(() {});
+                          },
+                          style: const TextStyle(
+                            fontSize: 14,
                           ),
-                          child: DropdownButton(
-                            focusColor: Colors.black,
-                            icon: const Icon(Icons.keyboard_arrow_down),
-                            iconEnabledColor: Colors.grey,
-                            iconDisabledColor: Colors.grey,
-                            underline: const SizedBox(),
-                            elevation: 0,
-                            hint: Text(_dropDownValue),
-                            isExpanded: true,
-                            items: ['NGN', 'USD'].map(
-                              (val) {
-                                return DropdownMenuItem<String>(
-                                  value: val,
-                                  child: FittedBox(
-                                    child: Text(val),
+                          decoration: InputDecoration(
+                            counterText: '',
+                            errorStyle: const TextStyle(fontSize: 10),
+                            filled: true,
+                            fillColor: MyColors.textFieldColor,
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 10,
+                              horizontal: 15,
+                            ),
+                            hintText: '0.00',
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                borderSide: BorderSide.none),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      SizedBox(
+                        width: 60,
+                        child: DropdownButton(
+                          focusColor: Colors.black,
+                          icon: const Icon(
+                            Icons.keyboard_arrow_down,
+                            size: 23,
+                          ),
+                          iconEnabledColor: Colors.grey,
+                          iconDisabledColor: Colors.grey,
+                          underline: const SizedBox(),
+                          elevation: 0,
+                          hint: Text(
+                            _dropDownValue,
+                            style: const TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                          isExpanded: true,
+                          items: ['NGN', 'USD'].map(
+                            (val) {
+                              return DropdownMenuItem<String>(
+                                value: val,
+                                child: FittedBox(
+                                  child: Text(
+                                    val,
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                    ),
                                   ),
-                                );
-                              },
-                            ).toList(),
-                            onChanged: (val) {
-                              setState(
-                                () {
-                                  _dropDownValue = val as String;
-                                },
+                                ),
                               );
                             },
-                          ),
+                          ).toList(),
+                          onChanged: (val) {
+                            setState(
+                              () {
+                                _dropDownValue = val as String;
+                              },
+                            );
+                          },
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 15,
                   ),
-                  const Text(
-                    'Choose Payment Method',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
+                  const TextFieldText(
+                    text: 'Choose Payment Method',
                   ),
                   const SizedBox(
                     height: 5,
                   ),
-                  MyDropDown(
-                    items: [
-                      'Local Card ( ₦, GH₵, KSh, R, USh, TSh)',
-                      'Paypal (\$)',
-                      'Card Payment (\$)',
-                    ].map(
-                      (val) {
-                        return DropdownMenuItem<String>(
-                          value: val,
-                          child: Text(
-                            val,
-                            style: const TextStyle(
-                              fontFamily: '',
-                              fontWeight: FontWeight.bold,
+                  SizedBox(
+                    width: double.infinity,
+                    child: DropdownButton(
+                      isExpanded: true,
+                      items: [
+                        'Local Card ( ₦, GH₵, KSh, R, USh, TSh)',
+                        'Paypal (\$)',
+                        'Card Payment (\$)',
+                      ].map(
+                        (val) {
+                          return DropdownMenuItem<String>(
+                            value: val,
+                            child: Text(
+                              val,
+                              style: const TextStyle(
+                                fontFamily: '',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        },
+                      ).toList(),
+                      // value: _paymentMethodDropdown,
+                      focusColor: Colors.black,
+                      icon: const Icon(
+                        Icons.keyboard_arrow_down,
+                        size: 23,
+                      ),
+                      iconEnabledColor: Colors.grey,
+                      iconDisabledColor: Colors.grey,
+                      underline: const SizedBox(),
+                      elevation: 0,
+                      hint: Text(
+                        //  _paymentMethodDropdown == null ??   'Pick a Payment Method' : _paymentMethodDropdown ,
+
+                        _paymentMethodDropdown ?? 'Pick a Payment Method',
+                        style: const TextStyle(
+                          fontSize: 11,
+                        ),
+                      ),
+                      onChanged: (val) {
+                        if (val == 'Local Card ( ₦, GH₵, KSh, R, USh, TSh)') {
+                          setState(
+                            () {
+                              _paymentMethodDropdown = 'flutterwave';
+                              _dropDownValue = 'NGN';
+                            },
+                          );
+                        } else if (val == 'Card Payment (\$)') {
+                          setState(() {
+                            _paymentMethodDropdown = 'cashapp';
+                            _dropDownValue = 'USD';
+                          });
+                        } else {
+                          setState(() {
+                            _paymentMethodDropdown = 'paypal';
+                            _dropDownValue = 'USD';
+                          });
+                        }
                       },
-                    ).toList(),
-                    onChanged: (val) {
-                      if (val == 'Local Card ( ₦, GH₵, KSh, R, USh, TSh)') {
-                        setState(
-                          () {
-                            _paymentMethodDropdown = 'flutterwave';
-                            _dropDownValue = 'NGN';
-                          },
-                        );
-                      } else if (val == 'Card Payment (\$)') {
-                        setState(() {
-                          _paymentMethodDropdown = 'cashapp';
-                          _dropDownValue = 'USD';
-                        });
-                      } else {
-                        setState(() {
-                          _paymentMethodDropdown = 'paypal';
-                          _dropDownValue = 'USD';
-                        });
-                      }
-                    },
-                    hint: const Text('Pick a Payment Method'),
-                    validator: (val) {
-                      if (val == null) {
-                        return 'Pick a payment method';
-                      } else if (_dropDownValue == 'USD' &&
-                          _paymentMethodDropdown == 'flutterwave') {
-                        return 'Choose a Payment method for Dollars';
-                      } else if (_dropDownValue == 'NGN' &&
-                          (_paymentMethodDropdown == 'paypal' ||
-                              _paymentMethodDropdown == 'Payment Method')) {
-                        return 'Choose a Payment method for Naira';
-                      } else {
-                        return null;
-                      }
-                    },
+                    ),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
                   Row(
                     children: [
-                      const Text('The current exhange rate is'),
+                      const Text(
+                        'The current exhange rate is',
+                        style: TextStyle(
+                          fontSize: 11,
+                        ),
+                      ),
                       const Spacer(),
                       Text(
                         _dropDownValue == 'USD'
                             ? '1 USD = ${platformCharges.dollarsToKtc} KTC'
                             : '1 NGN = ${platformCharges.nairaToKtc} KTC',
-                        style: const TextStyle(color: Colors.green),
+                        style: const TextStyle(
+                          color: Colors.green,
+                          fontSize: 11,
+                        ),
                       ),
                     ],
                   ),
@@ -401,12 +429,17 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
                     height: _deviceHeight * 0.02,
                   ),
                   const Divider(thickness: 1),
-                  SizedBox(
-                    height: _deviceHeight * 0.03,
+                  const SizedBox(
+                    height: 20,
                   ),
                   Row(
                     children: [
-                      const Text('Service charge'),
+                      const Text(
+                        'Service charge',
+                        style: TextStyle(
+                          fontSize: 11,
+                        ),
+                      ),
                       const Spacer(),
                       Text(
                         _dropDownValue == 'USD'
@@ -416,16 +449,22 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
                         style: const TextStyle(
                           fontFamily: '',
                           fontWeight: FontWeight.bold,
+                          fontSize: 11,
                         ),
                       )
                     ],
                   ),
-                  SizedBox(
-                    height: _deviceHeight * 0.03,
+                  const SizedBox(
+                    height: 10,
                   ),
                   Row(
                     children: [
-                      const Text('You\'ll Deposit'),
+                      const Text(
+                        'You\'ll Deposit',
+                        style: TextStyle(
+                          fontSize: 11,
+                        ),
+                      ),
                       const Spacer(),
                       Text(
                         _dropDownValue == 'USD'
@@ -434,16 +473,22 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
                         style: const TextStyle(
                           fontFamily: '',
                           fontWeight: FontWeight.bold,
+                          fontSize: 11,
                         ),
                       )
                     ],
                   ),
-                  SizedBox(
-                    height: _deviceHeight * 0.03,
+                  const SizedBox(
+                    height: 10,
                   ),
                   Row(
                     children: [
-                      const Text('You\'ll get '),
+                      const Text(
+                        'You\'ll get ',
+                        style: TextStyle(
+                          fontSize: 11,
+                        ),
+                      ),
                       const Spacer(),
                       Text(
                         'KTC ${_kashetoValue()}',
@@ -451,6 +496,7 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
                           fontFamily: '',
                           color: Colors.green,
                           fontWeight: FontWeight.bold,
+                          fontSize: 11,
                         ),
                       )
                     ],
