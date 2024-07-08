@@ -16,7 +16,12 @@ class Alert {
       elevation: 100,
       backgroundColor: Colors.black,
       behavior: SnackBarBehavior.floating,
-      content: Text(message),
+      content: Text(
+        message,
+        style: const TextStyle(
+          fontSize: 12,
+        ),
+      ),
       action: SnackBarAction(
           label: 'Close',
           onPressed: () {

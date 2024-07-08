@@ -15,6 +15,7 @@ import 'package:kasheto_flutter/widgets/error_widget.dart';
 import 'package:kasheto_flutter/widgets/loading_spinner.dart';
 import 'package:kasheto_flutter/widgets/my_dropdown.dart';
 import 'package:kasheto_flutter/widgets/submit_button.dart';
+import 'package:kasheto_flutter/widgets/text_field_text.dart';
 import 'package:provider/provider.dart';
 
 class WithdrawMoneyScreen extends StatefulWidget {
@@ -47,7 +48,9 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
       return true;
     } else if (_selectedBank == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        Alert.snackBar(message: 'Select a bank account to receive funds', context: context),
+        Alert.snackBar(
+            message: 'Select a bank account to receive funds',
+            context: context),
       );
       return false;
     } else {
@@ -81,8 +84,10 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
         _isLoading = true;
       });
       try {
-        const _currency = 'NGN'; // Provider.of<AuthProvider>(context, listen: false).userList[0].userCurrency;
-        final _url = Uri.parse('${ApiUrl.baseURL}user/withdraw/process-withdraw-to-bank');
+        const _currency =
+            'NGN'; // Provider.of<AuthProvider>(context, listen: false).userList[0].userCurrency;
+        final _url = Uri.parse(
+            '${ApiUrl.baseURL}user/withdraw/process-withdraw-to-bank');
         final _header = await ApiUrl.setHeaders();
 
         final _response = await http.post(_url,
@@ -96,9 +101,11 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
         if (_response.statusCode == 200 && res['status'] == 'success') {
           Alert.showSuccessDialog2(context);
         } else if (_response.statusCode == 422) {
-          ScaffoldMessenger.of(context).showSnackBar(Alert.snackBar(message: res['errors']['amount'][0], context: context));
+          ScaffoldMessenger.of(context).showSnackBar(Alert.snackBar(
+              message: res['errors']['amount'][0], context: context));
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(Alert.snackBar(message: 'Withdrawal failed', context: context));
+          ScaffoldMessenger.of(context).showSnackBar(
+              Alert.snackBar(message: 'Withdrawal failed', context: context));
         }
       } on SocketException {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -120,7 +127,8 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
     if (_amountController.text.isEmpty) {
       _ktcAmount = '0.00';
     }
-    final _naira2ktc = Provider.of<PlatformChargesProvider>(context, listen: false).nairaToKtc;
+    final _naira2ktc =
+        Provider.of<PlatformChargesProvider>(context, listen: false).nairaToKtc;
     final _amount = double.parse(_amountController.text) * _naira2ktc;
     _ktcAmount = _amount.toString();
   }
@@ -134,7 +142,8 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
       return '0.00';
     } else if (double.parse(_amountController.text) <= 5000) {
       return '10.75';
-    } else if (double.parse(_amountController.text) >= 5001 && double.parse(_amountController.text) <= 50000) {
+    } else if (double.parse(_amountController.text) >= 5001 &&
+        double.parse(_amountController.text) <= 50000) {
       return '27';
     } else {
       return '53.75';
@@ -154,7 +163,8 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
     if (_amountController.text.isEmpty) {
       return '0.00';
     } else {
-      var _charge = double.parse(_flutterwaveWithdrawCharge) + double.parse(_kashetoCharge);
+      var _charge = double.parse(_flutterwaveWithdrawCharge) +
+          double.parse(_kashetoCharge);
       return _charge.toStringAsFixed(2);
     }
   }
@@ -172,7 +182,10 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                     title: const Text('Withdraw Money'),
                   ),
                   body: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 15,
+                      vertical: 5,
+                    ),
                     child: Form(
                       key: _formKey,
                       child: Column(
@@ -181,14 +194,16 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                           Expanded(
                             child: ListView(
                               children: [
-                                const Text('Please enter the details of the account you wish to withdraw into.'),
+                                const Text(
+                                  'Please enter the details of the account you wish to withdraw into.',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                  ),
+                                ),
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                const Text(
-                                  'Amount',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
+                                const TextFieldText(text: 'Amount'),
                                 const SizedBox(
                                   height: 5,
                                 ),
@@ -209,9 +224,12 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                                       return 'Invalid amount';
                                     } else if (double.parse(value) <= 0.0) {
                                       return 'Enter an amount above 0';
-                                    } else if (double.parse(value) > _walletBalance) {
+                                    } else if (double.parse(value) >
+                                        _walletBalance) {
                                       return 'You have insufficient KTC';
-                                    } else if ((double.parse(_ktcAmount!) + double.parse(_totalCharge)) > _walletBalance) {
+                                    } else if ((double.parse(_ktcAmount!) +
+                                            double.parse(_totalCharge)) >
+                                        _walletBalance) {
                                       return 'Your current balance doesn\'t cover service charges';
                                     } else {
                                       return null;
@@ -221,6 +239,9 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                                     FocusScope.of(context).unfocus();
                                   },
                                   keyboardType: TextInputType.number,
+                                  style: const TextStyle(
+                                    fontSize: 13,
+                                  ),
                                   decoration: InputDecoration(
                                     // Using c style and text to hide counter
                                     counterStyle: const TextStyle(
@@ -231,37 +252,44 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                                       padding: EdgeInsets.all(12.0),
                                       child: Text(
                                         '₦',
-                                        style: TextStyle(fontFamily: '', fontSize: 18, color: Colors.grey),
+                                        style: TextStyle(
+                                            fontFamily: '',
+                                            fontSize: 15,
+                                            color: Colors.grey),
                                       ),
                                     ),
-                                    contentPadding: const EdgeInsets.all(10),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 5,
+                                    ),
                                     filled: true,
                                     fillColor: _textFieldColor,
                                     isDense: true,
                                     hintText: '0.00',
                                     hintStyle: const TextStyle(
                                       color: Colors.grey,
+                                      fontSize: 13,
                                     ),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(5),
                                       borderSide: BorderSide.none,
                                     ),
                                   ),
-                                  onSaved: (value) {},
                                 ),
                                 const SizedBox(
                                   height: 15,
                                 ),
                                 Row(
                                   children: [
-                                    const Text(
-                                      'Value in KTC',
-                                      style: TextStyle(fontWeight: FontWeight.bold),
-                                    ),
+                                    const TextFieldText(text: 'Value in KTC'),
                                     const Spacer(),
                                     Text(
                                       'k ${_walletBalance.toString()}',
-                                      style: const TextStyle(color: Colors.green, fontFamily: ''),
+                                      style: const TextStyle(
+                                        color: Colors.green,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Raleway',
+                                      ),
                                     )
                                   ],
                                 ),
@@ -275,16 +303,23 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                                       padding: EdgeInsets.all(12.0),
                                       child: Text(
                                         'k',
-                                        style: TextStyle(fontFamily: '', fontSize: 18, color: Colors.grey),
+                                        style: TextStyle(
+                                            fontFamily: '',
+                                            fontSize: 18,
+                                            color: Colors.grey),
                                       ),
                                     ),
-                                    contentPadding: const EdgeInsets.all(10),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 5,
+                                    ),
                                     filled: true,
                                     fillColor: _textFieldColor,
                                     isDense: true,
                                     hintText: _ktcAmount,
                                     hintStyle: const TextStyle(
                                       color: Colors.grey,
+                                      fontSize: 13,
                                     ),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(5),
@@ -295,10 +330,7 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                                 const SizedBox(
                                   height: 15,
                                 ),
-                                const Text(
-                                  'Withdrawal Method',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
+                                const TextFieldText(text: 'Withdrawal Method'),
                                 const SizedBox(
                                   height: 5,
                                 ),
@@ -309,7 +341,10 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                                         value: val,
                                         child: Text(
                                           val,
-                                          style: const TextStyle(fontWeight: FontWeight.bold),
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                          ),
                                         ),
                                       );
                                     },
@@ -318,12 +353,18 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                                     if (val == 'Local Bank') {
                                       setState(
                                         () {
-                                          _paymentMethodDropdown = 'flutterwave';
+                                          _paymentMethodDropdown =
+                                              'flutterwave';
                                         },
                                       );
                                     }
                                   },
-                                  hint: const Text('Choose a Withdrawal Method'),
+                                  hint: const Text(
+                                    'Choose a Withdrawal Method',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                    ),
+                                  ),
                                   validator: (val) {
                                     if (val == null) {
                                       return 'Pick a withdrawal method';
@@ -335,10 +376,7 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                                 const SizedBox(
                                   height: 15,
                                 ),
-                                const Text(
-                                  'Select Account',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
+                                const TextFieldText(text: 'Select Account'),
                                 const SizedBox(
                                   height: 5,
                                 ),
@@ -346,7 +384,9 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                                   padding: const EdgeInsets.only(
                                     left: 10,
                                   ),
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: MyColors.textFieldColor),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: MyColors.textFieldColor),
                                   child: Row(
                                     children: [
                                       const Text('Choose Bank Account'),
@@ -366,7 +406,9 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                                         },
                                         icon: Icon(
                                           Icons.arrow_drop_down_circle,
-                                          color: _showBanks ? Colors.grey : MyColors.primaryColor,
+                                          color: _showBanks
+                                              ? Colors.grey
+                                              : MyColors.primaryColor,
                                         ),
                                       )
                                     ],
@@ -380,37 +422,55 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                                         scrollDirection: Axis.horizontal,
                                         itemBuilder: (context, index) {
                                           return Container(
-                                            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                                            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                            margin: const EdgeInsets.symmetric(
+                                                vertical: 10, horizontal: 5),
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 10, horizontal: 10),
                                             decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10),
-                                              color: MyColors.primaryColor.withOpacity(0.3),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color: MyColors.primaryColor
+                                                  .withOpacity(0.3),
                                             ),
                                             alignment: Alignment.center,
                                             child: Stack(children: [
                                               Row(
                                                 children: [
                                                   Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceEvenly,
                                                     children: [
                                                       FittedBox(
                                                         child: Text(
-                                                          _banks[index].acctName!,
-                                                          style: const TextStyle(
-                                                            fontWeight: FontWeight.bold,
+                                                          _banks[index]
+                                                              .acctName!,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
                                                           ),
                                                         ),
                                                       ),
                                                       FittedBox(
                                                         child: Text(
-                                                          _banks[index].acctNumber!,
-                                                          style: const TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
+                                                          _banks[index]
+                                                              .acctNumber!,
+                                                          style: const TextStyle(
+                                                              color:
+                                                                  Colors.grey,
+                                                              fontStyle:
+                                                                  FontStyle
+                                                                      .italic),
                                                         ),
                                                       ),
                                                       FittedBox(
                                                         child: Text(
-                                                          _banks[index].bankName!,
+                                                          _banks[index]
+                                                              .bankName!,
                                                         ),
                                                       )
                                                     ],
@@ -426,14 +486,17 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                                                 child: GestureDetector(
                                                   onTap: () {
                                                     setState(() {
-                                                      if (_selectedBank == _banks[index].id) {
+                                                      if (_selectedBank ==
+                                                          _banks[index].id) {
                                                         _selectedBank = null;
                                                       } else {
-                                                        _selectedBank = _banks[index].id;
+                                                        _selectedBank =
+                                                            _banks[index].id;
                                                       }
                                                     });
                                                   },
-                                                  child: _selectedBank == _banks[index].id
+                                                  child: _selectedBank ==
+                                                          _banks[index].id
                                                       ? const CircleAvatar(
                                                           child: Icon(
                                                             Icons.check,
@@ -443,7 +506,8 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                                                         )
                                                       : const CircleAvatar(
                                                           radius: 10,
-                                                          backgroundColor: Colors.white,
+                                                          backgroundColor:
+                                                              Colors.white,
                                                         ),
                                                 ),
                                               ),
@@ -459,8 +523,11 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                                     const Text('Service Charge'),
                                     const Spacer(),
                                     Text(
-                                      _amountController.text.isEmpty ? '₦ 0' : '₦ $_totalCharge',
-                                      style: const TextStyle(color: Colors.green, fontFamily: ""),
+                                      _amountController.text.isEmpty
+                                          ? '₦ 0'
+                                          : '₦ $_totalCharge',
+                                      style: const TextStyle(
+                                          color: Colors.green, fontFamily: ""),
                                     ),
                                   ],
                                 ),
@@ -473,7 +540,8 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                                     const Spacer(),
                                     Text(
                                       'NGN 1 = K ${Provider.of<PlatformChargesProvider>(context, listen: false).nairaToKtc}',
-                                      style: const TextStyle(color: Colors.green),
+                                      style:
+                                          const TextStyle(color: Colors.green),
                                     ),
                                   ],
                                 ),

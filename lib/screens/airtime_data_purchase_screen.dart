@@ -80,21 +80,25 @@ class _AirtimeDataPurchaseScreenState extends State<AirtimeDataPurchaseScreen>
                             horizontal: 3, vertical: 2),
                         height: 35,
                         decoration: BoxDecoration(
-                          color: Colors.grey[300],
+                          color: Colors.grey[200],
                           borderRadius: BorderRadius.circular(
                             10.0,
                           ),
                         ),
                         child: TabBar(
-                          labelStyle:
-                              const TextStyle(fontWeight: FontWeight.bold),
+                          labelStyle: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
                           controller: _tabController,
                           indicator: BoxDecoration(
                             borderRadius: BorderRadius.circular(
-                              10.0,
+                              6,
                             ),
                             color: Colors.white,
                           ),
+                          indicatorSize: TabBarIndicatorSize.tab,
+                          dividerHeight: 0,
                           labelColor: Colors.green,
                           unselectedLabelColor: Colors.black.withOpacity(0.7),
                           tabs: const [

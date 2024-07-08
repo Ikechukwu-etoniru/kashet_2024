@@ -17,6 +17,7 @@ import 'package:kasheto_flutter/widgets/dialog_row.dart';
 import 'package:kasheto_flutter/widgets/loading_spinner.dart';
 import 'package:kasheto_flutter/widgets/my_dropdown.dart';
 import 'package:kasheto_flutter/widgets/submit_button.dart';
+import 'package:kasheto_flutter/widgets/text_field_text.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/platform_provider.dart';
@@ -85,7 +86,6 @@ class _AirtimePurchasePageState extends State<AirtimePurchasePage> {
           });
           final _response = await http.post(url, headers: _header, body: _body);
           final res = json.decode(_response.body);
-         
 
           if (_response.statusCode == 201 && res['status'] == 'success') {
             await _showSuccessDialog(context);
@@ -113,8 +113,7 @@ class _AirtimePurchasePageState extends State<AirtimePurchasePage> {
   }
 
   num get _walletBalance {
-    return Provider.of<WalletProvider>(context, listen: false)
-        .walletBalance;
+    return Provider.of<WalletProvider>(context, listen: false).walletBalance;
   }
 
   @override
@@ -129,15 +128,10 @@ class _AirtimePurchasePageState extends State<AirtimePurchasePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: constraints.maxHeight * 0.05,
+                const SizedBox(
+                  height: 15,
                 ),
-                const Text(
-                  'Select Operator',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                const TextFieldText(text: 'Select Operator'),
                 const SizedBox(
                   height: 5,
                 ),
@@ -146,7 +140,12 @@ class _AirtimePurchasePageState extends State<AirtimePurchasePage> {
                       (val) {
                         return DropdownMenuItem<String>(
                           value: val.genName,
-                          child: Text(val.genName),
+                          child: Text(
+                            val.genName.toUpperCase(),
+                            style: const TextStyle(
+                              fontSize: 12,
+                            ),
+                          ),
                         );
                       },
                     ).toList(),
@@ -160,11 +159,18 @@ class _AirtimePurchasePageState extends State<AirtimePurchasePage> {
                     },
                     hint: _dropDownValue == null
                         ? const FittedBox(
-                            child: Text('E.g MTN, Airtel, etc.'),
+                            child: Text(
+                              'E.g  MTN, Airtel, etc.',
+                              style: TextStyle(
+                                fontSize: 12,
+                              ),
+                            ),
                           )
                         : FittedBox(
                             child: Text(
                               _dropDownValue!,
+                              style: const TextStyle(
+                                  fontSize: 12, fontWeight: FontWeight.bold),
                             ),
                           ),
                     validator: (value) {
@@ -177,18 +183,13 @@ class _AirtimePurchasePageState extends State<AirtimePurchasePage> {
                 const SizedBox(
                   height: 15,
                 ),
-                const Text(
-                  'Phone Number',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                const TextFieldText(text: 'Phone Number'),
                 const SizedBox(
                   height: 5,
                 ),
                 TextFormField(
                   controller: _phoneController,
-                  style: const TextStyle(letterSpacing: 3),
+                  style: const TextStyle(letterSpacing: 3, fontSize: 12),
                   validator: ((value) {
                     if (value == null || value.isEmpty) {
                       return 'This field cannot be empty';
@@ -226,69 +227,80 @@ class _AirtimePurchasePageState extends State<AirtimePurchasePage> {
                 const SizedBox(
                   height: 15,
                 ),
-                const Text(
-                  'Amount',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                const TextFieldText(text: 'Amount'),
                 const SizedBox(
                   height: 5,
                 ),
-                TextFormField(
-                  controller: _amountController,
-                  validator: ((value) {
-                    if (value == null || value.isEmpty) {
-                      return 'This field cannot be empty';
-                    } else if (double.tryParse(value) == null) {
-                      return 'Enter a valid number';
-                    } else if (double.parse(_ktcAmount!) > _walletBalance) {
-                      return 'You have insufficient Kasheto funds';
-                    } else {
-                      return null;
-                    }
-                  }),
-                  onFieldSubmitted: (value) {
-                    FocusScope.of(context).unfocus();
-                  },
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    prefixIcon: const Padding(
-                      padding: EdgeInsets.all(12.0),
-                      child: Text(
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 12,
+                      ),
+                      decoration: BoxDecoration(
+                        color: MyColors.textFieldColor,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Text(
                         '₦',
                         style: TextStyle(
-                            fontFamily: '', fontSize: 18, color: Colors.grey),
+                          fontFamily: 'Raleway',
+                          fontSize: 14,
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                    contentPadding: const EdgeInsets.all(10),
-                    filled: true,
-                    fillColor: MyColors.textFieldColor,
-                    isDense: true,
-                    hintText: '0.00',
-                    hintStyle: const TextStyle(
-                      color: Colors.grey,
+                    Expanded(
+                      child: TextFormField(
+                        controller: _amountController,
+                        validator: ((value) {
+                          if (value == null || value.isEmpty) {
+                            return 'This field cannot be empty';
+                          } else if (double.tryParse(value) == null) {
+                            return 'Enter a valid number';
+                          } else if (double.parse(_ktcAmount!) >
+                              _walletBalance) {
+                            return 'You have insufficient Kasheto funds';
+                          } else {
+                            return null;
+                          }
+                        }),
+                        onFieldSubmitted: (value) {
+                          FocusScope.of(context).unfocus();
+                        },
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.all(10),
+                          filled: true,
+                          fillColor: MyColors.textFieldColor,
+                          isDense: true,
+                          hintText: '0.00',
+                          hintStyle: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 13,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            _getKtcAmount();
+                          });
+                        },
+                      ),
                     ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                  onChanged: (value) {
-                    setState(() {
-                      _getKtcAmount();
-                    });
-                  },
+                  ],
                 ),
                 const SizedBox(
                   height: 15,
                 ),
                 Row(
                   children: [
-                    const Text(
-                      'Value in KTC',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
+                    const TextFieldText(text: 'Value in KTC'),
                     const Spacer(),
                     Text(
                       'k ${_walletBalance.toString()}',
@@ -300,41 +312,68 @@ class _AirtimePurchasePageState extends State<AirtimePurchasePage> {
                 const SizedBox(
                   height: 5,
                 ),
-                TextFormField(
-                  enabled: false,
-                  decoration: InputDecoration(
-                    prefixIcon: const Padding(
-                      padding: EdgeInsets.all(12.0),
-                      child: Text(
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 12,
+                      ),
+                      decoration: BoxDecoration(
+                        color: MyColors.textFieldColor,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Text(
                         'k',
                         style: TextStyle(
-                            fontFamily: '', fontSize: 18, color: Colors.grey),
+                          fontFamily: 'Raleway',
+                          fontSize: 14,
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                    contentPadding: const EdgeInsets.all(10),
-                    filled: true,
-                    fillColor: MyColors.textFieldColor,
-                    isDense: true,
-                    hintText: _ktcAmount,
-                    hintStyle: const TextStyle(
-                      color: Colors.grey,
+                    const SizedBox(
+                      width: 1,
                     ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5),
-                      borderSide: BorderSide.none,
+                    Expanded(
+                      child: TextFormField(
+                        enabled: false,
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.all(10),
+                          filled: true,
+                          fillColor: MyColors.textFieldColor,
+                          isDense: true,
+                          hintText: _ktcAmount,
+                          hintStyle:
+                              const TextStyle(color: Colors.grey, fontSize: 13),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 Row(
                   children: [
-                    const Text('The current exhange rate is'),
+                    const Text(
+                      'The current exhange rate is',
+                      style: TextStyle(
+                        fontSize: 11,
+                      ),
+                    ),
                     const SizedBox(width: 5),
                     Text(
                       'NGN 1 = K ${Provider.of<PlatformChargesProvider>(context, listen: false).nairaToKtc}',
-                      style: const TextStyle(color: Colors.green),
+                      style: const TextStyle(
+                        color: Colors.green,
+                        fontSize: 11,
+                      ),
                     ),
                   ],
                 ),
