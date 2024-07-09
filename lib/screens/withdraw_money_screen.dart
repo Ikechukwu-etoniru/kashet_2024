@@ -389,7 +389,12 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                                       color: MyColors.textFieldColor),
                                   child: Row(
                                     children: [
-                                      const Text('Choose Bank Account'),
+                                      const Text(
+                                        'Choose Bank Account',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                        ),
+                                      ),
                                       const Spacer(),
                                       IconButton(
                                         padding: EdgeInsets.zero,
@@ -406,6 +411,7 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                                         },
                                         icon: Icon(
                                           Icons.arrow_drop_down_circle,
+                                          size: 17,
                                           color: _showBanks
                                               ? Colors.grey
                                               : MyColors.primaryColor,
@@ -416,7 +422,7 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                                 ),
                                 if (_showBanks)
                                   SizedBox(
-                                    height: 130,
+                                    height: 120,
                                     child: ListView.builder(
                                         itemCount: _banks.length,
                                         scrollDirection: Axis.horizontal,
@@ -446,12 +452,14 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                                                     children: [
                                                       FittedBox(
                                                         child: Text(
-                                                          _banks[index]
-                                                              .acctName!,
+                                                          capitalizeFirstLetterOfEachWord(
+                                                              _banks[index]
+                                                                  .acctName!),
                                                           style:
                                                               const TextStyle(
                                                             fontWeight:
                                                                 FontWeight.bold,
+                                                            fontSize: 12,
                                                           ),
                                                         ),
                                                       ),
@@ -459,18 +467,21 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                                                         child: Text(
                                                           _banks[index]
                                                               .acctNumber!,
-                                                          style: const TextStyle(
-                                                              color:
-                                                                  Colors.grey,
-                                                              fontStyle:
-                                                                  FontStyle
-                                                                      .italic),
+                                                          style:
+                                                              const TextStyle(
+                                                            color: Colors.grey,
+                                                            fontSize: 12,
+                                                          ),
                                                         ),
                                                       ),
                                                       FittedBox(
                                                         child: Text(
                                                           _banks[index]
                                                               .bankName!,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 12,
+                                                          ),
                                                         ),
                                                       )
                                                     ],
@@ -520,14 +531,22 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                                 ),
                                 Row(
                                   children: [
-                                    const Text('Service Charge'),
+                                    const Text(
+                                      'Service Charge',
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                      ),
+                                    ),
                                     const Spacer(),
                                     Text(
                                       _amountController.text.isEmpty
                                           ? '₦ 0'
                                           : '₦ $_totalCharge',
                                       style: const TextStyle(
-                                          color: Colors.green, fontFamily: ""),
+                                        color: Colors.green,
+                                        fontFamily: "",
+                                        fontSize: 11,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -536,12 +555,19 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                                 ),
                                 Row(
                                   children: [
-                                    const Text('The current exhange rate is'),
+                                    const Text(
+                                      'The current exhange rate is',
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                      ),
+                                    ),
                                     const Spacer(),
                                     Text(
                                       'NGN 1 = K ${Provider.of<PlatformChargesProvider>(context, listen: false).nairaToKtc}',
-                                      style:
-                                          const TextStyle(color: Colors.green),
+                                      style: const TextStyle(
+                                        color: Colors.green,
+                                        fontSize: 11,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -560,4 +586,20 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                 ),
               );
   }
+}
+
+String capitalizeFirstLetterOfEachWord(String sentence) {
+  if (sentence.isEmpty) return sentence;
+
+  // Split the sentence into words
+  List<String> words = sentence.split(' ');
+
+  // Capitalize the first letter of each word
+  words = words.map((word) {
+    if (word.isEmpty) return word; // Handle any extra spaces
+    return word[0].toUpperCase() + word.substring(1);
+  }).toList();
+
+  // Join the words back into a sentence
+  return words.join(' ');
 }

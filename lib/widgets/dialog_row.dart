@@ -12,14 +12,17 @@ class DialogRow extends StatelessWidget {
       height: 50,
       child: Column(
         children: [
-          Text(title),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 13),
+          ),
           const SizedBox(
             height: 5,
           ),
           Text(
             content,
             style: const TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 16, fontFamily: ''),
+                fontWeight: FontWeight.bold, fontSize: 12, fontFamily: ''),
           )
         ],
       ),

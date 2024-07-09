@@ -23,8 +23,7 @@ class ProfileScreen extends StatelessWidget {
         builder: (_) {
           return Container(
             margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            // height: MediaQuery.of(context).size.height * 0.2,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
@@ -35,7 +34,7 @@ class ProfileScreen extends StatelessWidget {
                 const Center(
                   child: Text(
                     'Do you want to logout ?',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
                   ),
                 ),
                 const SizedBox(
@@ -49,7 +48,7 @@ class ProfileScreen extends StatelessWidget {
                         'Cancel',
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: 17,
+                          fontSize: 12,
                         ),
                       ),
                       onPressed: () {
@@ -60,8 +59,8 @@ class ProfileScreen extends StatelessWidget {
                       height: 35,
                       child: VerticalDivider(
                         color: Colors.grey,
-                        thickness: 2,
-                        width: 20,
+                        thickness: 1.5,
+                        width: 15,
                       ),
                     ),
                     TextButton(
@@ -69,7 +68,7 @@ class ProfileScreen extends StatelessWidget {
                         'Logout',
                         style: TextStyle(
                             color: Colors.red,
-                            fontSize: 17,
+                            fontSize: 12,
                             fontWeight: FontWeight.bold),
                       ),
                       onPressed: () async {
@@ -102,7 +101,6 @@ class ProfileScreen extends StatelessWidget {
           child: Column(
             children: [
               Container(
-                height: 120,
                 padding: const EdgeInsets.symmetric(
                   vertical: 10,
                   horizontal: 10,
@@ -117,7 +115,7 @@ class ProfileScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CircleAvatar(
-                          radius: 35,
+                          radius: 28,
                           backgroundImage: NetworkImage(userData.imageUrl!),
                         ),
                         const SizedBox(
@@ -137,6 +135,7 @@ class ProfileScreen extends StatelessWidget {
                             style: TextStyle(
                               color: Colors.green,
                               fontWeight: FontWeight.bold,
+                              fontSize: 11,
                             ),
                           ),
                         ),
@@ -148,12 +147,16 @@ class ProfileScreen extends StatelessWidget {
                       children: [
                         Text(
                           userData.fullName,
+                          maxLines: 2,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                            fontSize: 13,
                           ),
                         ),
-                        Text(userData.emailAddress),
+                        Text(
+                          userData.emailAddress,
+                          style: const TextStyle(fontSize: 11),
+                        ),
                         Text(
                           userIdStatus == IDStatus.notSubmitted ||
                                   userIdStatus == IDStatus.declined
@@ -168,7 +171,7 @@ class ProfileScreen extends StatelessWidget {
                                 : userIdStatus == IDStatus.pending
                                     ? Colors.blue
                                     : Colors.green,
-                            fontSize: 15,
+                            fontSize: 13,
                             fontWeight: FontWeight.bold,
                           ),
                         )
@@ -207,9 +210,6 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 25,
-              )
             ],
           ),
         ),
@@ -236,7 +236,7 @@ class ProfileContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
       decoration: BoxDecoration(color: Colors.white, boxShadow: [
         BoxShadow(
             color: Colors.grey.withOpacity(0.1),
@@ -249,33 +249,42 @@ class ProfileContainer extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
           ),
           const Divider(),
           Row(
             children: [
-              Text(option1),
+              Text(
+                option1,
+                style: const TextStyle(
+                  fontSize: 12,
+                ),
+              ),
               const Spacer(),
               IconButton(
                 onPressed: option1F,
                 icon: const Icon(
                   Icons.arrow_forward_ios,
-                  size: 17,
+                  size: 14,
                   color: Colors.grey,
                 ),
               )
             ],
           ),
-          const Divider(),
           Row(
             children: [
-              Text(option2),
+              Text(
+                option2,
+                style: const TextStyle(
+                  fontSize: 12,
+                ),
+              ),
               const Spacer(),
               IconButton(
                 onPressed: option2F,
                 icon: const Icon(
                   Icons.arrow_forward_ios,
-                  size: 17,
+                  size: 15,
                   color: Colors.grey,
                 ),
               )

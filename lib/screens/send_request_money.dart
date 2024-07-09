@@ -41,17 +41,20 @@ class _SendRequestMoneyScreenState extends State<SendRequestMoneyScreen>
               padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 2),
               height: 35,
               decoration: BoxDecoration(
-                color: Colors.grey[300],
+                color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(
                   10.0,
                 ),
               ),
               child: TabBar(
-                labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+                labelStyle:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
                 controller: _tabController,
+                indicatorSize: TabBarIndicatorSize.tab,
+                dividerHeight: 0,
                 indicator: BoxDecoration(
                   borderRadius: BorderRadius.circular(
-                    10.0,
+                    7.0,
                   ),
                   color: Colors.white,
                 ),

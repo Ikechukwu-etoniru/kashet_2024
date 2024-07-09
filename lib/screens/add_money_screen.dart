@@ -108,7 +108,7 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
           );
         }));
       } else if (response.statusCode == 200 &&
-          paymentMethod.toLowerCase() == 'cashapp') {
+          paymentMethod.toLowerCase() == 'card') {
         final cashappWebviewLink = res['details']['href'];
         Navigator.of(context).push(MaterialPageRoute(builder: (_) {
           return WebViewPagesPaypal(

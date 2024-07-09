@@ -9,6 +9,7 @@ import 'package:kasheto_flutter/utils/api_url.dart';
 import 'package:kasheto_flutter/utils/my_padding.dart';
 import 'package:kasheto_flutter/widgets/loading_spinner.dart';
 import 'package:kasheto_flutter/widgets/submit_button.dart';
+import 'package:kasheto_flutter/widgets/text_field_text.dart';
 import 'package:provider/provider.dart';
 
 class PaypalTxScreen extends StatefulWidget {
@@ -85,9 +86,8 @@ class _PaypalTxScreenState extends State<PaypalTxScreen> {
         });
         final response = await http.post(url, body: body, headers: header);
         final res = json.decode(response.body);
-
         if (response.statusCode == 200) {
-          final paypalWebviewLink = res['details']['links'][1]['href'];
+          final paypalWebviewLink = res['details']['href'];
           Navigator.of(context).push(MaterialPageRoute(builder: (_) {
             return WebViewPagesPaypalToNaira(
               appbarTitle: 'Paypal Exchange',
@@ -130,138 +130,145 @@ class _PaypalTxScreenState extends State<PaypalTxScreen> {
           child: Form(
             key: _formKey,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: ListView(
-                    children: [
-                      const Text(
-                        'Amount (\$)',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, letterSpacing: 1.5),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      TextFormField(
-                        onFieldSubmitted: (value) {
-                          FocusScope.of(context).unfocus();
-                        },
-                        controller: _amountController,
-                        onChanged: (value) {
-                          if (value.isEmpty) {
-                            setState(() {
-                              _ktcValue = 0.0;
-                            });
-                          } else {
-                            setState(() {
-                              _getKtcValue();
-                            });
-                          }
-                        },
-                        validator: ((value) {
-                          if (value == null || value.isEmpty) {
-                            return 'This field cannot be empty';
-                          } else if (double.tryParse(value) == null) {
-                            return 'Enter a valid number';
-                          } else if (double.parse(value) <= 19.99) {
-                            return 'Enter a value above 20';
-                          } else {
-                            return null;
-                          }
-                        }),
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          contentPadding: MyPadding.textFieldContentPadding,
-                          isDense: true,
-                          hintText: 'Value of paypal funds',
-                          hintStyle: const TextStyle(
-                            color: Colors.grey,
-                          ),
-                          filled: true,
-                          fillColor: Colors.grey[200],
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: BorderSide.none),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 60,
-                      ),
-                      Row(
-                        children: [
-                          const Text(
-                            'Charges',
-                          ),
-                          const Spacer(),
-                          Text(
-                            '\$ $_platformChargeForDeposit',
-                            style: const TextStyle(
-                                color: Colors.green,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: ''),
-                          )
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        children: [
-                          const Text(
-                            'You\'ll deposit ',
-                          ),
-                          const Spacer(),
-                          Text(
-                            '\$ $_totalDepositAmount ',
-                            style: const TextStyle(
-                                color: Colors.green,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: ''),
-                          )
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        children: [
-                          const Text(
-                            'You\'ll receive',
-                          ),
-                          const Spacer(),
-                          Text(
-                            'KTC $_ktcValue',
-                            style: const TextStyle(
-                                color: Colors.green,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: ''),
-                          )
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        children: [
-                          const Text(
-                            'Naira Amount ',
-                          ),
-                          const Spacer(),
-                          Text(
-                            '₦ $_nairaAmount ',
-                            style: const TextStyle(
-                                color: Colors.green,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: ''),
-                          )
-                        ],
-                      ),
-                    ],
+                const TextFieldText(text: 'Amount (\$)'),
+                const SizedBox(
+                  height: 5,
+                ),
+                TextFormField(
+                  onFieldSubmitted: (value) {
+                    FocusScope.of(context).unfocus();
+                  },
+                  controller: _amountController,
+                  onChanged: (value) {
+                    if (value.isEmpty) {
+                      setState(() {
+                        _ktcValue = 0.0;
+                      });
+                    } else {
+                      setState(() {
+                        _getKtcValue();
+                      });
+                    }
+                  },
+                  validator: ((value) {
+                    if (value == null || value.isEmpty) {
+                      return 'This field cannot be empty';
+                    } else if (double.tryParse(value) == null) {
+                      return 'Enter a valid number';
+                    } else if (double.parse(value) <= 19.99) {
+                      return 'Enter a value above 20';
+                    } else {
+                      return null;
+                    }
+                  }),
+                  keyboardType: TextInputType.number,
+                  style: const TextStyle(
+                    fontSize: 12,
                   ),
+                  decoration: InputDecoration(
+                    contentPadding: MyPadding.textFieldContentPadding,
+                    isDense: true,
+                    hintText: 'Value of paypal funds',
+                    hintStyle:
+                        const TextStyle(color: Colors.grey, fontSize: 12),
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: BorderSide.none),
+                  ),
+                ),
+                const Spacer(),
+                Row(
+                  children: [
+                    const Text(
+                      'Charges',
+                      style: TextStyle(
+                        fontSize: 11,
+                      ),
+                    ),
+                    const Spacer(),
+                    Text(
+                      '\$ $_platformChargeForDeposit',
+                      style: const TextStyle(
+                        color: Colors.green,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: '',
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  children: [
+                    const Text(
+                      'You\'ll deposit ',
+                      style: TextStyle(
+                        fontSize: 11,
+                      ),
+                    ),
+                    const Spacer(),
+                    Text(
+                      '\$ $_totalDepositAmount ',
+                      style: const TextStyle(
+                        color: Colors.green,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: '',
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  children: [
+                    const Text(
+                      'You\'ll receive',
+                      style: TextStyle(
+                        fontSize: 11,
+                      ),
+                    ),
+                    const Spacer(),
+                    Text(
+                      'KTC $_ktcValue',
+                      style: const TextStyle(
+                        color: Colors.green,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: '',
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  children: [
+                    const Text(
+                      'Naira Amount ',
+                      style: TextStyle(
+                        fontSize: 11,
+                      ),
+                    ),
+                    const Spacer(),
+                    Text(
+                      '₦ $_nairaAmount ',
+                      style: const TextStyle(
+                        color: Colors.green,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: '',
+                      ),
+                    )
+                  ],
                 ),
                 if (_isLoading) const LoadingSpinnerWithMargin(),
                 if (!_isLoading)
@@ -269,6 +276,7 @@ class _PaypalTxScreenState extends State<PaypalTxScreen> {
                     action: () {
                       final _isValid = _formKey.currentState!.validate();
                       if (_isValid) {
+                        FocusScope.of(context).unfocus();
                         _depositPaypal();
                       }
                     },
