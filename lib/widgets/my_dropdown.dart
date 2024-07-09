@@ -1,6 +1,6 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class MyDropDown extends StatelessWidget {
   Object? value;
 
@@ -19,13 +19,13 @@ class MyDropDown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField2(
+    return DropdownButtonFormField(
       validator: validator,
       decoration: InputDecoration(
         filled: true,
         contentPadding: const EdgeInsets.symmetric(
-          horizontal: 5,
-          vertical: 10,
+          horizontal: 10,
+          vertical: 8,
         ),
         isDense: true,
         focusedBorder: OutlineInputBorder(

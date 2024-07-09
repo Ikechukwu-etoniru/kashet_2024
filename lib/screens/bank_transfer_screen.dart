@@ -15,6 +15,7 @@ import 'package:kasheto_flutter/utils/my_padding.dart';
 import 'package:kasheto_flutter/widgets/loading_spinner.dart';
 import 'package:kasheto_flutter/widgets/my_dropdown.dart';
 import 'package:kasheto_flutter/widgets/submit_button.dart';
+import 'package:kasheto_flutter/widgets/text_field_text.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/bank_provider.dart';
@@ -289,11 +290,7 @@ class _BankTransferState extends State<BankTransfer> {
                 Expanded(
                   child: ListView(
                     children: [
-                      const Text(
-                        'Bank Country',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, letterSpacing: 1.5),
-                      ),
+                      const TextFieldText(text: 'Bank Country'),
                       const SizedBox(
                         height: 5,
                       ),
@@ -302,10 +299,17 @@ class _BankTransferState extends State<BankTransfer> {
                             (val) {
                               return DropdownMenuItem<String>(
                                 value: val,
-                                child: Text(val),
+                                child: Text(
+                                  val,
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               );
                             },
                           ).toList(),
+                          value: _countryDropDownValue,
                           onChanged: (val) {
                             setState(
                               () {
@@ -317,7 +321,12 @@ class _BankTransferState extends State<BankTransfer> {
                           },
                           hint: _countryDropDownValue == null
                               ? const FittedBox(
-                                  child: Text('Choose Bank Country'),
+                                  child: Text(
+                                    'Choose Bank Country',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                    ),
+                                  ),
                                 )
                               : FittedBox(
                                   child: Text(
@@ -334,11 +343,7 @@ class _BankTransferState extends State<BankTransfer> {
                       const SizedBox(
                         height: 20,
                       ),
-                      const Text(
-                        'Account Number',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, letterSpacing: 1.5),
-                      ),
+                      const TextFieldText(text: 'Account Number'),
                       const SizedBox(
                         height: 5,
                       ),
@@ -363,8 +368,10 @@ class _BankTransferState extends State<BankTransfer> {
                             ),
                             child: const Text(
                               'Beneficiary Account Number',
-                              style:
-                                  TextStyle(color: Colors.grey, fontSize: 16),
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 12,
+                              ),
                             ),
                           ),
                         ),
@@ -396,6 +403,7 @@ class _BankTransferState extends State<BankTransfer> {
                                 _verifyAcctNumber();
                               }
                             },
+                            style: const TextStyle(fontSize: 12),
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                               contentPadding: _textFieldContentPadding,
@@ -403,6 +411,7 @@ class _BankTransferState extends State<BankTransfer> {
                               hintText: 'Beneficiary account number',
                               hintStyle: const TextStyle(
                                 color: Colors.grey,
+                                fontSize: 12,
                               ),
                               filled: true,
                               fillColor: _textFieldColor,
@@ -415,11 +424,7 @@ class _BankTransferState extends State<BankTransfer> {
                       const SizedBox(
                         height: 20,
                       ),
-                      const Text(
-                        'Bank Name',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, letterSpacing: 1.5),
-                      ),
+                      const TextFieldText(text: 'Bank Name'),
                       const SizedBox(
                         height: 5,
                       ),
@@ -442,14 +447,14 @@ class _BankTransferState extends State<BankTransfer> {
                             child: const Text(
                               'Choose Bank',
                               style:
-                                  TextStyle(color: Colors.grey, fontSize: 16),
+                                  TextStyle(color: Colors.grey, fontSize: 12),
                             ),
                           ),
                         ),
                       if (_isLoading) const LoadingSpinnerWithMargin(),
                       if (_countryDropDownValue != null && _isLoading == false)
                         DropdownSearch<String>(
-                          popupProps: const  PopupProps.menu(
+                          popupProps: const PopupProps.menu(
                             showSearchBox: true,
                             showSelectedItems: true,
                           ),
@@ -461,6 +466,7 @@ class _BankTransferState extends State<BankTransfer> {
                               hintText: _dropDownValue,
                               hintStyle: const TextStyle(
                                 color: Colors.grey,
+                                fontSize: 12,
                               ),
                               filled: true,
                               fillColor: _textFieldColor,
@@ -484,11 +490,7 @@ class _BankTransferState extends State<BankTransfer> {
                       const SizedBox(
                         height: 20,
                       ),
-                      const Text(
-                        'Account Name',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, letterSpacing: 1.5),
-                      ),
+                      const TextFieldText(text: 'Account Name'),
                       const SizedBox(
                         height: 5,
                       ),
@@ -529,6 +531,7 @@ class _BankTransferState extends State<BankTransfer> {
                               hintText: _beneName ?? 'Beneficiary Name',
                               hintStyle: const TextStyle(
                                 color: Colors.grey,
+                                fontSize: 12,
                               ),
                               filled: true,
                               fillColor: _textFieldColor,
@@ -541,11 +544,7 @@ class _BankTransferState extends State<BankTransfer> {
                       const SizedBox(
                         height: 20,
                       ),
-                      const Text(
-                        'Amount',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, letterSpacing: 1.5),
-                      ),
+                      const TextFieldText(text: 'Amount'),
                       const SizedBox(
                         height: 5,
                       ),
@@ -576,13 +575,14 @@ class _BankTransferState extends State<BankTransfer> {
                           FocusScope.of(context).unfocus();
                         },
                         keyboardType: TextInputType.number,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 12),
                         decoration: InputDecoration(
                           contentPadding: _textFieldContentPadding,
                           isDense: true,
                           hintText: '0.00',
-                          hintStyle: const TextStyle(
-                            color: Colors.grey,
-                          ),
+                          hintStyle:
+                              const TextStyle(color: Colors.grey, fontSize: 12),
                           filled: true,
                           fillColor: Colors.grey[200],
                           border: OutlineInputBorder(
@@ -595,17 +595,14 @@ class _BankTransferState extends State<BankTransfer> {
                       ),
                       Row(
                         children: [
-                          const Text(
-                            'KTC value',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 1.5),
-                          ),
+                          const TextFieldText(text: 'KTC value'),
                           const Spacer(),
                           Text(
                             ' K $walletBalance',
-                            style:
-                                const TextStyle(color: MyColors.primaryColor),
+                            style: const TextStyle(
+                              color: MyColors.primaryColor,
+                              fontSize: 11,
+                            ),
                           )
                         ],
                       ),
@@ -620,6 +617,7 @@ class _BankTransferState extends State<BankTransfer> {
                           hintText: _ktcAmount,
                           hintStyle: const TextStyle(
                             color: Colors.grey,
+                            fontSize: 12,
                           ),
                           filled: true,
                           fillColor: _textFieldColor,
@@ -631,18 +629,18 @@ class _BankTransferState extends State<BankTransfer> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Row(
-                        children: [
-                          const Text('Charge'),
-                          const Spacer(),
-                          Text(
-                            'KTC $_totalCharge',
-                            style: const TextStyle(
-                              color: Colors.green,
-                            ),
-                          )
-                        ],
-                      )
+                      // Row(
+                      //   children: [
+                      //     const Text('Charge'),
+                      //     const Spacer(),
+                      //     Text(
+                      //       'KTC $_totalCharge',
+                      //       style: const TextStyle(
+                      //         color: Colors.green,
+                      //       ),
+                      //     )
+                      //   ],
+                      // )
                     ],
                   ),
                 ),

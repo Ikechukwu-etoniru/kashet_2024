@@ -17,6 +17,7 @@ import 'package:kasheto_flutter/widgets/dialog_row.dart';
 import 'package:kasheto_flutter/widgets/loading_spinner.dart';
 import 'package:kasheto_flutter/widgets/my_dropdown.dart';
 import 'package:kasheto_flutter/widgets/submit_button.dart';
+import 'package:kasheto_flutter/widgets/text_field_text.dart';
 import 'package:provider/provider.dart';
 
 class DataPurchasePage extends StatefulWidget {
@@ -64,8 +65,7 @@ class _DataPurchasePageState extends State<DataPurchasePage> {
   }
 
   num get _walletBalance {
-    return Provider.of<WalletProvider>(context, listen: false)
-        .walletBalance;
+    return Provider.of<WalletProvider>(context, listen: false).walletBalance;
   }
 
   Future _validateData() async {
@@ -97,10 +97,9 @@ class _DataPurchasePageState extends State<DataPurchasePage> {
       setState(() {
         _isLoading = true;
       });
-      final _userCurrency =
-          Provider.of<AuthProvider>(context, listen: false)
-              .userList[0]
-              .userCurrency;
+      final _userCurrency = Provider.of<AuthProvider>(context, listen: false)
+          .userList[0]
+          .userCurrency;
       final url =
           Uri.parse('${ApiUrl.baseURL}user/bills/paybills?is_airtime=true');
       final _header = await ApiUrl.setHeaders();
@@ -113,7 +112,7 @@ class _DataPurchasePageState extends State<DataPurchasePage> {
       });
       final _response = await http.post(url, headers: _header, body: _body);
       final res = json.decode(_response.body);
-      
+
       if (res['status'] == 'success') {
         Provider.of<WalletProvider>(context, listen: false)
             .reduceKtcWalletBalance(double.parse(_ktcAmount!));
@@ -153,15 +152,10 @@ class _DataPurchasePageState extends State<DataPurchasePage> {
                 Expanded(
                   child: ListView(
                     children: [
-                      SizedBox(
-                        height: constraints.maxHeight * 0.05,
+                      const SizedBox(
+                        height: 15,
                       ),
-                      const Text(
-                        'Select Operator',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      const TextFieldText(text: 'Select Operator'),
                       const SizedBox(
                         height: 5,
                       ),
@@ -173,20 +167,36 @@ class _DataPurchasePageState extends State<DataPurchasePage> {
                             return null;
                           }
                         },
+                        value: _dropDownValue,
                         hint: _dropDownValue == null
                             ? const FittedBox(
-                                child: Text('E.g MTN, Airtel, etc.'),
+                                child: Text(
+                                  'E.g MTN, Airtel, etc.',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                  ),
+                                ),
                               )
                             : FittedBox(
                                 child: Text(
-                                  _dropDownValue!,
+                                  _dropDownValue!.toUpperCase(),
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                         items: _operatorList.map(
                           (val) {
                             return DropdownMenuItem<String>(
                               value: val,
-                              child: Text(val),
+                              child: Text(
+                                val.toUpperCase(),
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             );
                           },
                         ).toList(),
@@ -202,12 +212,7 @@ class _DataPurchasePageState extends State<DataPurchasePage> {
                       const SizedBox(
                         height: 15,
                       ),
-                      const Text(
-                        'Phone Number',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      const TextFieldText(text: 'Phone Number'),
                       const SizedBox(
                         height: 5,
                       ),
@@ -231,6 +236,9 @@ class _DataPurchasePageState extends State<DataPurchasePage> {
                         onFieldSubmitted: (value) {
                           FocusScope.of(context).unfocus();
                         },
+                        style: const TextStyle(
+                          fontSize: 12,
+                        ),
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           contentPadding: MyPadding.textFieldContentPadding,
@@ -240,6 +248,7 @@ class _DataPurchasePageState extends State<DataPurchasePage> {
                           hintText: 'E.g 08135467889',
                           hintStyle: const TextStyle(
                             color: Colors.grey,
+                            fontSize: 12,
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
@@ -250,12 +259,7 @@ class _DataPurchasePageState extends State<DataPurchasePage> {
                       const SizedBox(
                         height: 15,
                       ),
-                      const Text(
-                        'Select Plan',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      const TextFieldText(text: 'Select Plan'),
                       const SizedBox(
                         height: 5,
                       ),
@@ -267,7 +271,7 @@ class _DataPurchasePageState extends State<DataPurchasePage> {
                             color: MyColors.textFieldColor,
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          child: const Text('....  Select an operator'),
+                          child: const Text('Select an operator'),
                         ),
                       if (_operatorDataPlan != null)
                         MyDropDown(
@@ -282,13 +286,21 @@ class _DataPurchasePageState extends State<DataPurchasePage> {
                           hint: FittedBox(
                             child: Text(
                               _planDropdownValue ?? "Select a data plan",
+                              style: const TextStyle(
+                                fontSize: 12,
+                              ),
                             ),
                           ),
                           items: _operatorDataPlan!.map(
                             (val) {
                               return DropdownMenuItem<String>(
                                 value: val.name,
-                                child: Text(val.name),
+                                child: Text(
+                                  val.name,
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                  ),
+                                ),
                               );
                             },
                           ).toList(),
@@ -305,12 +317,7 @@ class _DataPurchasePageState extends State<DataPurchasePage> {
                       const SizedBox(
                         height: 15,
                       ),
-                      const Text(
-                        'Amount',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      const TextFieldText(text: 'Amount'),
                       const SizedBox(
                         height: 5,
                       ),
@@ -320,24 +327,29 @@ class _DataPurchasePageState extends State<DataPurchasePage> {
                         decoration: BoxDecoration(
                             color: MyColors.textFieldColor,
                             borderRadius: BorderRadius.circular(5)),
-                        child: Text(_selectedDataPlan == null
-                            ? '0.00'
-                            : _selectedDataPlan!.amount),
+                        child: Text(
+                          _selectedDataPlan == null
+                              ? '0.00'
+                              : _selectedDataPlan!.amount,
+                          style: const TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
                       ),
                       const SizedBox(
                         height: 15,
                       ),
                       Row(
                         children: [
-                          const Text(
-                            'Value in KTC',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
+                          const TextFieldText(text: 'Value in KTC'),
                           const Spacer(),
                           Text(
                             'k ${_walletBalance.toString()}',
                             style: const TextStyle(
-                                color: Colors.green, fontFamily: ''),
+                              color: Colors.green,
+                              fontFamily: '',
+                              fontSize: 11,
+                            ),
                           )
                         ],
                       ),
@@ -351,18 +363,31 @@ class _DataPurchasePageState extends State<DataPurchasePage> {
                           color: MyColors.textFieldColor,
                           borderRadius: BorderRadius.circular(5),
                         ),
-                        child: Text(_ktcAmount ?? '0.00'),
+                        child: Text(
+                          _ktcAmount ?? '0.00',
+                          style: const TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
                       ),
                       const SizedBox(
-                        height: 15,
+                        height: 25,
                       ),
                       Row(
-                        children:  [
-                         const  Text('The current exhange rate is'),
-                         const  SizedBox(width: 5),
+                        children: [
+                          const Text(
+                            'The current exhange rate is',
+                            style: TextStyle(
+                              fontSize: 11,
+                            ),
+                          ),
+                          const SizedBox(width: 5),
                           Text(
-                            'NGN 1 = KTC ${Provider.of<PlatformChargesProvider>(context, listen: false).nairaToKtc}',
-                            style: const TextStyle(color: Colors.green),
+                            'NGN 1 = K ${Provider.of<PlatformChargesProvider>(context, listen: false).nairaToKtc}',
+                            style: const TextStyle(
+                              color: Colors.green,
+                              fontSize: 11,
+                            ),
                           ),
                         ],
                       ),
@@ -455,4 +480,3 @@ Future<bool?> _confirmationDialog({
         );
       });
 }
-

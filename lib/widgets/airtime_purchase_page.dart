@@ -149,6 +149,7 @@ class _AirtimePurchasePageState extends State<AirtimePurchasePage> {
                         );
                       },
                     ).toList(),
+                    value: _dropDownValue,
                     onChanged: (val) {
                       setState(
                         () {

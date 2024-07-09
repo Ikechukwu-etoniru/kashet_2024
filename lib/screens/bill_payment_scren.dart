@@ -10,7 +10,12 @@ class BillPaymentScreen extends StatelessWidget {
 
   BillPaymentScreen({Key? key}) : super(key: key);
 
-  final List<String> _billPaymentServices = ['DSTV Subscriptions', 'GoTV Subscriptions', 'StarTimes Subscriptions', 'Electricity Bills'];
+  final List<String> _billPaymentServices = [
+    'DSTV Subscriptions',
+    'GoTV Subscriptions',
+    'StarTimes Subscriptions',
+    'Electricity Bills'
+  ];
 
   final List<String> _billPaymentServicesLogo = [
     'images/dstv_logo.png',
@@ -27,11 +32,16 @@ class BillPaymentScreen extends StatelessWidget {
           title: const Text('Bill Payment'),
         ),
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text('Select your desired service provider for bill payment.'),
+              const Text(
+                'Select your desired service provider for bill payment.',
+                style: TextStyle(
+                  fontSize: 12,
+                ),
+              ),
               const SizedBox(
                 height: 15,
               ),
@@ -59,11 +69,15 @@ class BillPaymentServiceContainer extends StatelessWidget {
   final String title;
   final String imageTitle;
 
-  const BillPaymentServiceContainer({required this.index, required this.title, required this.imageTitle, Key? key}) : super(key: key);
+  const BillPaymentServiceContainer(
+      {required this.index,
+      required this.title,
+      required this.imageTitle,
+      Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width * 0.9;
     return GestureDetector(
       onTap: () {
         if (index == 0) {
@@ -73,38 +87,48 @@ class BillPaymentServiceContainer extends StatelessWidget {
         } else if (index == 2) {
           Navigator.of(context).pushNamed(StartimeSubscriptionScreen.routeName);
         } else if (index == 3) {
-          Navigator.of(context).pushNamed(ElectricBillSubscriptionScreen.routeName);
+          Navigator.of(context)
+              .pushNamed(ElectricBillSubscriptionScreen.routeName);
         }
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 10),
-        height: MediaQuery.of(context).size.height * 0.08,
-        width: width,
+        margin: const EdgeInsets.only(
+          bottom: 10,
+        ),
+        padding: const EdgeInsets.symmetric(
+          vertical: 10,
+          horizontal: 5,
+        ),
+        width: double.infinity,
         decoration: BoxDecoration(
           border: Border.all(
             color: Colors.grey.withOpacity(0.3),
           ),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              width: width * 0.2,
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              width: 40,
               child: Image.asset(
                 imageTitle,
                 fit: BoxFit.contain,
               ),
             ),
-            SizedBox(
-              width: width * 0.65,
-              child: Text(title),
-            ),
-            const Expanded(
-              child: Icon(
-                Icons.keyboard_arrow_right_rounded,
-                color: Colors.grey,
+            Expanded(
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 12,
+                ),
               ),
-            )
+            ),
+            const Icon(
+              Icons.keyboard_arrow_right_rounded,
+              color: Colors.grey,
+              size: 18,
+            ),
           ],
         ),
       ),
