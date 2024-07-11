@@ -17,6 +17,7 @@ import 'package:kasheto_flutter/widgets/error_widget.dart';
 import 'package:kasheto_flutter/widgets/loading_spinner.dart';
 import 'package:kasheto_flutter/widgets/my_dropdown.dart';
 import 'package:kasheto_flutter/widgets/submit_button.dart';
+import 'package:kasheto_flutter/widgets/text_field_text.dart';
 import 'package:provider/provider.dart';
 
 import '../models/billings.dart';
@@ -61,8 +62,7 @@ class _GotvSubscriptionScreenState extends State<GotvSubscriptionScreen> {
   }
 
   num get _walletBalance {
-    return Provider.of<WalletProvider>(context, listen: false)
-        .walletBalance;
+    return Provider.of<WalletProvider>(context, listen: false).walletBalance;
   }
 
   Future _validateGotv() async {
@@ -78,9 +78,8 @@ class _GotvSubscriptionScreenState extends State<GotvSubscriptionScreen> {
           subName: _choosenGotvplan!.name,
           subNumber: _cardController.text);
 
-      if (_isConfirmed != null && _isConfirmed) {        
+      if (_isConfirmed != null && _isConfirmed) {
         _subscribeGotv();
-
       }
     }
   }
@@ -90,10 +89,9 @@ class _GotvSubscriptionScreenState extends State<GotvSubscriptionScreen> {
       setState(() {
         _isButtonLoading = true;
       });
-      final _userCurrency =
-          Provider.of<AuthProvider>(context, listen: false)
-              .userList[0]
-              .userCurrency;
+      final _userCurrency = Provider.of<AuthProvider>(context, listen: false)
+          .userList[0]
+          .userCurrency;
       final url = Uri.parse('${ApiUrl.baseURL}user/bills/paybills');
       final _header = await ApiUrl.setHeaders();
       final _ktcValue = _getKtcAmount(_choosenGotvplan!.name, context);
@@ -111,15 +109,16 @@ class _GotvSubscriptionScreenState extends State<GotvSubscriptionScreen> {
         Provider.of<WalletProvider>(context, listen: false)
             .reduceKtcWalletBalance(double.parse(_ktcValue));
         await Alert.showSuccessDialog(
-            context: context, text: 'Your GOTV subscription was successful',
+            context: context,
+            text: 'Your GOTV subscription was successful',
             onPressed: () {
               Navigator.of(context).pushNamedAndRemoveUntil(
                   MainScreen.routeName, (route) => false);
             });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-        Alert.snackBar(message: ApiUrl.errorString, context: context),
-      );
+          Alert.snackBar(message: ApiUrl.errorString, context: context),
+        );
       }
     } on SocketException {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -164,14 +163,13 @@ class _GotvSubscriptionScreenState extends State<GotvSubscriptionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _deviceHeight = MediaQuery.of(context).size.height;
     final platformCharges = Provider.of<PlatformChargesProvider>(context);
     return _isLoading
         ? const LoadingSpinnerWithScaffold()
         : _isError
             ? const IsErrorScreen()
             : SafeArea(
-              child: Scaffold(
+                child: Scaffold(
                   resizeToAvoidBottomInset: false,
                   appBar: AppBar(
                     title: const Text('GOTV'),
@@ -183,13 +181,10 @@ class _GotvSubscriptionScreenState extends State<GotvSubscriptionScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(
-                            height: _deviceHeight * 0.03,
+                          const SizedBox(
+                            height: 5,
                           ),
-                          const Text(
-                            'Decoder Number (ICU)',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
+                          const TextFieldText(text: 'Decoder Number (ICU)'),
                           const SizedBox(
                             height: 5,
                           ),
@@ -212,14 +207,18 @@ class _GotvSubscriptionScreenState extends State<GotvSubscriptionScreen> {
                               FocusScope.of(context).unfocus();
                             },
                             keyboardType: TextInputType.number,
+                            style: const TextStyle(
+                              fontSize: 12,
+                            ),
                             decoration: InputDecoration(
                               contentPadding: _textFieldContentPadding,
                               filled: true,
                               fillColor: MyColors.textFieldColor,
                               isDense: true,
-                              hintText: 'E.g 08135467889',
+                              hintText: 'E.g 88135467889',
                               hintStyle: const TextStyle(
                                 color: Colors.grey,
+                                fontSize: 12,
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5),
@@ -230,8 +229,7 @@ class _GotvSubscriptionScreenState extends State<GotvSubscriptionScreen> {
                           const SizedBox(
                             height: 20,
                           ),
-                          const Text('Select Subscription Plan',
-                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          const TextFieldText(text: 'Select Subscription Plan'),
                           const SizedBox(
                             height: 5,
                           ),
@@ -239,9 +237,15 @@ class _GotvSubscriptionScreenState extends State<GotvSubscriptionScreen> {
                             items: _gotvplanList!.map((e) {
                               return DropdownMenuItem(
                                 value: e.name,
-                                child: Text(e.name),
+                                child: Text(
+                                  e.name,
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                  ),
+                                ),
                               );
                             }).toList(),
+                            value: _dropDownValue,
                             onChanged: (val) {
                               setState(
                                 () {
@@ -251,7 +255,12 @@ class _GotvSubscriptionScreenState extends State<GotvSubscriptionScreen> {
                             },
                             hint: _dropDownValue == null
                                 ? const FittedBox(
-                                    child: Text('Select plan'),
+                                    child: Text(
+                                      'Select plan',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                      ),
+                                    ),
                                   )
                                 : FittedBox(
                                     child: Text(
@@ -269,12 +278,7 @@ class _GotvSubscriptionScreenState extends State<GotvSubscriptionScreen> {
                           const SizedBox(
                             height: 20,
                           ),
-                          const Text(
-                            'Amount',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          const TextFieldText(text: 'Amount'),
                           const SizedBox(
                             height: 5,
                           ),
@@ -295,14 +299,14 @@ class _GotvSubscriptionScreenState extends State<GotvSubscriptionScreen> {
                                 borderRadius: BorderRadius.circular(5),
                               ),
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 15),
+                                  horizontal: 10, vertical: 10),
                               child: Row(
                                 children: [
                                   const Text(
                                     '₦',
                                     style: TextStyle(
                                         fontFamily: '',
-                                        fontSize: 18,
+                                        fontSize: 14,
                                         color: Colors.grey),
                                   ),
                                   const SizedBox(
@@ -313,9 +317,11 @@ class _GotvSubscriptionScreenState extends State<GotvSubscriptionScreen> {
                                         ? '0.0'
                                         : _getAmount(_dropDownValue!, context),
                                     style: const TextStyle(
-                                        fontFamily: '',
-                                        fontSize: 18,
-                                        color: Colors.grey),
+                                      fontFamily: '',
+                                      fontSize: 13,
+                                      color: Colors.grey,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   )
                                 ],
                               ),
@@ -324,12 +330,7 @@ class _GotvSubscriptionScreenState extends State<GotvSubscriptionScreen> {
                           const SizedBox(
                             height: 15,
                           ),
-                          const Text(
-                            'Value in KTC',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          const TextFieldText(text: 'Value in KTC'),
                           const SizedBox(
                             height: 5,
                           ),
@@ -350,15 +351,17 @@ class _GotvSubscriptionScreenState extends State<GotvSubscriptionScreen> {
                                 borderRadius: BorderRadius.circular(5),
                               ),
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 15),
+                                  horizontal: 10, vertical: 10),
                               child: Row(
                                 children: [
                                   const Text(
                                     'K',
                                     style: TextStyle(
-                                        fontFamily: '',
-                                        fontSize: 18,
-                                        color: Colors.grey),
+                                      fontFamily: '',
+                                      fontSize: 14,
+                                      color: Colors.grey,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                   const SizedBox(
                                     width: 20,
@@ -366,46 +369,57 @@ class _GotvSubscriptionScreenState extends State<GotvSubscriptionScreen> {
                                   Text(
                                     _dropDownValue == null
                                         ? '0.0'
-                                        : _getKtcAmount(_dropDownValue!, context),
+                                        : _getKtcAmount(
+                                            _dropDownValue!, context),
                                     style: const TextStyle(
-                                        fontFamily: '',
-                                        fontSize: 18,
-                                        color: Colors.grey),
+                                      fontFamily: '',
+                                      fontSize: 13,
+                                      color: Colors.grey,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   )
                                 ],
                               ),
                             ),
                           ),
                           const SizedBox(
-                            height: 10,
+                            height: 30,
                           ),
                           Row(
                             children: [
-                              const Text('The current exhange rate is'),
+                              const Text(
+                                'The current exhange rate is',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                ),
+                              ),
                               const SizedBox(
                                 width: 5,
                               ),
                               Text(
                                 '1 NGN = ${platformCharges.nairaToKtc} KTC',
-                                style: const TextStyle(color: Colors.green),
+                                style: const TextStyle(
+                                  color: Colors.green,
+                                  fontSize: 12,
+                                ),
                               ),
                             ],
                           ),
                           const Spacer(),
                           if (_isButtonLoading)
-                         const  LoadingSpinnerWithMargin(),
-                         if (!_isButtonLoading)
-                          SubmitButton(
-                              action: () {
-                                _validateGotv();
-                              },
-                              title: 'Continue')
+                            const LoadingSpinnerWithMargin(),
+                          if (!_isButtonLoading)
+                            SubmitButton(
+                                action: () {
+                                  _validateGotv();
+                                },
+                                title: 'Continue')
                         ],
                       ),
                     ),
                   ),
                 ),
-            );
+              );
   }
 }
 

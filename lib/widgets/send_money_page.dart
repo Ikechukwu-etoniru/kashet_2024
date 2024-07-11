@@ -23,7 +23,6 @@ class SendMoneyPage extends StatefulWidget {
 }
 
 class _SendMoneyPageState extends State<SendMoneyPage> {
-  final _textFieldContentPadding = const EdgeInsets.all(10);
   final _textFieldColor = Colors.grey[200];
   String _dropDownValue = 'NGN';
   String _ktcDropDownValue = 'KTC';
@@ -179,7 +178,7 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                         : _isEmailvalid != null && _isEmailvalid!
                             ? Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 12),
+                                    horizontal: 15, vertical: 10),
                                 child: Container(
                                   decoration: const BoxDecoration(
                                     color: Colors.green,
@@ -197,7 +196,7 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                             : _isEmailvalid != null && _isEmailvalid! == false
                                 ? Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 15, vertical: 12),
+                                        horizontal: 15, vertical: 10),
                                     child: Container(
                                       decoration: const BoxDecoration(
                                           color: Colors.red,
@@ -212,7 +211,10 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                                     ),
                                   )
                                 : const SizedBox(),
-                    contentPadding: _textFieldContentPadding,
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 10,
+                      horizontal: 10,
+                    ),
                     isDense: true,
                     hintText: 'sample@gmail.com',
                     hintStyle: const TextStyle(
@@ -247,8 +249,8 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                   children: [
                     Container(
                       alignment: Alignment.center,
-                      width: 50,
-                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      width: 45,
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       decoration: BoxDecoration(
                         color: MyColors.textFieldColor,
                         borderRadius: BorderRadius.circular(5),
@@ -256,7 +258,7 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                       child: Text(
                         _dropDownValue == 'NGN' ? '₦' : '\$',
                         style: const TextStyle(
-                            color: Colors.grey, fontSize: 15, fontFamily: ''),
+                            color: Colors.grey, fontSize: 14, fontFamily: ''),
                       ),
                     ),
                     Expanded(
@@ -283,6 +285,9 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                           });
                         },
                         controller: _amountController,
+                        style: const TextStyle(
+                          fontSize: 12,
+                        ),
                         decoration: InputDecoration(
                           counterStyle: const TextStyle(
                             height: double.minPositive,
@@ -291,8 +296,8 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                           filled: true,
                           fillColor: MyColors.textFieldColor,
                           contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 15,
                             vertical: 10,
+                            horizontal: 10,
                           ),
                           hintText: '0.00',
                           border: OutlineInputBorder(
@@ -301,44 +306,54 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                         ),
                       ),
                     ),
-
-                    //  Container(
-                    //     padding: const EdgeInsets.symmetric(horizontal: 5),
-                    //     alignment: Alignment.center,
-                    //     width: constraints.maxWidth * 0.23,
-                    //     decoration: BoxDecoration(
-                    //       color: Colors.white,
-                    //       borderRadius: BorderRadius.circular(5),
-                    //     ),
-                    //     child: DropdownButton(
-                    //       focusColor: Colors.black,
-                    //       icon: const Icon(Icons.keyboard_arrow_down),
-                    //       iconEnabledColor: Colors.grey,
-                    //       iconDisabledColor: Colors.grey,
-                    //       underline: const SizedBox(),
-                    //       elevation: 0,
-                    //       hint: Text(_dropDownValue),
-                    //       isExpanded: true,
-                    //       items: [
-                    //         'NGN'
-                    //         //  'USD'
-                    //       ].map(
-                    //         (val) {
-                    //           return DropdownMenuItem<String>(
-                    //             value: val,
-                    //             child: Text(val),
-                    //           );
-                    //         },
-                    //       ).toList(),
-                    //       onChanged: (val) {
-                    //         setState(
-                    //           () {
-                    //             _dropDownValue = val as String;
-                    //           },
-                    //         );
-                    //       },
-                    //     ),
-                    //   ),
+                    const SizedBox(
+                      width: 1,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5,
+                      ),
+                      alignment: Alignment.center,
+                      width: 65,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: MyColors.textFieldColor,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: DropdownButton(
+                        focusColor: Colors.black,
+                        icon: const Icon(
+                          Icons.arrow_drop_down,
+                          size: 18,
+                        ),
+                        iconEnabledColor: Colors.grey,
+                        iconDisabledColor: Colors.grey,
+                        underline: const SizedBox(),
+                        elevation: 0,
+                        hint: Text(
+                          _dropDownValue,
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                        isExpanded: true,
+                        items: ['NGN', 'USD'].map(
+                          (val) {
+                            return DropdownMenuItem<String>(
+                              value: val,
+                              child: Text(val),
+                            );
+                          },
+                        ).toList(),
+                        onChanged: (val) {
+                          setState(
+                            () {
+                              _dropDownValue = val as String;
+                            },
+                          );
+                        },
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(
@@ -365,8 +380,8 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                   children: [
                     Container(
                       alignment: Alignment.center,
-                      width: 50,
-                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      width: 45,
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       decoration: BoxDecoration(
                         color: MyColors.textFieldColor,
                         borderRadius: BorderRadius.circular(5),
@@ -380,72 +395,38 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                         ),
                       ),
                     ),
-                    TextFormField(
-                      enabled: false,
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: 10,
-                            horizontal: constraints.maxWidth * 0.2),
-                        filled: true,
-                        fillColor: _textFieldColor,
-                        isDense: true,
-                        hintText: _ktcAmount,
-                        hintStyle: const TextStyle(
-                          color: Colors.grey,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
+                    const SizedBox(
+                      width: 1,
                     ),
-                    Container(
-                      alignment: Alignment.center,
-                      width: constraints.maxWidth * 0.15,
-                      height: 50,
-                      child: Text(
-                        _ktcDropDownValue == 'KTC' ? 'K' : '\$',
+                    Expanded(
+                      child: TextFormField(
+                        enabled: false,
                         style: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: 20,
-                          fontFamily: '',
+                          fontSize: 12,
+                        ),
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 10,
+                            horizontal: 10,
+                          ),
+                          filled: true,
+                          fillColor: _textFieldColor,
+                          isDense: true,
+                          hintText: _ktcAmount,
+                          hintStyle: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 12,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: BorderSide.none,
+                          ),
                         ),
                       ),
                     ),
-                    // Container(
-                    //     padding: const EdgeInsets.symmetric(horizontal: 5),
-                    //     alignment: Alignment.center,
-                    //     width: constraints.maxWidth * 0.23,
-                    //     decoration: BoxDecoration(
-                    //       color: Colors.white,
-                    //       borderRadius: BorderRadius.circular(5),
-                    //     ),
-                    //     child: DropdownButton(
-                    //       focusColor: Colors.black,
-                    //       icon: const Icon(Icons.keyboard_arrow_down),
-                    //       iconEnabledColor: Colors.grey,
-                    //       iconDisabledColor: Colors.grey,
-                    //       underline: const SizedBox(),
-                    //       elevation: 0,
-                    //       hint: Text(_ktcDropDownValue),
-                    //       isExpanded: true,
-                    //       items: ['KTC'].map(
-                    //         (val) {
-                    //           return DropdownMenuItem<String>(
-                    //             value: val,
-                    //             child: Text(val),
-                    //           );
-                    //         },
-                    //       ).toList(),
-                    //       onChanged: (val) {
-                    //         setState(
-                    //           () {
-                    //             _ktcDropDownValue = val as String;
-                    //           },
-                    //         );
-                    //       },
-                    //     ),
-                    //   ),
+                    const SizedBox(
+                      width: 1,
+                    ),
                   ],
                 ),
                 const SizedBox(
@@ -455,7 +436,10 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                   children: [
                     const Text(
                       'The current exhange rate is',
-                      style: TextStyle(color: Colors.grey),
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 12,
+                      ),
                     ),
                     const Spacer(),
                     Text(
@@ -463,6 +447,7 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.grey,
+                        fontSize: 12,
                       ),
                     ),
                   ],
@@ -476,12 +461,18 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                 ),
                 Row(
                   children: [
-                    const Text('Total Amount'),
+                    const Text(
+                      'Total Amount',
+                      style: TextStyle(fontSize: 12),
+                    ),
                     const Spacer(),
                     Text(
                       '₦${_amountController.text}',
                       style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontFamily: ''),
+                        fontWeight: FontWeight.bold,
+                        fontFamily: '',
+                        fontSize: 12,
+                      ),
                     ),
                   ],
                 ),

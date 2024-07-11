@@ -14,6 +14,7 @@ import 'package:kasheto_flutter/widgets/dialog_chip.dart';
 import 'package:kasheto_flutter/widgets/loading_spinner.dart';
 import 'package:kasheto_flutter/widgets/submit_button.dart';
 import 'package:http/http.dart' as http;
+import 'package:kasheto_flutter/widgets/text_field_text.dart';
 import 'package:provider/provider.dart';
 
 class RequestMoneyPage extends StatefulWidget {
@@ -113,7 +114,7 @@ class _RequestMoneyPageState extends State<RequestMoneyPage> {
       setState(() {
         _isLoading = true;
       });
-      final _isAgreed =  await _requestMoneyBottomSheet(
+      final _isAgreed = await _requestMoneyBottomSheet(
           currency: _dropDownValue,
           context: context,
           recepientName: _receiverName!,
@@ -162,14 +163,10 @@ class _RequestMoneyPageState extends State<RequestMoneyPage> {
             width: constraints.maxWidth,
             child: ListView(
               children: [
-                SizedBox(
-                  height: constraints.maxHeight * 0.03,
+                const SizedBox(
+                  height: 10,
                 ),
-                const Text(
-                  'Receipient Email',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600, letterSpacing: 1.5),
-                ),
+                const TextFieldText(text: 'Receipient Email'),
                 const SizedBox(
                   height: 5,
                 ),
@@ -194,12 +191,16 @@ class _RequestMoneyPageState extends State<RequestMoneyPage> {
                       }
                     }),
                     keyboardType: TextInputType.emailAddress,
+                    style: const TextStyle(
+                      fontSize: 12,
+                    ),
                     decoration: InputDecoration(
                       contentPadding: _textFieldContentPadding,
                       isDense: true,
                       hintText: 'sample@gmail.com',
                       hintStyle: const TextStyle(
                         color: Colors.grey,
+                        fontSize: 12,
                       ),
                       filled: true,
                       fillColor: _textFieldColor,
@@ -212,11 +213,7 @@ class _RequestMoneyPageState extends State<RequestMoneyPage> {
                 const SizedBox(
                   height: 15,
                 ),
-                const Text(
-                  'Receipient Name',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600, letterSpacing: 1.5),
-                ),
+                const TextFieldText(text: 'Receipient Name'),
                 const SizedBox(
                   height: 5,
                 ),
@@ -246,190 +243,123 @@ class _RequestMoneyPageState extends State<RequestMoneyPage> {
                       ),
                       child: Text(
                         _receiverName ?? 'Recepient Name',
-                        style: const TextStyle(color: Colors.black45),
+                        style: const TextStyle(
+                          color: Colors.black45,
+                          fontSize: 12,
+                        ),
                       ),
                     ),
                   ),
                 const SizedBox(
                   height: 15,
                 ),
-                const Text(
-                  'Amount Requested',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                const TextFieldText(text: 'Amount Requested'),
                 const SizedBox(
                   height: 5,
                 ),
-                Stack(
+                Row(
                   children: [
-                    TextFormField(
-                      maxLength: 19,
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'This field shouldn\'t be empty';
-                        } else if (double.tryParse(value) == null) {
-                          return 'Enter valid number';
-                        } else if (double.parse(value) <= 999.99) {
-                          return 'Enter a value greater than or equal to 1000';
-                        } else {
-                          return null;
-                        }
-                      },
-                      onChanged: (value) {
-                        setState(() {
-                          _getKtcAmount();
-                        });
-                      },
-                      controller: _amountController,
-                      decoration: InputDecoration(
-                        counterStyle: const TextStyle(
-                          height: double.minPositive,
-                        ),
-                        counterText: "",
-                        filled: true,
-                        fillColor: MyColors.textFieldColor,
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: 10,
-                            horizontal: constraints.maxWidth * 0.2),
-                        hintText: '0.00',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide.none),
-                      ),
-                    ),
                     Container(
                       alignment: Alignment.center,
-                      width: constraints.maxWidth * 0.15,
-                      height: 50,
+                      width: 45,
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      decoration: BoxDecoration(
+                        color: MyColors.textFieldColor,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
                       child: Text(
                         _dropDownValue == 'NGN' ? '₦' : '\$',
                         style: const TextStyle(
-                            color: Colors.grey, fontSize: 20, fontFamily: ''),
+                            color: Colors.grey, fontSize: 14, fontFamily: ''),
                       ),
                     ),
-                    Positioned(
-                      right: 2,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                        alignment: Alignment.center,
-                        width: constraints.maxWidth * 0.23,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(5),
+                    Expanded(
+                      child: TextFormField(
+                        maxLength: 19,
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'This field shouldn\'t be empty';
+                          } else if (double.tryParse(value) == null) {
+                            return 'Enter valid number';
+                          } else if (double.parse(value) <= 999.99) {
+                            return 'Enter a value greater than or equal to 1000';
+                          } else {
+                            return null;
+                          }
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            _getKtcAmount();
+                          });
+                        },
+                        controller: _amountController,
+                        style: const TextStyle(
+                          fontSize: 12,
                         ),
-                        child: DropdownButton(
-                          focusColor: Colors.black,
-                          icon: const Icon(Icons.keyboard_arrow_down),
-                          iconEnabledColor: Colors.grey,
-                          iconDisabledColor: Colors.grey,
-                          underline: const SizedBox(),
-                          elevation: 0,
-                          hint: Text(_dropDownValue),
-                          isExpanded: true,
-                          items: [
-                            'NGN'
-                            //  'USD'
-                          ].map(
-                            (val) {
-                              return DropdownMenuItem<String>(
-                                value: val,
-                                child: Text(val),
-                              );
-                            },
-                          ).toList(),
-                          onChanged: (val) {
-                            setState(
-                              () {
-                                _dropDownValue = val as String;
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                const Text(
-                  'You\'ll Get',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Stack(
-                  children: [
-                    TextFormField(
-                      enabled: false,
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: 10,
-                            horizontal: constraints.maxWidth * 0.2),
-                        filled: true,
-                        fillColor: _textFieldColor,
-                        isDense: true,
-                        hintText: _ktcAmount,
-                        hintStyle: const TextStyle(
-                          color: Colors.grey,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide.none,
+                        decoration: InputDecoration(
+                          counterStyle: const TextStyle(
+                            height: double.minPositive,
+                          ),
+                          counterText: "",
+                          filled: true,
+                          fillColor: MyColors.textFieldColor,
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 10),
+                          hintText: '0.00',
+                          hintStyle: const TextStyle(fontSize: 12),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              borderSide: BorderSide.none),
                         ),
                       ),
                     ),
                     Container(
-                      alignment: Alignment.center,
-                      width: constraints.maxWidth * 0.15,
-                      height: 50,
-                      child: Text(
-                        _ktcDropDownValue == 'KTC' ? 'K' : '\$',
-                        style: const TextStyle(
-                            color: Colors.grey, fontSize: 20, fontFamily: ''),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5,
                       ),
-                    ),
-                    Positioned(
-                      right: 2,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                        alignment: Alignment.center,
-                        width: constraints.maxWidth * 0.23,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(5),
+                      alignment: Alignment.center,
+                      width: 65,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: MyColors.textFieldColor,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: DropdownButton(
+                        focusColor: Colors.black,
+                        icon: const Icon(
+                          Icons.arrow_drop_down,
+                          size: 18,
                         ),
-                        child: DropdownButton(
-                          focusColor: Colors.black,
-                          icon: const Icon(Icons.keyboard_arrow_down),
-                          iconEnabledColor: Colors.grey,
-                          iconDisabledColor: Colors.grey,
-                          underline: const SizedBox(),
-                          elevation: 0,
-                          hint: Text(_ktcDropDownValue),
-                          isExpanded: true,
-                          items: ['KTC'].map(
-                            (val) {
-                              return DropdownMenuItem<String>(
-                                value: val,
-                                child: Text(val),
-                              );
-                            },
-                          ).toList(),
-                          onChanged: (val) {
-                            setState(
-                              () {
-                                _ktcDropDownValue = val as String;
-                              },
+                        iconEnabledColor: Colors.grey,
+                        iconDisabledColor: Colors.grey,
+                        underline: const SizedBox(),
+                        elevation: 0,
+                        hint: Text(
+                          _dropDownValue,
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                        isExpanded: true,
+                        items: ['NGN', 'USD'].map(
+                          (val) {
+                            return DropdownMenuItem<String>(
+                              value: val,
+                              child: Text(
+                                val,
+                                style: const TextStyle(fontSize: 14),
+                              ),
                             );
                           },
-                        ),
+                        ).toList(),
+                        onChanged: (val) {
+                          setState(
+                            () {
+                              _dropDownValue = val as String;
+                            },
+                          );
+                        },
                       ),
                     ),
                   ],
@@ -437,11 +367,69 @@ class _RequestMoneyPageState extends State<RequestMoneyPage> {
                 const SizedBox(
                   height: 15,
                 ),
-                const Text(
-                  'Description',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
+                const TextFieldText(text: 'You\'ll Get'),
+                const SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  children: [
+                    Container(
+                      alignment: Alignment.center,
+                      width: 45,
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      decoration: BoxDecoration(
+                        color: MyColors.textFieldColor,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: const Text(
+                        'k',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 15,
+                          fontFamily: '',
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 2,
+                    ),
+                    Expanded(
+                      child: TextFormField(
+                        enabled: false,
+                        style: const TextStyle(
+                          fontSize: 12,
+                        ),
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 10,
+                            horizontal: 10,
+                          ),
+                          filled: true,
+                          fillColor: _textFieldColor,
+                          isDense: true,
+                          hintText: _ktcAmount,
+                          hintStyle: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 12,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 1,
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                const TextFieldText(text: 'Description'),
+                const SizedBox(
+                  height: 5,
                 ),
                 TextFormField(
                   controller: _descriptionController,
@@ -458,13 +446,13 @@ class _RequestMoneyPageState extends State<RequestMoneyPage> {
                     }
                   }),
                   onSaved: (value) {},
+                  style: const TextStyle(fontSize: 12),
                   decoration: InputDecoration(
                     contentPadding: _textFieldContentPadding,
                     isDense: true,
                     hintText: 'Provide a payment description',
-                    hintStyle: const TextStyle(
-                      color: Colors.grey,
-                    ),
+                    hintStyle:
+                        const TextStyle(color: Colors.grey, fontSize: 12),
                     filled: true,
                     fillColor: Colors.grey[200],
                     border: OutlineInputBorder(
@@ -477,11 +465,16 @@ class _RequestMoneyPageState extends State<RequestMoneyPage> {
                 ),
                 Row(
                   children: [
-                    const Text('The current exhange rate is'),
+                    const Text(
+                      'The current exhange rate is',
+                      style: TextStyle(
+                        fontSize: 12,
+                      ),
+                    ),
                     const SizedBox(width: 5),
                     Text(
                       'NGN 1 = KTC ${Provider.of<PlatformChargesProvider>(context, listen: false).nairaToKtc}',
-                      style: const TextStyle(color: Colors.green),
+                      style: const TextStyle(color: Colors.green, fontSize: 12),
                     ),
                   ],
                 ),
@@ -641,7 +634,6 @@ Future<bool?> _requestMoneyBottomSheet(
                     const Spacer(),
                   ],
                 ),
-                
               ],
             ),
           ),

@@ -18,6 +18,7 @@ import 'package:kasheto_flutter/widgets/error_widget.dart';
 import 'package:kasheto_flutter/widgets/loading_spinner.dart';
 import 'package:kasheto_flutter/widgets/my_dropdown.dart';
 import 'package:kasheto_flutter/widgets/submit_button.dart';
+import 'package:kasheto_flutter/widgets/text_field_text.dart';
 import 'package:provider/provider.dart';
 
 class ElectricBillSubscriptionScreen extends StatefulWidget {
@@ -51,8 +52,9 @@ class _ElectricBillSubscriptionScreenState
   }
 
   void _getKtcAmount() {
-    final _nairaAmount =
-        _amountController.text.isEmpty ? 0 : double.parse(_amountController.text);
+    final _nairaAmount = _amountController.text.isEmpty
+        ? 0
+        : double.parse(_amountController.text);
     final _nairaToKtc =
         Provider.of<PlatformChargesProvider>(context, listen: false).nairaToKtc;
     final ktcAmount = _nairaAmount * _nairaToKtc;
@@ -87,8 +89,7 @@ class _ElectricBillSubscriptionScreenState
   }
 
   num get _walletBalance {
-    return Provider.of<WalletProvider>(context, listen: false)
-        .walletBalance;
+    return Provider.of<WalletProvider>(context, listen: false).walletBalance;
   }
 
   Future _validateElectric() async {
@@ -114,10 +115,9 @@ class _ElectricBillSubscriptionScreenState
       setState(() {
         _isButtonLoading = true;
       });
-      final _userCurrency =
-          Provider.of<AuthProvider>(context, listen: false)
-              .userList[0]
-              .userCurrency;
+      final _userCurrency = Provider.of<AuthProvider>(context, listen: false)
+          .userList[0]
+          .userCurrency;
       final url = Uri.parse('${ApiUrl.baseURL}user/bills/paybills');
       final _header = await ApiUrl.setHeaders();
       final _body = json.encode({
@@ -141,8 +141,8 @@ class _ElectricBillSubscriptionScreenState
             });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-        Alert.snackBar(message: ApiUrl.errorString, context: context),
-      );
+          Alert.snackBar(message: ApiUrl.errorString, context: context),
+        );
       }
     } on SocketException {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -161,14 +161,13 @@ class _ElectricBillSubscriptionScreenState
 
   @override
   Widget build(BuildContext context) {
-    final _deviceHeight = MediaQuery.of(context).size.height;
     final platformCharges = Provider.of<PlatformChargesProvider>(context);
     return _isLoading
         ? const LoadingSpinnerWithScaffold()
         : _isError
             ? const IsErrorScreen()
             : SafeArea(
-              child: Scaffold(
+                child: Scaffold(
                   resizeToAvoidBottomInset: false,
                   appBar: AppBar(
                     title: const Text('Electricity Bill'),
@@ -180,55 +179,64 @@ class _ElectricBillSubscriptionScreenState
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(
-                            height: _deviceHeight * 0.04,
+                          const SizedBox(
+                            height: 10,
                           ),
-                          const Text(
-                            'Select Provider',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
+                          const TextFieldText(text: 'Select Provider'),
                           const SizedBox(
                             height: 5,
                           ),
                           MyDropDown(
-                            validator: (value) {
-                              if (value == null) {
-                                return 'Select a provider';
-                              } else {
-                                return null;
-                              }
-                            },
-                            items: _electricplanList!.map((e) {
-                              return DropdownMenuItem(
-                                value: e.name,
-                                child: Text(e.name),
-                              );
-                            }).toList(),
-                            onChanged: (val) {
-                              setState(
-                                () {
-                                  _dropDownValue = val as String?;
-                                  _getSelectedElectricPlan();
-                                },
-                              );
-                            },
-                            hint: _dropDownValue == null
-                                ? const FittedBox(
-                                    child: Text('E.g EKEDC'),
-                                  )
-                                : FittedBox(
-                                    child: Text(
-                                      _dropDownValue!,
+                              validator: (value) {
+                                if (value == null) {
+                                  return 'Select a provider';
+                                } else {
+                                  return null;
+                                }
+                              },
+                              items: _electricplanList!.map((e) {
+                                return DropdownMenuItem(
+                                  value: e.name,
+                                  child: Text(
+                                    e.name,
+                                    style: const TextStyle(
+                                      fontSize: 12,
                                     ),
                                   ),
-                          ),
+                                );
+                              }).toList(),
+                              value: _dropDownValue,
+                              onChanged: (val) {
+                                setState(
+                                  () {
+                                    _dropDownValue = val as String?;
+                                    _getSelectedElectricPlan();
+                                  },
+                                );
+                              },
+                              hint:
+                                  // _dropDownValue == null
+                                  //     ?
+                                  const Text(
+                                'E.g EKEDC',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                ),
+                              )
+                              // : FittedBox(
+                              //     child: Text(
+                              //       'test',
+                              //       // _dropDownValue!,
+                              //       overflow: TextOverflow.ellipsis,
+                              //       maxLines: 1,
+                              //       softWrap: true,
+                              //     ),
+                              //   ),
+                              ),
                           const SizedBox(
                             height: 20,
                           ),
-                          const Text(
-                            'Meter Number',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
+                          const TextFieldText(text: 'Meter Number'),
                           const SizedBox(
                             height: 5,
                           ),
@@ -247,6 +255,7 @@ class _ElectricBillSubscriptionScreenState
                               FocusScope.of(context).unfocus();
                             },
                             keyboardType: TextInputType.number,
+                            style: const TextStyle(fontSize: 12),
                             decoration: InputDecoration(
                               contentPadding: _textFieldContentPadding,
                               filled: true,
@@ -255,69 +264,7 @@ class _ElectricBillSubscriptionScreenState
                               hintText: 'Enter meter number',
                               hintStyle: const TextStyle(
                                 color: Colors.grey,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide.none,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          const Text(
-                            'Amount',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          TextFormField(
-                            maxLength: 19,
-                            onChanged: (value) {
-                              setState(() {
-                                _getKtcAmount();
-                              });
-                            },
-                            controller: _amountController,
-                            validator: ((value) {
-                              if (value == null || value.isEmpty) {
-                                return 'This field cannot be empty';
-                              } else if (double.tryParse(value) == null ||
-                                  double.parse(value) < 0) {
-                                return 'Enter a valid number';
-                              } else {
-                                return null;
-                              }
-                            }),
-                            onFieldSubmitted: (value) {
-                              FocusScope.of(context).unfocus();
-                            },
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              counterStyle: const TextStyle(
-                                height: double.minPositive,
-                              ),
-                              counterText: "",
-                              prefixIcon: const Padding(
-                                padding: EdgeInsets.all(12.0),
-                                child: Text(
-                                  '₦',
-                                  style: TextStyle(
-                                      fontFamily: '',
-                                      fontSize: 18,
-                                      color: Colors.grey),
-                                ),
-                              ),
-                              contentPadding: const EdgeInsets.all(10),
-                              filled: true,
-                              fillColor: MyColors.textFieldColor,
-                              isDense: true,
-                              hintText: '0.00',
-                              hintStyle: const TextStyle(
-                                color: Colors.grey,
+                                fontSize: 12,
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5),
@@ -328,62 +275,170 @@ class _ElectricBillSubscriptionScreenState
                           const SizedBox(
                             height: 15,
                           ),
+                          const TextFieldText(text: 'Amount'),
+                          const SizedBox(
+                            height: 5,
+                          ),
                           Row(
                             children: [
-                              const Text(
-                                'Value in KTC',
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                              Container(
+                                width: 40,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 9,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: MyColors.textFieldColor,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: const Center(
+                                  child: Text(
+                                    '₦',
+                                    style: TextStyle(
+                                        fontFamily: '',
+                                        fontSize: 14,
+                                        color: Colors.grey),
+                                  ),
+                                ),
                               ),
+                              const SizedBox(
+                                width: 2,
+                              ),
+                              Expanded(
+                                child: TextFormField(
+                                  maxLength: 19,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _getKtcAmount();
+                                    });
+                                  },
+                                  controller: _amountController,
+                                  validator: ((value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'This field cannot be empty';
+                                    } else if (double.tryParse(value) == null ||
+                                        double.parse(value) < 0) {
+                                      return 'Enter a valid number';
+                                    } else {
+                                      return null;
+                                    }
+                                  }),
+                                  onFieldSubmitted: (value) {
+                                    FocusScope.of(context).unfocus();
+                                  },
+                                  keyboardType: TextInputType.number,
+                                  style: const TextStyle(fontSize: 12),
+                                  decoration: InputDecoration(
+                                    counterStyle: const TextStyle(
+                                      height: double.minPositive,
+                                    ),
+                                    counterText: "",
+                                    contentPadding: const EdgeInsets.all(10),
+                                    filled: true,
+                                    fillColor: MyColors.textFieldColor,
+                                    isDense: true,
+                                    hintText: '0.00',
+                                    hintStyle: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12,
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(5),
+                                      borderSide: BorderSide.none,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Row(
+                            children: [
+                              const TextFieldText(text: 'Value in KTC'),
                               const Spacer(),
                               Text(
                                 'k ${_walletBalance.toString()}',
                                 style: const TextStyle(
-                                    color: Colors.green, fontFamily: ''),
+                                  color: Colors.green,
+                                  fontFamily: '',
+                                  fontSize: 12,
+                                ),
                               )
                             ],
                           ),
                           const SizedBox(
                             height: 5,
                           ),
-                          TextFormField(
-                            enabled: false,
-                            decoration: InputDecoration(
-                              prefixIcon: const Padding(
-                                padding: EdgeInsets.all(12.0),
-                                child: Text(
-                                  'k',
-                                  style: TextStyle(
+                          Row(
+                            children: [
+                              Container(
+                                width: 35,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 9,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: MyColors.textFieldColor,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: const Center(
+                                  child: Text(
+                                    'k',
+                                    style: TextStyle(
                                       fontFamily: '',
-                                      fontSize: 18,
-                                      color: Colors.grey),
+                                      fontSize: 14,
+                                      color: Colors.grey,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
                               ),
-                              contentPadding: const EdgeInsets.all(10),
-                              filled: true,
-                              fillColor: MyColors.textFieldColor,
-                              isDense: true,
-                              hintText: _ktcAmount,
-                              hintStyle: const TextStyle(
-                                color: Colors.grey,
+                              const SizedBox(
+                                width: 2,
                               ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide.none,
+                              Expanded(
+                                child: TextFormField(
+                                  enabled: false,
+                                  style: const TextStyle(fontSize: 12),
+                                  decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.all(10),
+                                    filled: true,
+                                    fillColor: MyColors.textFieldColor,
+                                    isDense: true,
+                                    hintText: _ktcAmount,
+                                    hintStyle: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12,
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(5),
+                                      borderSide: BorderSide.none,
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           ),
                           const SizedBox(
-                            height: 15,
+                            height: 30,
                           ),
                           Row(
                             children: [
-                              const Text('The current exhange rate is'),
+                              const Text(
+                                'The current exhange rate is',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                ),
+                              ),
                               const SizedBox(
                                 width: 5,
                               ),
                               Text(
                                 '1 NGN = ${platformCharges.nairaToKtc} KTC',
-                                style: const TextStyle(color: Colors.green),
+                                style: const TextStyle(
+                                  color: Colors.green,
+                                  fontSize: 12,
+                                ),
                               ),
                             ],
                           ),
@@ -400,7 +455,7 @@ class _ElectricBillSubscriptionScreenState
                     ),
                   ),
                 ),
-            );
+              );
   }
 }
 
