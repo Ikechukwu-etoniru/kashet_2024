@@ -13,6 +13,7 @@ import 'package:kasheto_flutter/utils/my_padding.dart';
 import 'package:kasheto_flutter/widgets/error_widget.dart';
 import 'package:kasheto_flutter/widgets/loading_spinner.dart';
 import 'package:kasheto_flutter/widgets/submit_button.dart';
+import 'package:kasheto_flutter/widgets/text_field_text.dart';
 import 'package:provider/provider.dart';
 
 class EditBankScreen extends StatefulWidget {
@@ -34,6 +35,7 @@ class _EditBankScreenState extends State<EditBankScreen> {
   var _isError = false;
   var _isButtonLoading = false;
   final _formKey = GlobalKey<FormState>();
+  final textEditingController = TextEditingController();
 
   void _getBankId(String value) {
     var _selectedBank = _bankList!.firstWhere((element) {
@@ -139,12 +141,7 @@ class _EditBankScreenState extends State<EditBankScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Account Name',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 1.5),
-                          ),
+                          const TextFieldText(text: 'Account Name'),
                           const SizedBox(
                             height: 5,
                           ),
@@ -162,12 +159,14 @@ class _EditBankScreenState extends State<EditBankScreen> {
                               }
                             }),
                             keyboardType: TextInputType.name,
+                            style: const TextStyle(fontSize: 12),
                             decoration: InputDecoration(
                               contentPadding: MyPadding.textFieldContentPadding,
                               isDense: true,
                               hintText: 'Enter your account name',
                               hintStyle: const TextStyle(
                                 color: Colors.grey,
+                                fontSize: 12,
                               ),
                               filled: true,
                               fillColor: Colors.grey[200],
@@ -182,12 +181,7 @@ class _EditBankScreenState extends State<EditBankScreen> {
                           const SizedBox(
                             height: 20,
                           ),
-                          const Text(
-                            'Account Number',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 1.5),
-                          ),
+                          const TextFieldText(text: 'Account Number'),
                           const SizedBox(
                             height: 5,
                           ),
@@ -208,12 +202,15 @@ class _EditBankScreenState extends State<EditBankScreen> {
                               }
                             }),
                             keyboardType: TextInputType.number,
+                            style:
+                                const TextStyle(fontSize: 12, letterSpacing: 2),
                             decoration: InputDecoration(
                               contentPadding: MyPadding.textFieldContentPadding,
                               isDense: true,
                               hintText: 'Enter your account number',
                               hintStyle: const TextStyle(
                                 color: Colors.grey,
+                                fontSize: 12,
                               ),
                               filled: true,
                               fillColor: Colors.grey[200],
@@ -228,48 +225,60 @@ class _EditBankScreenState extends State<EditBankScreen> {
                           const SizedBox(
                             height: 20,
                           ),
-                          const Text(
-                            'Select Bank',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 1.5),
-                          ),
+                          const TextFieldText(text: 'Select Bank'),
                           const SizedBox(
                             height: 5,
                           ),
-                          DropdownButtonFormField2(
-                            // dropdownFullScreen: false,
-                            // dropdownMaxHeight: 250,
-                            // dropdownOverButton: false,
-                            // dropdownPadding:
-                            //     const EdgeInsets.symmetric(vertical: 10),
-                            // scrollbarAlwaysShow: true,
-                            // isExpanded: true,
-                            // scrollbarThickness: 10,
-                            // dropdownDecoration: BoxDecoration(
-                            //     borderRadius: BorderRadius.circular(15)),
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor: MyColors.textFieldColor,
-                              contentPadding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: const BorderSide(
-                                    color: Colors.green, width: 1),
+                          DropdownButton2<String>(
+                            isExpanded: true,
+                            underline: Container(),
+                            selectedItemBuilder: (context) {
+                              return _bankListString!
+                                  .map(
+                                    (e) => DropdownMenuItem<String>(
+                                      value: e,
+                                      child: Text(
+                                        e,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                  .toList();
+                            },
+                            iconStyleData: const IconStyleData(
+                              iconEnabledColor: Colors.grey,
+                              iconSize: 18,
+                              icon: Icon(
+                                Icons.keyboard_arrow_down,
                               ),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: BorderSide.none),
                             ),
-                            items: _bankListString!.map(
-                              (val) {
-                                return DropdownMenuItem(
-                                  value: val,
-                                  child: Text(val),
-                                );
-                              },
-                            ).toList(),
+                            hint: FittedBox(
+                              child: Text(
+                                _bankDropdown ?? widget.bank.bankName!,
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            items: _bankListString!
+                                .map(
+                                  (e) => DropdownMenuItem<String>(
+                                    value: e,
+                                    child: Text(
+                                      e,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                            value: _bankDropdown,
                             onChanged: (val) {
                               final value = val as String;
                               _getBankId(value);
@@ -279,10 +288,78 @@ class _EditBankScreenState extends State<EditBankScreen> {
                                 },
                               );
                             },
-                            hint: FittedBox(
-                              child:
-                                  Text(_bankDropdown ?? widget.bank.bankName!),
+
+                            buttonStyleData: ButtonStyleData(
+                              padding: const EdgeInsets.only(
+                                right: 5,
+                                top: 1,
+                                bottom: 1,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[200],
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
+                            dropdownStyleData: const DropdownStyleData(
+                              maxHeight: 200,
+                              decoration: BoxDecoration(color: Colors.white),
+                            ),
+                            menuItemStyleData: MenuItemStyleData(
+                                height: 50,
+                                selectedMenuItemBuilder: (ctx, child) {
+                                  return Container(
+                                    color: Colors.white,
+                                    child: child,
+                                  );
+                                }),
+                            dropdownSearchData: DropdownSearchData(
+                              searchController: textEditingController,
+                              searchInnerWidgetHeight: 40,
+                              searchInnerWidget: Container(
+                                height: 40,
+                                padding: const EdgeInsets.only(
+                                  top: 8,
+                                  bottom: 1,
+                                  right: 8,
+                                  left: 8,
+                                ),
+                                child: TextFormField(
+                                  controller: textEditingController,
+                                  style: const TextStyle(fontSize: 12),
+                                  decoration: InputDecoration(
+                                    prefixIcon: const Padding(
+                                      padding: EdgeInsets.all(5.0),
+                                      child: Icon(
+                                        Icons.search,
+                                        size: 13,
+                                      ),
+                                    ),
+                                    prefixIconConstraints: const BoxConstraints(
+                                      maxHeight: 30,
+                                      maxWidth: 50,
+                                    ),
+                                    isDense: true,
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 3,
+                                      vertical: 8,
+                                    ),
+                                    fillColor: Colors.white,
+                                    hintText: 'Search',
+                                    hintStyle: const TextStyle(fontSize: 12),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            //This to clear the search value when you close the menu
+                            onMenuStateChange: (isOpen) {
+                              if (!isOpen) {
+                                textEditingController.clear();
+                              }
+                            },
                           ),
                           const Spacer(),
                           if (_isButtonLoading)

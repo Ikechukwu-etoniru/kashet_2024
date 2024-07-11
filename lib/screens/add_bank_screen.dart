@@ -5,6 +5,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:http/http.dart' as http;
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:kasheto_flutter/widgets/text_field_text.dart';
 import 'package:provider/provider.dart';
 
 import 'package:kasheto_flutter/models/bank.dart';
@@ -133,18 +134,13 @@ class _AddBankScreenState extends State<AddBankScreen> {
                   ),
                   body: Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 15),
+                        horizontal: 15, vertical: 10),
                     child: Form(
                       key: _formKey,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Account Name',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 1.5),
-                          ),
+                          const TextFieldText(text: 'Account Name'),
                           const SizedBox(
                             height: 5,
                           ),
@@ -161,13 +157,13 @@ class _AddBankScreenState extends State<AddBankScreen> {
                               }
                             }),
                             keyboardType: TextInputType.name,
+                            style: const TextStyle(fontSize: 12),
                             decoration: InputDecoration(
                               contentPadding: MyPadding.textFieldContentPadding,
                               isDense: true,
                               hintText: 'Enter your account name',
                               hintStyle: const TextStyle(
-                                color: Colors.grey,
-                              ),
+                                  color: Colors.grey, fontSize: 12),
                               filled: true,
                               fillColor: Colors.grey[200],
                               border: OutlineInputBorder(
@@ -181,12 +177,7 @@ class _AddBankScreenState extends State<AddBankScreen> {
                           const SizedBox(
                             height: 20,
                           ),
-                          const Text(
-                            'Account Number',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 1.5),
-                          ),
+                          const TextFieldText(text: 'Account Number'),
                           const SizedBox(
                             height: 5,
                           ),
@@ -206,13 +197,13 @@ class _AddBankScreenState extends State<AddBankScreen> {
                               }
                             }),
                             keyboardType: TextInputType.number,
+                            style: const TextStyle(fontSize: 12),
                             decoration: InputDecoration(
                               contentPadding: MyPadding.textFieldContentPadding,
                               isDense: true,
                               hintText: 'Enter your account number',
                               hintStyle: const TextStyle(
-                                color: Colors.grey,
-                              ),
+                                  color: Colors.grey, fontSize: 12),
                               filled: true,
                               fillColor: Colors.grey[200],
                               border: OutlineInputBorder(
@@ -226,18 +217,13 @@ class _AddBankScreenState extends State<AddBankScreen> {
                           const SizedBox(
                             height: 20,
                           ),
-                          const Text(
-                            'Select Bank',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 1.5,
-                            ),
-                          ),
+                          const TextFieldText(text: 'Select Bank'),
                           const SizedBox(
                             height: 5,
                           ),
                           DropdownButton2<String>(
                             isExpanded: true,
+                            underline: Container(),
                             selectedItemBuilder: (context) {
                               return _bankListString!
                                   .map(

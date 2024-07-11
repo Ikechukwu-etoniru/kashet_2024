@@ -26,8 +26,6 @@ class _SecuritySettingsScreenState extends State<SecuritySettingsScreen> {
   // Only if auth status is changed
   var _isAuthChanged = false;
 
-  
-
   Future _changeAuthStatus(bool value) async {
     _isAuthChanged = true;
     setState(() {
@@ -63,7 +61,8 @@ class _SecuritySettingsScreenState extends State<SecuritySettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool auth2faValueBool = Provider.of<AuthProvider>(context).faStatus == 1 ? true : false;
+    bool auth2faValueBool =
+        Provider.of<AuthProvider>(context).faStatus == 1 ? true : false;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -79,7 +78,7 @@ class _SecuritySettingsScreenState extends State<SecuritySettingsScreen> {
             },
             icon: const Icon(
               Icons.arrow_back_ios_new_rounded,
-              size: 20,
+              size: 15,
             ),
           ),
         ),
@@ -101,7 +100,8 @@ class _SecuritySettingsScreenState extends State<SecuritySettingsScreen> {
                 height: 10,
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                 decoration: BoxDecoration(color: Colors.white, boxShadow: [
                   BoxShadow(
                       color: Colors.grey.withOpacity(0.1),
@@ -110,7 +110,13 @@ class _SecuritySettingsScreenState extends State<SecuritySettingsScreen> {
                 ]),
                 child: Row(
                   children: [
-                    Text(auth2faValueBool == true ? '2FA Enabled' : '2FA Disabled'),
+                    Text(
+                      auth2faValueBool == true ? '2FA Enabled' : '2FA Disabled',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     const Spacer(),
                     if (_isLoading)
                       const SpinKitDoubleBounce(
@@ -120,6 +126,7 @@ class _SecuritySettingsScreenState extends State<SecuritySettingsScreen> {
                     if (!_isLoading)
                       Switch.adaptive(
                           value: auth2faValueBool,
+                          activeColor: MyColors.primaryColor,
                           onChanged: (value) {
                             _changeAuthStatus(value);
                           })
@@ -161,13 +168,19 @@ class SecuritySettingsBox extends StatelessWidget {
       ]),
       child: Row(
         children: [
-          Text(title),
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           const Spacer(),
           IconButton(
             onPressed: action,
             icon: const Icon(
               Icons.arrow_forward_ios,
-              size: 17,
+              size: 15,
               color: Colors.grey,
             ),
           )

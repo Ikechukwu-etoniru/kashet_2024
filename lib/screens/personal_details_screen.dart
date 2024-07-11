@@ -104,7 +104,7 @@ class _PersonalDetailScreenState extends State<PersonalDetailScreen> {
                         const Text(
                           'Personal Details',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
+                              fontWeight: FontWeight.bold, fontSize: 14),
                         ),
                         const Spacer(),
                         if (userIdStatus != IDStatus.approved)
@@ -135,6 +135,7 @@ class _PersonalDetailScreenState extends State<PersonalDetailScreen> {
                             'Identity Verified',
                             style: TextStyle(
                               color: Colors.green,
+                              fontSize: 10,
                             ),
                           ),
                           SizedBox(
@@ -143,6 +144,7 @@ class _PersonalDetailScreenState extends State<PersonalDetailScreen> {
                           Icon(
                             Icons.check,
                             color: Colors.green,
+                            size: 14,
                           )
                         ],
                       ),
@@ -199,7 +201,7 @@ class _PersonalDetailScreenState extends State<PersonalDetailScreen> {
                         'Bank Details',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                          fontSize: 13,
                         ),
                       ),
                       Spacer(),
@@ -218,7 +220,7 @@ class _PersonalDetailScreenState extends State<PersonalDetailScreen> {
                         Text(
                           'Email Address',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 19),
+                              fontWeight: FontWeight.bold, fontSize: 13),
                         ),
                         Spacer(),
                       ],
@@ -235,7 +237,7 @@ class _PersonalDetailScreenState extends State<PersonalDetailScreen> {
                       Text(
                         'Phone Number',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 19),
+                            fontWeight: FontWeight.bold, fontSize: 13),
                       ),
                       Spacer(),
                     ],
@@ -299,33 +301,36 @@ class ProfileRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      return Column(
-        children: [
-          const SizedBox(
-            height: 10,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Text(
+          title,
+          style: const TextStyle(fontSize: 11),
+        ),
+
+        const SizedBox(
+          width: 3,
+        ),
+        const Text('-'),
+        const SizedBox(
+          width: 3,
+        ),
+
+        Expanded(
+          child: Text(
+            content,
+            maxLines: 2,
+            softWrap: true,
+            overflow: TextOverflow.fade,
+            style: const TextStyle(
+              fontSize: 12,
+            ),
           ),
-          Row(
-            children: [
-              SizedBox(
-                width: constraints.maxWidth * 0.3,
-                child: Text(title),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              const Spacer(),
-              Expanded(
-                child: Text(
-                  content,
-                  softWrap: true,
-                  overflow: TextOverflow.fade,
-                ),
-              )
-            ],
-          ),
-        ],
-      );
-    });
+        ),
+
+        // )
+      ]),
+    );
   }
 }

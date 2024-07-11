@@ -7,6 +7,7 @@ import 'package:kasheto_flutter/provider/bank_provider.dart';
 import 'package:kasheto_flutter/screens/add_bank_screen.dart';
 import 'package:kasheto_flutter/screens/edit_bank_screen.dart';
 import 'package:kasheto_flutter/screens/personal_details_screen.dart';
+import 'package:kasheto_flutter/screens/withdraw_money_screen.dart';
 import 'package:kasheto_flutter/utils/my_colors.dart';
 import 'package:provider/provider.dart';
 
@@ -50,7 +51,7 @@ class _UserBankListState extends State<UserBankList> {
                         'You have not added any bank yet',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -151,7 +152,10 @@ class _UserBankBoxState extends State<UserBankBox> {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-      padding: const EdgeInsets.only(bottom: 15, left: 15, right: 15),
+      padding: const EdgeInsets.symmetric(
+        vertical: 10,
+        horizontal: 10,
+      ),
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
@@ -169,6 +173,13 @@ class _UserBankBoxState extends State<UserBankBox> {
           ]),
       child: Column(
         children: [
+          ProfileRow(
+              title: 'Account Name',
+              content:
+                  capitalizeFirstLetterOfEachWord(widget.bank.acctName ?? "")),
+          ProfileRow(
+              title: 'Account Number', content: widget.bank.acctNumber ?? ""),
+          ProfileRow(title: 'Bank Name', content: widget.bank.bankName ?? ""),
           Row(
             children: [
               const Spacer(),
@@ -217,11 +228,6 @@ class _UserBankBoxState extends State<UserBankBox> {
               ),
             ],
           ),
-          ProfileRow(
-              title: 'Account Name', content: widget.bank.acctName ?? ""),
-          ProfileRow(
-              title: 'Account Number', content: widget.bank.acctNumber ?? ""),
-          ProfileRow(title: 'Bank Name', content: widget.bank.bankName ?? ""),
         ],
       ),
     );
