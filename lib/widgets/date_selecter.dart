@@ -115,6 +115,7 @@ class _DateSelecterForDobState extends State<DateSelecterForDob> {
               color: selectedDate == null && widget.initialDOB == null
                   ? Colors.grey
                   : Colors.black,
+              fontSize: 13,
             ),
           ),
           const Spacer(),

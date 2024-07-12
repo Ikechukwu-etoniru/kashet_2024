@@ -80,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
         headers: header,
       );
       final res = json.decode(response.body);
-      print(res);
+
       //  Sign in was successful and Auth device was used
       if ((response.statusCode == 200 || response.statusCode == 201) &&
           (res["success"] == true || res["success"] == false)) {

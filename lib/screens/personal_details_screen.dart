@@ -126,7 +126,12 @@ class _PersonalDetailScreenState extends State<PersonalDetailScreen> {
                     ),
                     if (userIdStatus != IDStatus.approved)
                       const Text(
-                          'Note - When your identity card is verified, you would not be able to change these details'),
+                        'Note - When your identity card is verified, you would not be able to change these details',
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: Colors.grey,
+                        ),
+                      ),
                     if (userIdStatus == IDStatus.approved)
                       const Row(
                         mainAxisSize: MainAxisSize.min,
@@ -151,7 +156,8 @@ class _PersonalDetailScreenState extends State<PersonalDetailScreen> {
                     const SizedBox(
                       height: 5,
                     ),
-                    ProfileRow(title: 'Name', content: _user.fullName),
+                    // Fix first last name
+                    ProfileRow(title: 'Name', content: _user.firstName),
                     ProfileRow(
                         title: 'Date of Birth',
                         content: _user.dob ?? 'Not Set'),

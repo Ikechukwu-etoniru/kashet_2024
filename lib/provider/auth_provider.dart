@@ -52,7 +52,13 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<bool> signUserUp(
-      User user, String countryCode, BuildContext context) async {
+      {required String firstName,
+      required String name,
+      required String email,
+      required String countryCode,
+      required String userNumber,
+      required String password,
+      required BuildContext context}) async {
     try {
       const _signUpEndpoint = '${ApiUrl.baseURL}v1/register';
       final _uri = Uri.parse(_signUpEndpoint);
@@ -62,27 +68,30 @@ class AuthProvider with ChangeNotifier {
           {"Content-type": "application/json", "Accept": "application/json"};
 
       final _body = json.encode({
-        "name": user.fullName,
-        "email": user.emailAddress,
-        "phone": '$countryCode${user.phoneNumber.toString()}',
-        "password": user.password,
-        "password_confirmation": user.password,
-        "ip_address": _deviceInfo
+        "first_name": firstName,
+        "last_name": name,
+        "email": email,
+        "phone": '$countryCode${userNumber.toString()}',
+        "password": password,
+        "password_confirmation": password,
+        "device_name": _deviceInfo
       });
-      final httpResponse =
+      final response =
           await http.post(_uri, body: _body, headers: _setHeaders());
-      final response = json.decode(httpResponse.body);
+      final res = json.decode(response.body);
+      print(res);
+
       //  If response is successfull, i add token and save user details
-      if (httpResponse.statusCode == 200) {
+      if (response.statusCode == 200) {
         SharedPreferences localStorage = await SharedPreferences.getInstance();
         if (localStorage.containsKey('token')) {
           localStorage.remove('token');
         }
-        localStorage.setString('token', response['token']);
+        localStorage.setString('token', res['token']);
         return true;
-      } else if (httpResponse.statusCode == 422) {
+      } else if (response.statusCode == 422) {
         ScaffoldMessenger.of(context).showSnackBar(
-          Alert.snackBar(message: response['errors'][0], context: context),
+          Alert.snackBar(message: res['errors'][0], context: context),
         );
         return false;
       } else {
@@ -137,10 +146,10 @@ class AuthProvider with ChangeNotifier {
       final res = json.decode(httpResponse.body);
       if (httpResponse.statusCode == 200 && res['success'] == 'true') {
         // Delete user from list and add another user
-
         _userList.clear();
         final newUser = User(
-          fullName: res['user Details']['name'],
+          firstName: res['user Details']['first_name'],
+          lastName: res['user Details']['last_name'],
           emailAddress: res['user Details']['email'],
           phoneNumber: res['user Details']['details']['phone'],
           id: res['user Details']['id'].toString(),

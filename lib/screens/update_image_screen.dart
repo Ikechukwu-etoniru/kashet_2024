@@ -9,6 +9,7 @@ import 'package:kasheto_flutter/screens/login_screen.dart';
 import 'package:kasheto_flutter/utils/alerts.dart';
 import 'package:kasheto_flutter/utils/api_url.dart';
 import 'package:kasheto_flutter/utils/cloudinary_helper.dart';
+import 'package:kasheto_flutter/utils/my_colors.dart';
 import 'package:kasheto_flutter/widgets/loading_spinner.dart';
 import 'package:kasheto_flutter/widgets/submit_button.dart';
 import 'package:provider/provider.dart';
@@ -146,7 +147,7 @@ class _UpdateImageScreenState extends State<UpdateImageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<AuthProvider>(context).userList[0].fullName;
+    final user = Provider.of<AuthProvider>(context).userList[0].firstName;
     return widget.id == null
         ? WillPopScope(
             onWillPop: _closeApp,
@@ -274,7 +275,7 @@ class _ImagePickerBoxState extends State<ImagePickerBox> {
             title: const Center(
               child: Text(
                 'Select Source',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
               ),
             ),
             content: Column(
@@ -284,6 +285,7 @@ class _ImagePickerBoxState extends State<ImagePickerBox> {
                   height: 5,
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     const SizedBox(
                       width: 10,
@@ -311,7 +313,9 @@ class _ImagePickerBoxState extends State<ImagePickerBox> {
                         ],
                       ),
                     ),
-                    const Spacer(),
+                    const SizedBox(
+                      width: 30,
+                    ),
                     GestureDetector(
                       onTap: () async {
                         final selectedImage =
@@ -341,7 +345,7 @@ class _ImagePickerBoxState extends State<ImagePickerBox> {
                   ],
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 40,
                 ),
                 TextButton(
                   onPressed: () {
@@ -353,6 +357,9 @@ class _ImagePickerBoxState extends State<ImagePickerBox> {
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap),
                   child: const Text(
                     'Close',
+                    style: TextStyle(
+                      color: MyColors.primaryColor,
+                    ),
                   ),
                 )
               ],
@@ -373,20 +380,27 @@ class _ImagePickerBoxState extends State<ImagePickerBox> {
                   onPressed: _selectImageDialog,
                   icon: const Icon(
                     Icons.add,
-                    size: 40,
+                    size: 30,
+                    color: MyColors.primaryColor,
                   ))
               : const Text(''),
-          radius: 80,
+          radius: 60,
         ),
         const SizedBox(
           height: 20,
         ),
         TextButton.icon(
           onPressed: _selectImageDialog,
-          icon: const Icon(Icons.image),
+          icon: const Icon(
+            Icons.image,
+            color: MyColors.primaryColor,
+          ),
           label: Text(
             pickedImage == null ? 'Add Image' : 'Change Image',
-            style: const TextStyle(fontSize: 22),
+            style: const TextStyle(
+              fontSize: 15,
+              color: MyColors.primaryColor,
+            ),
           ),
         )
       ],

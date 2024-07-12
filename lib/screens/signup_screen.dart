@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kasheto_flutter/models/http_exceptions.dart';
 import 'package:kasheto_flutter/provider/auth_provider.dart';
 import 'package:kasheto_flutter/screens/initialization_screen.dart';
+import 'package:kasheto_flutter/utils/my_colors.dart';
 import 'package:kasheto_flutter/widgets/loading_spinner.dart';
 import 'package:kasheto_flutter/widgets/submit_button.dart';
 import 'package:kasheto_flutter/widgets/text_field_text.dart';
@@ -21,16 +22,16 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _passwordController = TextEditingController();
+  final firstNameController = TextEditingController();
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
   final _textFieldContentPadding = const EdgeInsets.all(10);
   final _textFieldColor = Colors.grey[200];
   var _hidePassword = true;
   var _hidePassword1 = true;
-  final _phoneNumberController = TextEditingController();
+  final phoneNumberController = TextEditingController();
   String countryCode = '+1';
-
-  var _user = User(
-      fullName: '', emailAddress: '', phoneNumber: '1', password: '', id: '1');
 
   var _isLoading = false;
 
@@ -41,10 +42,18 @@ class _SignupScreenState extends State<SignupScreen> {
       setState(() {
         _isLoading = true;
       });
-      _formKey.currentState!.save();
+
       try {
-        final isSaved = await Provider.of<AuthProvider>(context, listen: false)
-            .signUserUp(_user, countryCode, context);
+        final isSaved =
+            await Provider.of<AuthProvider>(context, listen: false).signUserUp(
+          firstName: firstNameController.text,
+          name: nameController.text.trim(),
+          email: emailController.text.trim(),
+          countryCode: countryCode,
+          userNumber: phoneNumberController.text.trim(),
+          password: passwordController.text.trim(),
+          context: context,
+        );
 
         if (isSaved) {
           Navigator.of(context)
@@ -90,7 +99,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   child: ListView(
                     children: [
                       const TextFieldText(
-                        text: 'Full Name',
+                        text: 'First Name',
                       ),
                       const SizedBox(
                         height: 5,
@@ -100,6 +109,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         onFieldSubmitted: (value) {
                           FocusScope.of(context).unfocus();
                         },
+                        controller: firstNameController,
                         validator: ((value) {
                           if (value == null || value.isEmpty) {
                             return 'This field cannot be empty';
@@ -107,19 +117,51 @@ class _SignupScreenState extends State<SignupScreen> {
                             return null;
                           }
                         }),
-                        onSaved: (value) {
-                          _user = User(
-                              fullName: value!,
-                              emailAddress: _user.emailAddress,
-                              phoneNumber: _user.phoneNumber,
-                              password: _user.password,
-                              id: _user.id);
-                        },
                         keyboardType: TextInputType.name,
+                        style: const TextStyle(
+                          fontSize: 13,
+                        ),
                         decoration: InputDecoration(
                           contentPadding: _textFieldContentPadding,
                           isDense: true,
                           hintText: 'First name',
+                          filled: true,
+                          fillColor: Colors.grey[200],
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              borderSide: BorderSide.none),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const TextFieldText(
+                        text: 'Last Name',
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      TextFormField(
+                        textCapitalization: TextCapitalization.words,
+                        onFieldSubmitted: (value) {
+                          FocusScope.of(context).unfocus();
+                        },
+                        controller: nameController,
+                        validator: ((value) {
+                          if (value == null || value.isEmpty) {
+                            return 'This field cannot be empty';
+                          } else {
+                            return null;
+                          }
+                        }),
+                        keyboardType: TextInputType.name,
+                        style: const TextStyle(
+                          fontSize: 13,
+                        ),
+                        decoration: InputDecoration(
+                          contentPadding: _textFieldContentPadding,
+                          isDense: true,
+                          hintText: 'Last name',
                           filled: true,
                           fillColor: Colors.grey[200],
                           border: OutlineInputBorder(
@@ -138,6 +180,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         onFieldSubmitted: (value) {
                           FocusScope.of(context).unfocus();
                         },
+                        controller: emailController,
                         validator: ((value) {
                           if (value == null || value.isEmpty) {
                             return 'This field cannot be empty';
@@ -148,6 +191,9 @@ class _SignupScreenState extends State<SignupScreen> {
                           }
                         }),
                         keyboardType: TextInputType.emailAddress,
+                        style: const TextStyle(
+                          fontSize: 13,
+                        ),
                         decoration: InputDecoration(
                           contentPadding: _textFieldContentPadding,
                           isDense: true,
@@ -159,14 +205,6 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                           hintText: 'sample@mail.com',
                         ),
-                        onSaved: (value) {
-                          _user = User(
-                              fullName: _user.fullName,
-                              emailAddress: value!,
-                              phoneNumber: _user.phoneNumber,
-                              password: _user.password,
-                              id: _user.id);
-                        },
                       ),
                       const SizedBox(
                         height: 20,
@@ -185,10 +223,12 @@ class _SignupScreenState extends State<SignupScreen> {
                             initialSelection: 'US',
                             dialogSize:
                                 Size(_deviceWidth * 0.8, _deviceHeight * 0.8),
+                            dialogBackgroundColor: MyColors.textFieldColor,
                           ),
                           Expanded(
                             child: TextFormField(
-                              style: const TextStyle(letterSpacing: 3),
+                              style: const TextStyle(
+                                  letterSpacing: 3, fontSize: 13),
                               validator: ((value) {
                                 if (value == null || value.isEmpty) {
                                   return 'This field cannot be empty';
@@ -205,6 +245,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   return null;
                                 }
                               }),
+                              controller: phoneNumberController,
                               onFieldSubmitted: (value) {
                                 FocusScope.of(context).unfocus();
                               },
@@ -220,14 +261,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                   borderSide: BorderSide.none,
                                 ),
                               ),
-                              onSaved: (value) {
-                                _user = User(
-                                    fullName: _user.fullName,
-                                    emailAddress: _user.emailAddress,
-                                    phoneNumber: value!,
-                                    password: _user.password,
-                                    id: _user.id);
-                              },
                             ),
                           )
                         ],
@@ -243,7 +276,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       TextFormField(
                         style: const TextStyle(letterSpacing: 5),
-                        controller: _passwordController,
+                        controller: passwordController,
                         validator: ((value) {
                           String pattern =
                               r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
@@ -292,14 +325,6 @@ class _SignupScreenState extends State<SignupScreen> {
                             borderSide: BorderSide.none,
                           ),
                         ),
-                        onSaved: (value) {
-                          _user = User(
-                              fullName: _user.fullName,
-                              emailAddress: _user.emailAddress,
-                              phoneNumber: _user.phoneNumber,
-                              password: value!,
-                              id: _user.id);
-                        },
                       ),
                       const SizedBox(
                         height: 20,
@@ -313,7 +338,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       TextFormField(
                         style: const TextStyle(letterSpacing: 5),
                         validator: ((value) {
-                          if (_passwordController.text != value) {
+                          if (passwordController.text != value) {
                             return 'Passwords must match';
                           } else {
                             return null;

@@ -74,6 +74,10 @@ class _UserBankListState extends State<UserBankList> {
                         },
                         child: const Text(
                           'Click here to add bank',
+                          style: TextStyle(
+                            color: MyColors.primaryColor,
+                            fontSize: 12,
+                          ),
                         ),
                       )
                     ],

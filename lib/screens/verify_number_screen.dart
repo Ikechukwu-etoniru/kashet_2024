@@ -8,6 +8,7 @@ import 'package:kasheto_flutter/screens/initialization_screen.dart';
 import 'package:kasheto_flutter/screens/login_screen.dart';
 import 'package:kasheto_flutter/utils/alerts.dart';
 import 'package:kasheto_flutter/utils/api_url.dart';
+import 'package:kasheto_flutter/utils/my_colors.dart';
 import 'package:kasheto_flutter/widgets/loading_spinner.dart';
 import 'package:kasheto_flutter/widgets/submit_button.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -106,16 +107,17 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
       final _body = _isResend
           ? json.encode({'phone': _userNumber, 'resend': true})
           : json.encode({'phone': _userNumber, 'resend': false});
-      final httpResponse = await http.post(_url, body: _body, headers: _header);
+      final response = await http.post(_url, body: _body, headers: _header);
 
-      final response = json.decode(httpResponse.body);
-      if (httpResponse.statusCode == 200 && response['success'] == true) {
+      final res = json.decode(response.body);
+      print(res);
+      if (response.statusCode == 200 && res['success'] == true) {
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
-          _snackBar(message: response['message']),
+          _snackBar(message: res['message']),
         );
         _startTimer();
-        _otp = response['otp'].toString();
+        _otp = res['otp'].toString();
       } else {
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
@@ -270,7 +272,7 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
                   const Text(
                     'We will send you a one time password to this number',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 13),
                   ),
                   const SizedBox(
                     height: 15,
@@ -278,17 +280,32 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
                   Text(
                     _phoneNumber(),
                     style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 20),
+                        fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   TextButton(
                     onPressed: _sendOtp,
                     child: _isLoading
                         ? const LoadingSpinnerWithMargin()
                         : _isTimer
-                            ? Text(_start.toString())
+                            ? Text(
+                                _start.toString(),
+                                style: const TextStyle(
+                                  color: MyColors.primaryColor,
+                                ),
+                              )
                             : _isResend
-                                ? const Text('Resend OTP')
-                                : const Text('Send OTP'),
+                                ? const Text(
+                                    'Resend OTP',
+                                    style: TextStyle(
+                                      color: MyColors.primaryColor,
+                                    ),
+                                  )
+                                : const Text(
+                                    'Send OTP',
+                                    style: TextStyle(
+                                      color: MyColors.primaryColor,
+                                    ),
+                                  ),
                   ),
                   const SizedBox(
                     height: 10,

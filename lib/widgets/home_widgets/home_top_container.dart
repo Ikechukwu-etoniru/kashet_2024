@@ -41,8 +41,7 @@ class HomeTopWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                // Converting full name too first name
-                'Hi,  ${user.fullName.split(' ')[0]}',
+                'Hi,  ${user.firstName}',
                 style: const TextStyle(
                   fontWeight: FontWeight.w700,
                 ),

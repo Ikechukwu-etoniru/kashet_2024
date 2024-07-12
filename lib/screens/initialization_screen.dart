@@ -96,11 +96,8 @@ class _InitializationScreenState extends State<InitializationScreen> {
             title: 'Money Request',
             body: '${_pendingMr.length} users have requested payment from you');
       }
-    } on SocketException {
-      setState(() {
-        _isError = true;
-      });
     } catch (error) {
+      print(error);
       setState(() {
         _isError = true;
       });

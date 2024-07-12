@@ -10,6 +10,7 @@ import 'package:kasheto_flutter/utils/my_colors.dart';
 import 'package:kasheto_flutter/utils/my_padding.dart';
 import 'package:kasheto_flutter/widgets/loading_spinner.dart';
 import 'package:kasheto_flutter/widgets/submit_button.dart';
+import 'package:kasheto_flutter/widgets/text_field_text.dart';
 
 class UpdatePasswordScreen extends StatefulWidget {
   static const routeName = '/update_password_screen.dart';
@@ -103,22 +104,21 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Old Password',
-                  style:
-                      TextStyle(fontWeight: FontWeight.w600, letterSpacing: 1.5),
-                ),
+                const TextFieldText(text: 'Old Password'),
                 const SizedBox(
                   height: 5,
                 ),
                 TextFormField(
                   controller: _oldPasswordController,
-                  style: const TextStyle(letterSpacing: 5),
+                  style: const TextStyle(
+                    letterSpacing: 5,
+                    fontSize: 13,
+                  ),
                   validator: ((value) {
                     String pattern =
                         r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
                     RegExp regExp = RegExp(pattern);
-    
+
                     if (value == null || value.isEmpty) {
                       return 'This field cannot be empty';
                     } else if (regExp.hasMatch(value) == false) {
@@ -166,22 +166,21 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                const Text(
-                  'New Password',
-                  style:
-                      TextStyle(fontWeight: FontWeight.w600, letterSpacing: 1.5),
-                ),
+                const TextFieldText(text: 'New Password'),
                 const SizedBox(
                   height: 5,
                 ),
                 TextFormField(
-                  style: const TextStyle(letterSpacing: 5),
+                  style: const TextStyle(
+                    letterSpacing: 5,
+                    fontSize: 13,
+                  ),
                   controller: _newPasswordController,
                   validator: ((value) {
                     String pattern =
                         r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
                     RegExp regExp = RegExp(pattern);
-    
+
                     if (value == null || value.isEmpty) {
                       return 'This field cannot be empty';
                     } else if (regExp.hasMatch(value) == false) {
@@ -229,17 +228,16 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                const Text(
-                  'Confirm Password',
-                  style:
-                      TextStyle(fontWeight: FontWeight.w600, letterSpacing: 1.5),
-                ),
+                const TextFieldText(text: 'Confirm Password'),
                 const SizedBox(
                   height: 5,
                 ),
                 TextFormField(
                   controller: _confirmPasswordController,
-                  style: const TextStyle(letterSpacing: 5),
+                  style: const TextStyle(
+                    letterSpacing: 5,
+                    fontSize: 13,
+                  ),
                   validator: ((value) {
                     if (value == null || value.isEmpty) {
                       return 'This field cannot be empty';

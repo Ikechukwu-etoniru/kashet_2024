@@ -14,6 +14,7 @@ import 'package:kasheto_flutter/widgets/loading_spinner.dart';
 import 'package:kasheto_flutter/widgets/my_dropdown.dart';
 import 'package:kasheto_flutter/widgets/submit_button.dart';
 import 'package:http/http.dart' as http;
+import 'package:kasheto_flutter/widgets/text_field_text.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -82,13 +83,17 @@ class _VerifyIdCardScreenState extends State<VerifyIdCardScreen> {
       request.files.add(
         await http.MultipartFile.fromPath('doc_back', pickedImageBack!.path),
       );
+
       request.fields['doc_type'] = _selectedDocument!;
       request.fields['doc_no'] = _idNumberController.text;
 
       // Send the request
       final response = await request.send();
+
       final responseString = await response.stream.bytesToString();
+
       final res = json.decode(responseString);
+
       print(res);
       print(response.statusCode);
       if (response.statusCode == 200 && res["status"] == true) {
@@ -110,6 +115,7 @@ class _VerifyIdCardScreenState extends State<VerifyIdCardScreen> {
             context: context));
       }
     } catch (error) {
+      print(error);
       ScaffoldMessenger.of(context).showSnackBar(
         Alert.snackBar(
             message: 'An error occurred while uploading your document',
@@ -182,7 +188,7 @@ class _VerifyIdCardScreenState extends State<VerifyIdCardScreen> {
             },
             icon: const Icon(
               Icons.arrow_back_ios_new_rounded,
-              size: 20,
+              size: 15,
             ),
           ),
         ),
@@ -331,230 +337,223 @@ class _VerifyIdCardScreenState extends State<VerifyIdCardScreen> {
                       ],
                     ),
                   )
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 10,
-                          horizontal: 10,
+                : SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 15,
+                            horizontal: 15,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.green[100],
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Column(
+                            children: [
+                              Text(
+                                'Please upload a high resolution uncropped and/or scanned image document to get verified and unlock the full power of your dashboard.',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                'It is important to note that the name on this document must match the name you used in signing up your account to be verified and it cannot be changed after verification.',
+                                style: TextStyle(
+                                    fontSize: 13, fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
                         ),
-                        decoration: BoxDecoration(
-                          color: Colors.green[100],
-                          borderRadius: BorderRadius.circular(10),
+                        const SizedBox(
+                          height: 30,
                         ),
-                        child: const Column(
+                        const TextFieldText(text: 'Document Type'),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        MyDropDown(
+                          items: _idTypeList.map(
+                            (val) {
+                              return DropdownMenuItem<String>(
+                                value: val,
+                                child: Text(
+                                  val,
+                                  style: const TextStyle(fontSize: 13),
+                                ),
+                              );
+                            },
+                          ).toList(),
+                          value: _selectedDocument,
+                          onChanged: (value) {
+                            _selectedDocument = value as String;
+                          },
+                          hint: const Text(
+                            'Pick Document',
+                            style: TextStyle(
+                              fontSize: 13,
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value == null) {
+                              return 'This field can\'t be empty';
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const TextFieldText(text: 'Document Number'),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        TextFormField(
+                          controller: _idNumberController,
+                          onFieldSubmitted: (value) {
+                            FocusScope.of(context).unfocus();
+                          },
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'This field can\'t be empty';
+                            } else {
+                              return null;
+                            }
+                          },
+                          style: const TextStyle(
+                            fontSize: 12,
+                          ),
+                          decoration: InputDecoration(
+                            isDense: true,
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 10,
+                              horizontal: 10,
+                            ),
+                            filled: true,
+                            fillColor: Colors.grey[100],
+                            hintText: '',
+                            hintStyle: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const TextFieldText(text: 'Upload A Valid ID (Front)'),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
                           children: [
-                            Text(
-                              'Please upload a high resolution uncropped and/or scanned image document to get verified and unlock the full power of your dashboard.',
-                              style: TextStyle(
-                                fontSize: 13,
+                            GestureDetector(
+                              onTap: () {
+                                _selectImageDialog(1);
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 2,
+                                  horizontal: 5,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[100],
+                                  border: Border.all(
+                                    width: 1.5,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                child: const Text('Choose File'),
                               ),
                             ),
-                            SizedBox(
-                              height: 10,
+                            const SizedBox(
+                              width: 10,
                             ),
                             Text(
-                              'It is important to note that the name on this document must match the name you used in signing up your account to be verified and it cannot be changed after verification.',
-                              style: TextStyle(
-                                  fontSize: 13, fontWeight: FontWeight.w600),
+                              pickedImageFront == null
+                                  ? 'No file choosen'
+                                  : 'File Selected',
+                              style: const TextStyle(
+                                fontSize: 14,
+                              ),
                             ),
+                            const Spacer(),
+                            if (pickedImageFront != null)
+                              const Icon(
+                                Icons.check_box,
+                                color: Colors.green,
+                                size: 18,
+                              ),
                           ],
                         ),
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      const Text(
-                        'Document Type',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1.5,
+                        const SizedBox(
+                          height: 30,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      MyDropDown(
-                        items: _idTypeList.map(
-                          (val) {
-                            return DropdownMenuItem<String>(
-                              value: val,
-                              child: Text(val),
-                            );
-                          },
-                        ).toList(),
-                        onChanged: (value) {
-                          _selectedDocument = value as String;
-                        },
-                        hint: const Text('Pick Document'),
-                        validator: (value) {
-                          if (value == null) {
-                            return 'This field can\'t be empty';
-                          } else {
-                            return null;
-                          }
-                        },
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text(
-                        'Document Number',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1.5,
+                        const TextFieldText(text: 'Upload A Valid ID (Back)'),
+                        const SizedBox(
+                          height: 10,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      TextFormField(
-                        controller: _idNumberController,
-                        onFieldSubmitted: (value) {
-                          FocusScope.of(context).unfocus();
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'This field can\'t be empty';
-                          } else {
-                            return null;
-                          }
-                        },
-                        decoration: InputDecoration(
-                          isDense: true,
-                          contentPadding: const EdgeInsets.symmetric(
-                            vertical: 10,
-                            horizontal: 10,
-                          ),
-                          filled: true,
-                          fillColor: Colors.grey[100],
-                          hintText: '',
-                          hintStyle: const TextStyle(
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text(
-                        'Upload A Valid ID (Front)',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1.5,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              _selectImageDialog(1);
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 2,
-                                horizontal: 5,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                border: Border.all(
-                                  width: 1.5,
-                                  color: Colors.black,
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                _selectImageDialog(2);
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 2,
+                                  horizontal: 5,
                                 ),
-                              ),
-                              child: const Text('Choose File'),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            pickedImageFront == null
-                                ? 'No file choosen'
-                                : 'File Selected',
-                            style: const TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                          const Spacer(),
-                          if (pickedImageFront != null)
-                            const Icon(
-                              Icons.check_box,
-                              color: Colors.green,
-                              size: 18,
-                            ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      const Text(
-                        'Upload A Valid ID (Back)',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1.5,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              _selectImageDialog(2);
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 2,
-                                horizontal: 5,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                border: Border.all(
-                                  width: 1.5,
-                                  color: Colors.black,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[100],
+                                  border: Border.all(
+                                    width: 1.5,
+                                    color: Colors.black,
+                                  ),
                                 ),
+                                child: const Text('Choose File'),
                               ),
-                              child: const Text('Choose File'),
                             ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            pickedImageBack == null
-                                ? 'No file choosen'
-                                : 'File Selected',
-                            style: const TextStyle(
-                              fontSize: 14,
+                            const SizedBox(
+                              width: 10,
                             ),
-                          ),
-                          const Spacer(),
-                          if (pickedImageBack != null)
-                            const Icon(
-                              Icons.check_box,
-                              color: Colors.green,
-                              size: 18,
+                            Text(
+                              pickedImageBack == null
+                                  ? 'No file choosen'
+                                  : 'File Selected',
+                              style: const TextStyle(
+                                fontSize: 14,
+                              ),
                             ),
-                        ],
-                      ),
-                      const Spacer(),
-                      if (_isLoading)
-                        const Center(
-                          child: LoadingSpinnerWithMargin(),
+                            const Spacer(),
+                            if (pickedImageBack != null)
+                              const Icon(
+                                Icons.check_box,
+                                color: Colors.green,
+                                size: 18,
+                              ),
+                          ],
                         ),
-                      if (!_isLoading)
-                        SubmitButton(
-                          action: _uploadDucument,
-                          title: 'Upload',
+                        const SizedBox(
+                          height: 20,
                         ),
-                    ],
+                        if (_isLoading)
+                          const Center(
+                            child: LoadingSpinnerWithMargin(),
+                          ),
+                        if (!_isLoading)
+                          SubmitButton(
+                            action: _uploadDucument,
+                            title: 'Upload',
+                          ),
+                      ],
+                    ),
                   ),
           ),
         ),
@@ -573,7 +572,7 @@ class _VerifyIdCardScreenState extends State<VerifyIdCardScreen> {
             title: const Center(
               child: Text(
                 'Select Source',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
               ),
             ),
             content: Column(
@@ -583,6 +582,7 @@ class _VerifyIdCardScreenState extends State<VerifyIdCardScreen> {
                   height: 5,
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     const SizedBox(
                       width: 10,
@@ -615,7 +615,9 @@ class _VerifyIdCardScreenState extends State<VerifyIdCardScreen> {
                         ],
                       ),
                     ),
-                    const Spacer(),
+                    const SizedBox(
+                      width: 30,
+                    ),
                     GestureDetector(
                       onTap: () async {
                         final selectedImage =

@@ -11,7 +11,7 @@ class SupportScreen extends StatelessWidget {
     var whatsapp = "+19455420315";
     var whatsappURlAndroid =
         Uri.parse("whatsapp://send?phone=" + whatsapp + "&text=hello");
-    
+
     if (await canLaunchUrl(whatsappURlAndroid)) {
       await launchUrl(whatsappURlAndroid);
     } else {
@@ -38,7 +38,7 @@ class SupportScreen extends StatelessWidget {
                 height: _deviceHeight * 0.3,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: MyColors.primaryColor.withOpacity(0.3),
+                  // color: MyColors.primaryColor.withOpacity(0.3),
                 ),
                 child: SizedBox(
                   height: 100,
@@ -55,7 +55,7 @@ class SupportScreen extends StatelessWidget {
                 'Tell Us How We Can Help You',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 14,
                     fontFamily: 'Raleway',
                     fontWeight: FontWeight.bold),
               ),
@@ -65,7 +65,10 @@ class SupportScreen extends StatelessWidget {
               const Text(
                 'Our crew is standing by for service and support',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.grey),
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 11,
+                ),
               ),
               const SizedBox(
                 height: 20,
@@ -97,24 +100,29 @@ class SupportScreen extends StatelessWidget {
                       const SizedBox(
                         width: 15,
                       ),
-                    const  Expanded(
+                      const Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children:  [
+                          children: [
                             Text(
                               'Chat',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
+                                  fontSize: 13, fontWeight: FontWeight.bold),
                             ),
                             Text(
                               'Start a conversation now',
                               textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.grey, fontSize: 14),
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 11),
                             ),
                           ],
                         ),
                       ),
+                      const Icon(
+                        Icons.ads_click_outlined,
+                        color: MyColors.primaryColor,
+                      )
                     ],
                   ),
                 ),

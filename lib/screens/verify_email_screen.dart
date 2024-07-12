@@ -7,6 +7,7 @@ import 'package:kasheto_flutter/screens/initialization_screen.dart';
 import 'package:kasheto_flutter/screens/login_screen.dart';
 import 'package:kasheto_flutter/utils/alerts.dart';
 import 'package:kasheto_flutter/utils/api_url.dart';
+import 'package:kasheto_flutter/utils/my_colors.dart';
 import 'package:kasheto_flutter/widgets/loading_spinner.dart';
 
 import 'package:kasheto_flutter/widgets/submit_button.dart';
@@ -199,102 +200,116 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
               child: Form(
                 key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: _deviceHeight * 0.3,
-                      child: Center(
-                        child: SizedBox(
-                          height: (_deviceHeight * 0.3) * 0.7,
-                          child: Image.asset('images/email_pic.png'),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: _deviceHeight * 0.3,
+                        child: Center(
+                          child: SizedBox(
+                            height: (_deviceHeight * 0.3) * 0.7,
+                            child: Image.asset('images/email_pic.png'),
+                          ),
                         ),
                       ),
-                    ),
-                    if (_isLoading) const LoadingSpinnerWithMargin(),
-                    if (!_isLoading)
-                      TextButton(
-                        onPressed: _sendOtp,
-                        child: _isLoading
-                            ? const LoadingSpinnerWithMargin()
-                            : _isTimer
-                                ? Text(_start.toString())
-                                : const Text('Send OTP'),
-                      ),
-                    const Text(
-                      'We will send you a verification link to this email',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Text(
-                      _email,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 20),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 40),
-                      child: PinCodeTextField(
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Enter OTP sent to your email';
-                          } else if (value.length != 4) {
-                            return 'Enter complete OTP';
-                          } else if (value != _otp) {
-                            return 'Enter correct OTP sent to your email';
-                          } else {
-                            return null;
-                          }
-                        },
-                        appContext: context,
-                        length: 4,
-                        onChanged: (value) {},
-                        pinTheme: PinTheme(
-                          shape: PinCodeFieldShape.box,
-                          borderRadius: BorderRadius.circular(10),
-                          selectedColor: Colors.green[300],
-                          activeColor: Colors.green[700],
-                          inactiveColor: Colors.grey[200],
+                      if (_isLoading) const LoadingSpinnerWithMargin(),
+                      if (!_isLoading)
+                        TextButton(
+                          onPressed: _sendOtp,
+                          child: _isLoading
+                              ? const LoadingSpinnerWithMargin()
+                              : _isTimer
+                                  ? Text(
+                                      _start.toString(),
+                                      style: const TextStyle(
+                                        color: MyColors.primaryColor,
+                                      ),
+                                    )
+                                  : const Text(
+                                      'Send OTP',
+                                      style: TextStyle(
+                                        color: MyColors.primaryColor,
+                                      ),
+                                    ),
                         ),
-                        animationDuration: const Duration(milliseconds: 200),
-                        animationType: AnimationType.fade,
-                        keyboardType: TextInputType.number,
-                        hapticFeedbackTypes: HapticFeedbackTypes.medium,
-                        controller: _textController,
+                      const Text(
+                        'We will send you a verification link to this email',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 13,
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    const Spacer(),
-                    if (_isButtonLoading) const LoadingSpinnerWithMargin(),
-                    if (!_isButtonLoading)
-                      SubmitButton(
-                          action: () async {
-                            if (_otp == null) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  Alert.snackBar(
-                                      message:
-                                          'You have not received an otp yet. Click "Send OTP"',
-                                      context: context));
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        _email,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 40),
+                        child: PinCodeTextField(
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Enter OTP sent to your email';
+                            } else if (value.length != 4) {
+                              return 'Enter complete OTP';
+                            } else if (value != _otp) {
+                              return 'Enter correct OTP sent to your email';
                             } else {
-                              final _isVerified = await _verifyOtp();
-                              if (_isVerified) {
-                                Navigator.pushReplacementNamed(
-                                    context, InitializationScreen.routeName);
-                              }
+                              return null;
                             }
                           },
-                          title: 'Verify')
-                  ],
+                          appContext: context,
+                          length: 4,
+                          onChanged: (value) {},
+                          pinTheme: PinTheme(
+                            shape: PinCodeFieldShape.box,
+                            borderRadius: BorderRadius.circular(10),
+                            selectedColor: Colors.green[300],
+                            activeColor: Colors.green[700],
+                            inactiveColor: Colors.grey[200],
+                          ),
+                          animationDuration: const Duration(milliseconds: 200),
+                          animationType: AnimationType.fade,
+                          keyboardType: TextInputType.number,
+                          hapticFeedbackTypes: HapticFeedbackTypes.medium,
+                          controller: _textController,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      // const Spacer(),
+                      if (_isButtonLoading) const LoadingSpinnerWithMargin(),
+                      if (!_isButtonLoading)
+                        SubmitButton(
+                            action: () async {
+                              if (_otp == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    Alert.snackBar(
+                                        message:
+                                            'You have not received an otp yet. Click "Send OTP"',
+                                        context: context));
+                              } else {
+                                final _isVerified = await _verifyOtp();
+                                if (_isVerified) {
+                                  Navigator.pushReplacementNamed(
+                                      context, InitializationScreen.routeName);
+                                }
+                              }
+                            },
+                            title: 'Verify')
+                    ],
+                  ),
                 ),
               ),
             )),

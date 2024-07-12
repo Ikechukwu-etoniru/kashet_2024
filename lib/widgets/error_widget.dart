@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kasheto_flutter/utils/my_colors.dart';
 import 'package:kasheto_flutter/utils/my_padding.dart';
 
 class IsErrorScreen extends StatelessWidget {
@@ -35,7 +36,8 @@ class IsErrorScreen extends StatelessWidget {
               Text(
                 text ?? 'An error occured',
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               TextButton(
                 onPressed: onPressed ??
@@ -44,6 +46,10 @@ class IsErrorScreen extends StatelessWidget {
                     },
                 child: const Text(
                   'Go Back',
+                  style: TextStyle(
+                    color: MyColors.primaryColor,
+                    fontSize: 12,
+                  ),
                 ),
               )
             ],

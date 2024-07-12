@@ -60,10 +60,12 @@ class _MoneyRequestScreenState extends State<MoneyRequestScreen>
                 controller: _tabController,
                 indicator: BoxDecoration(
                   borderRadius: BorderRadius.circular(
-                    10.0,
+                    7,
                   ),
                   color: Colors.white,
                 ),
+                indicatorSize: TabBarIndicatorSize.tab,
+                dividerHeight: 0,
                 labelColor: Colors.green,
                 unselectedLabelColor: Colors.black.withOpacity(0.7),
                 tabs: const [

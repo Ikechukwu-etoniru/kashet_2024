@@ -1,5 +1,6 @@
 class User {
-  final String fullName;
+  final String firstName;
+  final String lastName;
   final String emailAddress;
   final String phoneNumber;
   final String id;
@@ -18,7 +19,8 @@ class User {
   final String? userCurrency;
 
   User(
-      {required this.fullName,
+      {required this.firstName,
+      required this.lastName,
       required this.emailAddress,
       required this.phoneNumber,
       required this.id,

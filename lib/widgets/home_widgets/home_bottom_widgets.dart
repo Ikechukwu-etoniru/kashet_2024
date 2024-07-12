@@ -92,8 +92,8 @@ class VerifyIdWidget extends StatelessWidget {
                 children: [
                   SvgPicture.asset(
                     'images/cert.svg',
-                    height: 100,
-                    width: 100,
+                    height: 80,
+                    width: 80,
                   ),
                   const SizedBox(
                     width: 20,
@@ -105,7 +105,7 @@ class VerifyIdWidget extends StatelessWidget {
                         Text(
                           'Verify Your Identity',
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: 14,
                             color: Colors.red,
                             fontWeight: FontWeight.bold,
                           ),
@@ -116,7 +116,7 @@ class VerifyIdWidget extends StatelessWidget {
                         Text(
                           "To ensure the security of your account and to enjoy all our features, verify your identity",
                           style: TextStyle(
-                            fontSize: 13,
+                            fontSize: 12,
                           ),
                         )
                       ],
@@ -127,7 +127,7 @@ class VerifyIdWidget extends StatelessWidget {
                       Icon(
                         Icons.lightbulb,
                         color: Colors.red,
-                        size: 30,
+                        size: 20,
                       ),
                       Expanded(child: SizedBox())
                     ],
@@ -329,7 +329,7 @@ class HomeMiddleWidget extends StatelessWidget {
             child: Row(
               children: [
                 SizedBox(
-                  height: 150,
+                  height: 120,
                   width: constraint.maxWidth * 0.3,
                   child: Image.asset(
                     'images/enable_2fa.png',
@@ -343,12 +343,12 @@ class HomeMiddleWidget extends StatelessWidget {
                       Text(
                         'Enable',
                         style: TextStyle(
-                            fontSize: 15, color: MyColors.primaryColor),
+                            fontSize: 13, color: MyColors.primaryColor),
                       ),
                       Text(
                         '2-Factor Authenciation',
                         style: TextStyle(
-                            fontSize: 12, color: MyColors.primaryColor),
+                            fontSize: 13, color: MyColors.primaryColor),
                       ),
                       SizedBox(
                         height: 10,
@@ -356,7 +356,7 @@ class HomeMiddleWidget extends StatelessWidget {
                       Text(
                         'Provide more security for your account',
                         style: TextStyle(
-                          fontSize: 13,
+                          fontSize: 12,
                         ),
                       )
                     ],
@@ -567,7 +567,12 @@ class HomePageBottomBar extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                const Text('You have no transactions yet !!!!')
+                const Text(
+                  'You have no transactions yet !!!!',
+                  style: TextStyle(
+                    fontSize: 13,
+                  ),
+                )
               ],
             ),
           if (first10Transactions.isNotEmpty)

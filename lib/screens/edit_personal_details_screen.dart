@@ -18,6 +18,7 @@ import 'package:kasheto_flutter/widgets/error_widget.dart';
 import 'package:kasheto_flutter/widgets/loading_spinner.dart';
 import 'package:kasheto_flutter/widgets/my_dropdown.dart';
 import 'package:kasheto_flutter/widgets/submit_button.dart';
+import 'package:kasheto_flutter/widgets/text_field_text.dart';
 import 'package:provider/provider.dart';
 
 class EditPersonalDetailsScreen extends StatefulWidget {
@@ -181,17 +182,12 @@ class _EditPersonalDetailsScreenState extends State<EditPersonalDetailsScreen> {
                           Expanded(
                             child: ListView(
                               children: [
-                                const Text(
-                                  'Name',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      letterSpacing: 1.5),
-                                ),
+                                const TextFieldText(text: 'First Name'),
                                 const SizedBox(
                                   height: 5,
                                 ),
                                 TextFormField(
-                                  initialValue: _user.fullName,
+                                  initialValue: _user.firstName,
                                   textCapitalization: TextCapitalization.words,
                                   onSaved: (value) {
                                     _userName = value;
@@ -206,13 +202,15 @@ class _EditPersonalDetailsScreenState extends State<EditPersonalDetailsScreen> {
                                       return null;
                                     }
                                   }),
+                                  style: const TextStyle(fontSize: 13),
                                   keyboardType: TextInputType.name,
                                   decoration: InputDecoration(
                                     contentPadding: _textFieldContentPadding,
                                     isDense: true,
-                                    hintText: 'Enter Your Name',
+                                    hintText: 'Enter Your First Name',
                                     hintStyle: const TextStyle(
                                       color: Colors.grey,
+                                      fontSize: 13,
                                     ),
                                     filled: true,
                                     fillColor: Colors.grey[200],
@@ -224,12 +222,47 @@ class _EditPersonalDetailsScreenState extends State<EditPersonalDetailsScreen> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                const Text(
-                                  'Date Of Birth',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      letterSpacing: 1.5),
+                                const TextFieldText(text: 'Last Name'),
+                                const SizedBox(
+                                  height: 5,
                                 ),
+                                TextFormField(
+                                  initialValue: _user.lastName,
+                                  textCapitalization: TextCapitalization.words,
+                                  onSaved: (value) {
+                                    _userName = value;
+                                  },
+                                  onFieldSubmitted: (value) {
+                                    FocusScope.of(context).unfocus();
+                                  },
+                                  validator: ((value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'This field cannot be empty';
+                                    } else {
+                                      return null;
+                                    }
+                                  }),
+                                  style: const TextStyle(fontSize: 13),
+                                  keyboardType: TextInputType.name,
+                                  decoration: InputDecoration(
+                                    contentPadding: _textFieldContentPadding,
+                                    isDense: true,
+                                    hintText: 'Enter Your Last Name',
+                                    hintStyle: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 13,
+                                    ),
+                                    filled: true,
+                                    fillColor: Colors.grey[200],
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: BorderSide.none),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                const TextFieldText(text: 'Date Of Birth'),
                                 const SizedBox(
                                   height: 5,
                                 ),
@@ -239,12 +272,7 @@ class _EditPersonalDetailsScreenState extends State<EditPersonalDetailsScreen> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                const Text(
-                                  'Address',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      letterSpacing: 1.5),
-                                ),
+                                const TextFieldText(text: 'Address'),
                                 const SizedBox(
                                   height: 5,
                                 ),
@@ -264,6 +292,7 @@ class _EditPersonalDetailsScreenState extends State<EditPersonalDetailsScreen> {
                                       return null;
                                     }
                                   }),
+                                  style: const TextStyle(fontSize: 13),
                                   keyboardType: TextInputType.streetAddress,
                                   decoration: InputDecoration(
                                     contentPadding: _textFieldContentPadding,
@@ -271,6 +300,7 @@ class _EditPersonalDetailsScreenState extends State<EditPersonalDetailsScreen> {
                                     hintText: 'Enter your home address',
                                     hintStyle: const TextStyle(
                                       color: Colors.grey,
+                                      fontSize: 13,
                                     ),
                                     filled: true,
                                     fillColor: Colors.grey[200],
@@ -282,13 +312,7 @@ class _EditPersonalDetailsScreenState extends State<EditPersonalDetailsScreen> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                const Text(
-                                  'Country',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    letterSpacing: 1.5,
-                                  ),
-                                ),
+                                const TextFieldText(text: 'Country'),
                                 const SizedBox(
                                   height: 5,
                                 ),
@@ -297,10 +321,16 @@ class _EditPersonalDetailsScreenState extends State<EditPersonalDetailsScreen> {
                                     (val) {
                                       return DropdownMenuItem(
                                         value: val.name,
-                                        child: Text(val.name),
+                                        child: Text(
+                                          val.name,
+                                          style: const TextStyle(
+                                            fontSize: 13,
+                                          ),
+                                        ),
                                       );
                                     },
                                   ).toList(),
+                                  value: _countryDropdown,
                                   onChanged: (val) {
                                     // Use country to show states and send is to backend
                                     _getCountry(val!);
@@ -312,19 +342,25 @@ class _EditPersonalDetailsScreenState extends State<EditPersonalDetailsScreen> {
                                     );
                                   },
                                   hint: FittedBox(
-                                    child: Text((_user.country == null ||
-                                                _user.country == 'null') &&
-                                            _countryDropdown == null
-                                        ? 'Select a Country'
-                                        : (_user.country != null ||
-                                                    _user.country == 'null') &&
-                                                _countryDropdown == null
-                                            ? Provider.of<LocationProvider>(
-                                                    context,
-                                                    listen: false)
-                                                .getCountryById(
-                                                    int.parse(_user.country!))
-                                            : _countryDropdown!),
+                                    child: Text(
+                                      (_user.country == null ||
+                                                  _user.country == 'null') &&
+                                              _countryDropdown == null
+                                          ? 'Select a Country'
+                                          : (_user.country != null ||
+                                                      _user.country ==
+                                                          'null') &&
+                                                  _countryDropdown == null
+                                              ? Provider.of<LocationProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .getCountryById(
+                                                      int.parse(_user.country!))
+                                              : _countryDropdown!,
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                      ),
+                                    ),
                                   ),
                                   validator: (val) {
                                     if ((_user.country == null ||
@@ -343,12 +379,7 @@ class _EditPersonalDetailsScreenState extends State<EditPersonalDetailsScreen> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                const Text(
-                                  'State',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      letterSpacing: 1.5),
-                                ),
+                                const TextFieldText(text: 'State'),
                                 const SizedBox(
                                   height: 5,
                                 ),
@@ -359,22 +390,34 @@ class _EditPersonalDetailsScreenState extends State<EditPersonalDetailsScreen> {
                                       color: MyColors.textFieldColor,
                                       borderRadius: BorderRadius.circular(5),
                                     ),
-                                    child: Text(_user.state == null ||
-                                            _user.state == 'null'
-                                        ? 'No Country Selected'
-                                        : Provider.of<LocationProvider>(context,
-                                                listen: false)
-                                            .getStateById(
-                                                int.parse(_user.state!))),
+                                    child: Text(
+                                      _user.state == null ||
+                                              _user.state == 'null'
+                                          ? 'No Country Selected'
+                                          : Provider.of<LocationProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .getStateById(
+                                                  int.parse(_user.state!)),
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                      ),
+                                    ),
                                   ),
                                 if (_choosenCountry != null)
+                                  // Remember
                                   MyDropDown(
                                     value: _stateDropdown,
                                     items: _stateList!.map(
                                       (val) {
                                         return DropdownMenuItem(
                                           value: val.name,
-                                          child: Text(val.name),
+                                          child: Text(
+                                            val.name,
+                                            style: const TextStyle(
+                                              fontSize: 13,
+                                            ),
+                                          ),
                                         );
                                       },
                                     ).toList(),
@@ -388,19 +431,25 @@ class _EditPersonalDetailsScreenState extends State<EditPersonalDetailsScreen> {
                                       );
                                     },
                                     hint: FittedBox(
-                                      child: Text((_user.state == null ||
-                                                  _user.state == 'null') &&
-                                              _stateDropdown == null
-                                          ? 'Select a State'
-                                          : (_user.state != null ||
-                                                      _user.state == 'null') &&
-                                                  _stateDropdown == null
-                                              ? Provider.of<LocationProvider>(
-                                                      context,
-                                                      listen: false)
-                                                  .getStateById(
-                                                      int.parse(_user.state!))
-                                              : _stateDropdown!),
+                                      child: Text(
+                                        (_user.state == null ||
+                                                    _user.state == 'null') &&
+                                                _stateDropdown == null
+                                            ? 'Select a State'
+                                            : (_user.state != null ||
+                                                        _user.state ==
+                                                            'null') &&
+                                                    _stateDropdown == null
+                                                ? Provider.of<LocationProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .getStateById(
+                                                        int.parse(_user.state!))
+                                                : _stateDropdown!,
+                                        style: const TextStyle(
+                                          fontSize: 13,
+                                        ),
+                                      ),
                                     ),
                                     validator: (val) {
                                       if ((_user.state == null ||
@@ -412,12 +461,10 @@ class _EditPersonalDetailsScreenState extends State<EditPersonalDetailsScreen> {
                                       }
                                     },
                                   ),
-                                const Text(
-                                  'City',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      letterSpacing: 1.5),
+                                const SizedBox(
+                                  height: 20,
                                 ),
+                                const TextFieldText(text: 'City'),
                                 const SizedBox(
                                   height: 5,
                                 ),
@@ -430,6 +477,7 @@ class _EditPersonalDetailsScreenState extends State<EditPersonalDetailsScreen> {
                                   onSaved: (value) {
                                     _userCity = value;
                                   },
+                                  style: const TextStyle(fontSize: 13),
                                   validator: ((value) {
                                     if (value == null || value.isEmpty) {
                                       return 'This field cannot be empty';
@@ -443,8 +491,7 @@ class _EditPersonalDetailsScreenState extends State<EditPersonalDetailsScreen> {
                                     isDense: true,
                                     hintText: 'Enter your City',
                                     hintStyle: const TextStyle(
-                                      color: Colors.grey,
-                                    ),
+                                        color: Colors.grey, fontSize: 13),
                                     filled: true,
                                     fillColor: Colors.grey[200],
                                     border: OutlineInputBorder(
