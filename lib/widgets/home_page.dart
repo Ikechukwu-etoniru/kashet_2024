@@ -28,28 +28,7 @@ class _HomePageState extends State<HomePage> {
           const HomeTopWidget(),
           BlackBox(height: _deviceHeight * 0.2),
           HomeServiceMenu(height: _deviceHeight * 0.14),
-          Container(
-            height: 200,
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            margin: const EdgeInsets.symmetric(horizontal: 15),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  'Rates Calculator',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 13,
-                  ),
-                )
-                // const Si
-              ],
-            ),
-          ),
+          const RateCalculatorWidget(),
           const VerifyIdWidget(),
           const HomeMiddleWidget(),
           const HomeFundRequestContainer(),

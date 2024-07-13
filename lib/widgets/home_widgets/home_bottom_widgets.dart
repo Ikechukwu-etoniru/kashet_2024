@@ -596,3 +596,92 @@ class HomePageBottomBar extends StatelessWidget {
     );
   }
 }
+
+class RateCalculatorWidget extends StatefulWidget {
+  const RateCalculatorWidget({Key? key}) : super(key: key);
+
+  @override
+  State<RateCalculatorWidget> createState() => _RateCalculatorWidgetState();
+}
+
+class _RateCalculatorWidgetState extends State<RateCalculatorWidget> {
+  final amountController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 15,
+        vertical: 19,
+      ),
+      margin: const EdgeInsets.symmetric(horizontal: 15),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Center(
+            child: Text(
+              'Rates Calculator',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Text(
+            'You Send',
+            style: TextStyle(fontSize: 11, fontFamily: 'Raleway'),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          TextField(
+            controller: amountController,
+            keyboardType: TextInputType.emailAddress,
+            onEditingComplete: () {
+              FocusScope.of(context).unfocus();
+            },
+            style: const TextStyle(
+              fontSize: 13,
+            ),
+            decoration: InputDecoration(
+              isDense: true,
+              contentPadding:
+                  EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(
+                width: 1,
+                color: Colors.grey,
+              )),
+              filled: true,
+              fillColor: Colors.white,
+              hintText: 'Enter amount',
+              hintStyle: TextStyle(
+                color: Colors.grey,
+                fontSize: 13,
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Text(
+            'Reciepient Receives',
+            style: TextStyle(fontSize: 11, fontFamily: 'Raleway'),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          TextField(),
+        ],
+      ),
+    );
+  }
+}
