@@ -56,6 +56,7 @@ dependencies:
   dropdown_search: ^5.0.6
   printing: ^5.11.0
   flutter_svg: ^2.0.7
+  crypto: ^3.0.3
 
   
 dependency_overrides:  

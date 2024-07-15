@@ -146,8 +146,7 @@ class ProfileScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          // Fix first last name
-                          userData.firstName,
+                          '${userData.firstName} ${userData.lastName}',
                           maxLines: 2,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,

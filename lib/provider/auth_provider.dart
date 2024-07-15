@@ -150,6 +150,7 @@ class AuthProvider with ChangeNotifier {
         final newUser = User(
           firstName: res['user Details']['first_name'],
           lastName: res['user Details']['last_name'],
+          uid: res['user Details']['uuid'],
           emailAddress: res['user Details']['email'],
           phoneNumber: res['user Details']['details']['phone'],
           id: res['user Details']['id'].toString(),

@@ -156,8 +156,9 @@ class _PersonalDetailScreenState extends State<PersonalDetailScreen> {
                     const SizedBox(
                       height: 5,
                     ),
-                    // Fix first last name
-                    ProfileRow(title: 'Name', content: _user.firstName),
+                    ProfileRow(
+                        title: 'Name',
+                        content: '${_user.firstName} ${_user.lastName}'),
                     ProfileRow(
                         title: 'Date of Birth',
                         content: _user.dob ?? 'Not Set'),

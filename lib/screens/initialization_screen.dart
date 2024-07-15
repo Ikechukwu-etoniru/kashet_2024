@@ -79,6 +79,8 @@ class _InitializationScreenState extends State<InitializationScreen> {
       await Provider.of<MoneyRequestProvider>(context, listen: false)
           .getReceivedMoneyReqestList();
       await Provider.of<PlatformChargesProvider>(context, listen: false)
+          .getCurrencies();
+      await Provider.of<PlatformChargesProvider>(context, listen: false)
           .getExchangeRate();
       await Provider.of<AuthProvider>(context, listen: false)
           .checkVerificationStatus();

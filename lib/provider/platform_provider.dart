@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:kasheto_flutter/models/currency.dart';
 import 'package:kasheto_flutter/models/http_exceptions.dart';
 import 'package:kasheto_flutter/utils/api_url.dart';
 
@@ -12,6 +13,12 @@ class PlatformChargesProvider with ChangeNotifier {
   late double usdCharge;
   late double ngnCharge;
   late double withdrawalCharge;
+
+  final List<CurrencyK> _currencyList = [];
+
+  List<CurrencyK> get currencyList {
+    return [..._currencyList];
+  }
 
   Future getExchangeRate() async {
     try {
@@ -34,6 +41,32 @@ class PlatformChargesProvider with ChangeNotifier {
             nairaToKtc = double.parse(element['rate'].toString());
           }
         }
+      }
+    } catch (error) {
+      throw AppException('An error occured');
+    }
+  }
+
+  Future getCurrencies() async {
+    try {
+      final url = Uri.parse('https://kasheto.com/send');
+      final header = {"Accept": "application/json"};
+
+      final response = await http.get(
+        url,
+        headers: header,
+      );
+      final res = json.decode(response.body);
+      Map<String, dynamic> currencyFromDb = res["fxcurrencies"]["rates"];
+      if (response.statusCode == 200) {
+        _currencyList.clear();
+        currencyFromDb.values.toList().forEach((val) {
+          final cur = CurrencyK(
+              name: val['name'],
+              rate: double.parse(val['rate'].toString()),
+              code: val['code']);
+          _currencyList.add(cur);
+        });
       }
     } catch (error) {
       throw AppException('An error occured');

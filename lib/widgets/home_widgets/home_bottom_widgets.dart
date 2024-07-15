@@ -1,7 +1,11 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kasheto_flutter/models/currency.dart';
 import 'package:kasheto_flutter/provider/auth_provider.dart';
 import 'package:kasheto_flutter/provider/money_request_provider.dart';
+import 'package:kasheto_flutter/provider/platform_provider.dart';
 import 'package:kasheto_flutter/provider/transaction_provider.dart';
 import 'package:kasheto_flutter/screens/all_transactions_screen.dart';
 import 'package:kasheto_flutter/screens/id_declined_screen.dart';
@@ -540,9 +544,8 @@ class HomePageBottomBar extends StatelessWidget {
                     },
                     child: const Text(
                       'View all',
-                      style: TextStyle(
-                        fontSize: 11,
-                      ),
+                      style:
+                          TextStyle(fontSize: 11, color: MyColors.primaryColor),
                     ),
                   )
               ],
@@ -606,6 +609,45 @@ class RateCalculatorWidget extends StatefulWidget {
 
 class _RateCalculatorWidgetState extends State<RateCalculatorWidget> {
   final amountController = TextEditingController();
+  final textEditingController = TextEditingController();
+
+  CurrencyK? initialSendCurrency;
+  CurrencyK? initialReceiveCurrency;
+
+  double receiveAmount = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    initialSendCurrency = getCurrencies.firstWhere((val) {
+      return val.code == 'USD';
+    });
+    initialReceiveCurrency = getCurrencies.firstWhere((val) {
+      return val.code == 'NGN';
+    });
+  }
+
+  List<CurrencyK> get getCurrencies {
+    return Provider.of<PlatformChargesProvider>(context, listen: false)
+        .currencyList;
+  }
+
+  void onAmountChanged() {
+    if (double.tryParse(amountController.text) == null ||
+        amountController.text.isEmpty) {
+      receiveAmount = 0.0;
+      return;
+    }
+
+    double initRate = initialSendCurrency!.rate;
+    double finalRate = initialReceiveCurrency!.rate;
+
+    double amount = double.parse(amountController.text);
+
+    double euroVal = amount / initRate;
+
+    receiveAmount = euroVal * finalRate;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -642,31 +684,193 @@ class _RateCalculatorWidgetState extends State<RateCalculatorWidget> {
           const SizedBox(
             height: 5,
           ),
-          TextField(
-            controller: amountController,
-            keyboardType: TextInputType.emailAddress,
-            onEditingComplete: () {
-              FocusScope.of(context).unfocus();
-            },
-            style: const TextStyle(
-              fontSize: 13,
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.circular(8),
             ),
-            decoration: InputDecoration(
-              isDense: true,
-              contentPadding:
-                  EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                width: 1,
-                color: Colors.grey,
-              )),
-              filled: true,
-              fillColor: Colors.white,
-              hintText: 'Enter amount',
-              hintStyle: TextStyle(
-                color: Colors.grey,
-                fontSize: 13,
-              ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: amountController,
+                    keyboardType: TextInputType.number,
+                    onEditingComplete: () {
+                      FocusScope.of(context).unfocus();
+                    },
+                    style: const TextStyle(
+                      fontSize: 13,
+                    ),
+                    onChanged: (val) {
+                      setState(
+                        () {
+                          onAmountChanged();
+                        },
+                      );
+                    },
+                    decoration: const InputDecoration(
+                      isDense: true,
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: 'Enter amount',
+                      hintStyle: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 2,
+                ),
+                SizedBox(
+                  width: 65,
+                  height: 40,
+                  child: DropdownButton2<CurrencyK>(
+                    isExpanded: true,
+                    underline: Container(),
+
+                    selectedItemBuilder: (context) {
+                      return getCurrencies
+                          .map(
+                            (e) => DropdownMenuItem<CurrencyK>(
+                              value: e,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: Text(
+                                  e.code,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                          .toList();
+                    },
+                    iconStyleData: const IconStyleData(
+                      iconEnabledColor: Colors.grey,
+                      iconSize: 18,
+                      icon: Icon(
+                        Icons.keyboard_arrow_down,
+                      ),
+                    ),
+
+                    items: getCurrencies
+                        .map(
+                          (e) => DropdownMenuItem<CurrencyK>(
+                            value: e,
+                            child: Row(
+                              children: [
+                                Text(
+                                  e.code,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  e.name,
+                                  style: const TextStyle(
+                                    fontSize: 9,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                        .toList(),
+                    value: initialSendCurrency,
+                    onChanged: (val) {
+                      setState(
+                        () {
+                          initialSendCurrency = val;
+                          onAmountChanged();
+                        },
+                      );
+                    },
+
+                    buttonStyleData: ButtonStyleData(
+                      padding: const EdgeInsets.only(
+                        right: 5,
+                        top: 1,
+                        bottom: 1,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    dropdownStyleData: const DropdownStyleData(
+                      maxHeight: 400,
+                      width: 300,
+                      decoration: BoxDecoration(color: Colors.white),
+                    ),
+                    menuItemStyleData: MenuItemStyleData(
+                        height: 50,
+                        selectedMenuItemBuilder: (ctx, child) {
+                          return Container(
+                            color: Colors.white,
+                            child: child,
+                          );
+                        }),
+                    dropdownSearchData: DropdownSearchData(
+                      searchController: textEditingController,
+                      searchInnerWidgetHeight: 50,
+                      searchInnerWidget: Container(
+                        height: 50,
+                        padding: const EdgeInsets.only(
+                          top: 8,
+                          bottom: 1,
+                          right: 8,
+                          left: 8,
+                        ),
+                        child: TextFormField(
+                          controller: textEditingController,
+                          style: const TextStyle(fontSize: 12),
+                          decoration: InputDecoration(
+                            prefixIcon: const Padding(
+                              padding: EdgeInsets.all(5.0),
+                              child: Icon(
+                                Icons.search,
+                                size: 13,
+                              ),
+                            ),
+                            prefixIconConstraints: const BoxConstraints(
+                              maxHeight: 30,
+                              maxWidth: 50,
+                            ),
+                            isDense: true,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 5,
+                              vertical: 10,
+                            ),
+                            fillColor: Colors.white,
+                            hintText: 'Search',
+                            hintStyle: const TextStyle(fontSize: 12),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    //This to clear the search value when you close the menu
+                    onMenuStateChange: (isOpen) {
+                      if (!isOpen) {
+                        textEditingController.clear();
+                      }
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
           const SizedBox(
@@ -679,7 +883,185 @@ class _RateCalculatorWidgetState extends State<RateCalculatorWidget> {
           const SizedBox(
             height: 5,
           ),
-          TextField(),
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    enabled: false,
+                    style: const TextStyle(
+                      fontSize: 13,
+                    ),
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      isDense: true,
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 10),
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: receiveAmount.toStringAsFixed(2),
+                      hintStyle: const TextStyle(
+                        color: Colors.grey,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 2,
+                ),
+                SizedBox(
+                  width: 65,
+                  height: 40,
+                  child: DropdownButton2<CurrencyK>(
+                    isExpanded: true,
+                    underline: Container(),
+
+                    selectedItemBuilder: (context) {
+                      return getCurrencies
+                          .map(
+                            (e) => DropdownMenuItem<CurrencyK>(
+                              value: e,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: Text(
+                                  e.code,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                          .toList();
+                    },
+                    iconStyleData: const IconStyleData(
+                      iconEnabledColor: Colors.grey,
+                      iconSize: 18,
+                      icon: Icon(
+                        Icons.keyboard_arrow_down,
+                      ),
+                    ),
+
+                    items: getCurrencies
+                        .map(
+                          (e) => DropdownMenuItem<CurrencyK>(
+                            value: e,
+                            child: Row(
+                              children: [
+                                Text(
+                                  e.code,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  e.name,
+                                  style: const TextStyle(
+                                    fontSize: 9,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                        .toList(),
+                    value: initialReceiveCurrency,
+                    onChanged: (val) {
+                      setState(
+                        () {
+                          initialReceiveCurrency = val;
+                          onAmountChanged();
+                        },
+                      );
+                    },
+
+                    buttonStyleData: ButtonStyleData(
+                      padding: const EdgeInsets.only(
+                        right: 5,
+                        top: 1,
+                        bottom: 1,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    dropdownStyleData: const DropdownStyleData(
+                      maxHeight: 400,
+                      width: 300,
+                      decoration: BoxDecoration(color: Colors.white),
+                    ),
+                    menuItemStyleData: MenuItemStyleData(
+                        height: 50,
+                        selectedMenuItemBuilder: (ctx, child) {
+                          return Container(
+                            color: Colors.white,
+                            child: child,
+                          );
+                        }),
+                    dropdownSearchData: DropdownSearchData(
+                      searchController: textEditingController,
+                      searchInnerWidgetHeight: 50,
+                      searchInnerWidget: Container(
+                        height: 50,
+                        padding: const EdgeInsets.only(
+                          top: 8,
+                          bottom: 1,
+                          right: 8,
+                          left: 8,
+                        ),
+                        child: TextFormField(
+                          controller: textEditingController,
+                          style: const TextStyle(fontSize: 12),
+                          decoration: InputDecoration(
+                            prefixIcon: const Padding(
+                              padding: EdgeInsets.all(5.0),
+                              child: Icon(
+                                Icons.search,
+                                size: 13,
+                              ),
+                            ),
+                            prefixIconConstraints: const BoxConstraints(
+                              maxHeight: 30,
+                              maxWidth: 50,
+                            ),
+                            isDense: true,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 5,
+                              vertical: 10,
+                            ),
+                            fillColor: Colors.white,
+                            hintText: 'Search',
+                            hintStyle: const TextStyle(fontSize: 12),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    //This to clear the search value when you close the menu
+                    onMenuStateChange: (isOpen) {
+                      if (!isOpen) {
+                        textEditingController.clear();
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
