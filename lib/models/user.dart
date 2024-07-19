@@ -16,7 +16,7 @@ class User {
   final String? countryInitial;
   final String? isEmailVerified;
   final String? isNumberVerified;
-  final String? isBvnVerified;
+  final bool? isVerified;
   final String? userCurrency;
 
   User(
@@ -35,7 +35,7 @@ class User {
       this.address,
       this.country,
       this.state,
-      this.isBvnVerified,
+      this.isVerified,
       this.isEmailVerified,
       this.isNumberVerified,
       this.countryInitial});

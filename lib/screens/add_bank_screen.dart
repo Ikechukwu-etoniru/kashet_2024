@@ -78,18 +78,6 @@ class _AddBankScreenState extends State<AddBankScreen> {
   }
 
   Future<void> _sendBankDetails() async {
-// var test = Hmac(hash, []),
-// base64:o2cj8ZFMg8WGttwgNUJmBfEjUWgYmaI3DEUVIJ1QQTY=
-//  String base64Key = 'DfeRt...';
-//   String message = 'blabla';
-
-//   List<int> messageBytes = utf8.encode(message);
-//   List<int> key = base64.decode(base64Key);
-//   Hmac hmac = new Hmac(sha256, key);
-//   Digest digest = hmac.convert(messageBytes);
-
-//   String base64Mac = base64.encode(digest.bytes);
-
     final _isValid = _formKey.currentState!.validate();
 
     if (_isValid) {

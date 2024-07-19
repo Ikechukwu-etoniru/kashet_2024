@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:kasheto_flutter/models/money_request.dart';
 import 'package:kasheto_flutter/provider/bank_provider.dart';
@@ -82,8 +80,6 @@ class _InitializationScreenState extends State<InitializationScreen> {
           .getCurrencies();
       await Provider.of<PlatformChargesProvider>(context, listen: false)
           .getExchangeRate();
-      await Provider.of<AuthProvider>(context, listen: false)
-          .checkVerificationStatus();
       List<MoneyRequest> _pendingMr =
           Provider.of<MoneyRequestProvider>(context, listen: false)
               .pendingReceivedMoneyRequest;

@@ -1,11 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:kasheto_flutter/screens/withdraw_paypal_to_naira_screen.dart';
 import 'package:kasheto_flutter/utils/api_url.dart';
-import 'package:kasheto_flutter/utils/my_colors.dart';
-import 'package:kasheto_flutter/utils/notifications.dart';
+import 'package:kasheto_flutter/widgets/loading_spinner.dart';
 import 'package:kasheto_flutter/widgets/success_page.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 
@@ -21,8 +19,55 @@ class WebViewPages extends StatefulWidget {
 }
 
 class _WebViewPagesState extends State<WebViewPages> {
+  late WebViewControllerPlus _controler;
+
+  bool _isLoading = false;
   var _dstReached = false;
-  var _isLoading = false;
+
+  @override
+  void initState() {
+    _controler = WebViewControllerPlus()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0x00000000))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onNavigationRequest: (req) {
+            if (req.url.contains('${ApiUrl.baseURL}user/transaction')) {
+              Navigator.pop(context);
+              // do not navigate
+              return NavigationDecision.prevent;
+            } else if (req.url.contains('${ApiUrl.baseURL}user/pay/success')) {
+              setState(() {
+                _dstReached = true;
+              });
+              // do not navigate
+              return NavigationDecision.prevent;
+            } else {
+              return NavigationDecision.navigate;
+            }
+          },
+          onPageFinished: (url) {
+            setState(() {
+              _isLoading = false;
+            });
+          },
+          onPageStarted: (url) {
+            setState(() {
+              _isLoading = true;
+            });
+          },
+          onProgress: (url) {},
+        ),
+      )
+      ..loadRequest(Uri.parse(widget.url));
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controler.server.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,49 +75,16 @@ class _WebViewPagesState extends State<WebViewPages> {
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
-          automaticallyImplyLeading: _dstReached ? false : true,
           title: Text(widget.appbarTitle),
         ),
         body: _dstReached
             ? const SuccessPage()
             : _isLoading
-                ? const Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SpinKitPianoWave(
-                        color: MyColors.primaryColor,
-                        duration: const Duration(milliseconds: 400),
-                        itemCount: 5,
-                        size: 20,
-                        type: SpinKitPianoWaveType.center,
-                      ),
-                    ],
+                ? const Center(
+                    child: LoadingSpinner(),
                   )
-                : WebViewPlus(
-                    javascriptMode: JavascriptMode.unrestricted,
-                    initialUrl: widget.url,
-                    navigationDelegate: (NavigationRequest request) async {
-                      if (request.url
-                          .contains('${ApiUrl.baseURL}user/transaction')) {
-                        Navigator.pop(context);
-                        // do not navigate
-                        return NavigationDecision.prevent;
-                      } else if (request.url
-                          .contains('${ApiUrl.baseURL}user/pay/success')) {
-                        setState(() {
-                          _dstReached = true;
-                        });
-                        Notifications.notifyUser(
-                            title: 'Deposit Successful',
-                            body: 'Your deposit was succesfully');
-
-                        // do not navigate
-                        return NavigationDecision.prevent;
-                      } else {
-                        return NavigationDecision.navigate;
-                      }
-                    },
+                : WebViewWidget(
+                    controller: _controler,
                   ),
       ),
     );
@@ -94,6 +106,57 @@ class WebViewTransferPage extends StatefulWidget {
 class _WebViewTransferPageState extends State<WebViewTransferPage> {
   var _dstReached = false;
 
+  late WebViewControllerPlus _controler;
+
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    _controler = WebViewControllerPlus()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0x00000000))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onNavigationRequest: (request) {
+            if (request.url.contains('${ApiUrl.baseURL}user/transaction')) {
+              Navigator.pop(context);
+              // do not navigate
+              return NavigationDecision.prevent;
+            } else if (request.url
+                .contains('${ApiUrl.baseURL}user/pay/success')) {
+              setState(() {
+                _dstReached = true;
+              });
+
+              // do not navigate
+              return NavigationDecision.prevent;
+            } else {
+              return NavigationDecision.navigate;
+            }
+          },
+          onPageFinished: (url) {
+            setState(() {
+              _isLoading = false;
+            });
+          },
+          onPageStarted: (url) {
+            setState(() {
+              _isLoading = true;
+            });
+          },
+          onProgress: (url) {},
+        ),
+      )
+      ..loadRequest(Uri.parse(widget.url));
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controler.server.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -105,31 +168,13 @@ class _WebViewTransferPageState extends State<WebViewTransferPage> {
         ),
         body: _dstReached
             ? const SuccessPage()
-            : WebViewPlus(
-                javascriptMode: JavascriptMode.unrestricted,
-                initialUrl: widget.url,
-                navigationDelegate: (NavigationRequest request) async {
-                  if (request.url
-                      .contains('${ApiUrl.baseURL}user/transaction')) {
-                    Navigator.pop(context);
-                    // do not navigate
-                    return NavigationDecision.prevent;
-                  } else if (request.url
-                      .contains('${ApiUrl.baseURL}user/pay/success')) {
-                    setState(() {
-                      _dstReached = true;
-                    });
-                    Notifications.notifyUser(
-                        title: 'Transfer Deposit Successful',
-                        body: 'Your Transfer deposit was succesfully');
-
-                    // do not navigate
-                    return NavigationDecision.prevent;
-                  } else {
-                    return NavigationDecision.navigate;
-                  }
-                },
-              ),
+            : _isLoading
+                ? const Center(
+                    child: LoadingSpinner(),
+                  )
+                : WebViewWidget(
+                    controller: _controler,
+                  ),
       ),
     );
   }
@@ -152,9 +197,59 @@ class WebViewPagesPaypal extends StatefulWidget {
 }
 
 class _WebViewPagesPaypalState extends State<WebViewPagesPaypal> {
-  late WebViewPlusController controller;
+  late WebViewControllerPlus _controler;
+  bool _isLoading = false;
+  bool _dstReached = false;
 
-  var _dstReached = 0;
+  @override
+  void initState() {
+    _controler = WebViewControllerPlus()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0x00000000))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onNavigationRequest: (request) {
+            if (request.url.contains('${ApiUrl.baseURL}user/transaction')) {
+              Navigator.pop(context);
+              // do not navigate
+              return NavigationDecision.prevent;
+            } else if (request.url
+                .contains('${ApiUrl.baseURL}user/pay/success')) {
+              setState(() {
+                _dstReached = true;
+              });
+
+              // do not navigate
+              return NavigationDecision.prevent;
+            } else if (request.url
+                .contains('https://api.kasheto.com/payment-verification')) {
+              return NavigationDecision.prevent;
+            } else {
+              return NavigationDecision.navigate;
+            }
+          },
+          onPageFinished: (url) {
+            setState(() {
+              _isLoading = false;
+            });
+          },
+          onPageStarted: (url) {
+            setState(() {
+              _isLoading = true;
+            });
+          },
+          onProgress: (url) {},
+        ),
+      )
+      ..loadRequest(Uri.parse(widget.url));
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controler.server.close();
+    super.dispose();
+  }
 
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
@@ -166,35 +261,15 @@ class _WebViewPagesPaypalState extends State<WebViewPagesPaypal> {
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
-          automaticallyImplyLeading: _dstReached == 1 ? false : true,
+          automaticallyImplyLeading: _dstReached ? false : true,
           title: Text(widget.appbarTitle),
         ),
-        body: _dstReached == 1
-            ? const SuccessPage()
-            : WebViewPlus(
-                key: UniqueKey(),
-                javascriptMode: JavascriptMode.unrestricted,
-                gestureRecognizers: gestureRecognizers,
-                initialUrl: widget.url,
-                navigationDelegate: (NavigationRequest request) {
-                  if (request.url.contains('api/user/transaction')) {
-                    Navigator.pop(context);
-                    // do not navigate
-                    return NavigationDecision.prevent;
-                  } else if (request.url
-                      .contains('${ApiUrl.baseURL}user/pay/success')) {
-                    setState(() {
-                      _dstReached = 1;
-                    });
-                    Notifications.notifyUser(
-                        title: 'Deposit Successful',
-                        body:
-                            'Your deposit of ${widget.amount} was succesfully and has been added to your balance');
-                    // do not navigate
-                    return NavigationDecision.prevent;
-                  }
-                  return NavigationDecision.navigate;
-                },
+        body: _isLoading
+            ? const Center(
+                child: LoadingSpinner(),
+              )
+            : WebViewWidget(
+                controller: _controler,
               ),
       ),
     );
@@ -221,26 +296,28 @@ class WebViewPagesPaypalToNaira extends StatefulWidget {
 }
 
 class _WebViewPagesPaypalToNairaState extends State<WebViewPagesPaypalToNaira> {
-  late WebViewPlusController controller;
+  late WebViewControllerPlus _controler;
+
+  bool _isLoading = false;
+  var _dstReached = false;
 
   @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        appBar: AppBar(
-          title: Text(widget.appbarTitle),
-        ),
-        body: WebViewPlus(
-          javascriptMode: JavascriptMode.unrestricted,
-          initialUrl: widget.url,
-          navigationDelegate: (NavigationRequest request) async {
-            if (request.url.contains('api/user/transaction')) {
+  void initState() {
+    _controler = WebViewControllerPlus()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0x00000000))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onNavigationRequest: (request) {
+            if (request.url.contains('${ApiUrl.baseURL}user/transaction')) {
               Navigator.pop(context);
               // do not navigate
               return NavigationDecision.prevent;
             } else if (request.url
                 .contains('${ApiUrl.baseURL}user/pay/success')) {
+              setState(() {
+                _dstReached = true;
+              });
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) {
                   return WithdrawPaypalToNaira(
@@ -251,10 +328,48 @@ class _WebViewPagesPaypalToNairaState extends State<WebViewPagesPaypalToNaira> {
 
               // do not navigate
               return NavigationDecision.prevent;
+            } else {
+              return NavigationDecision.navigate;
             }
-            return NavigationDecision.navigate;
           },
+          onPageFinished: (url) {
+            setState(() {
+              _isLoading = false;
+            });
+          },
+          onPageStarted: (url) {
+            setState(() {
+              _isLoading = true;
+            });
+          },
+          onProgress: (url) {},
         ),
+      )
+      ..loadRequest(Uri.parse(widget.url));
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controler.server.close();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: AppBar(
+          title: Text(widget.appbarTitle),
+        ),
+        body: _isLoading
+            ? const Center(
+                child: LoadingSpinner(),
+              )
+            : WebViewWidget(
+                controller: _controler,
+              ),
       ),
     );
   }

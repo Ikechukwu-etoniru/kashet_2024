@@ -32,7 +32,7 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
 
   var _isLoading = false;
 
-  Future _addUsdMoney(String paymentMethod) async {
+  Future _addUsdMoney() async {
     if (_amountController.text.isEmpty ||
         double.tryParse(_amountController.text) == null) {
       Alert.showerrorDialog(
@@ -97,7 +97,7 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
       });
       final response = await http.post(url, body: body, headers: header);
       final res = json.decode(response.body);
-      print(res);
+
       if (response.statusCode == 200 && _paymentMethodDropdown == 'paypal') {
         final paypalWebviewLink = res['details']['href'];
         Navigator.of(context).push(MaterialPageRoute(builder: (_) {
@@ -108,7 +108,7 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
           );
         }));
       } else if (response.statusCode == 200 &&
-          paymentMethod.toLowerCase() == 'card') {
+          _paymentMethodDropdown!.toLowerCase() == 'card') {
         final cashappWebviewLink = res['details']['href'];
         Navigator.of(context).push(MaterialPageRoute(builder: (_) {
           return WebViewPagesPaypal(
@@ -554,8 +554,19 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
                   SubmitButton(
                     action: () {
                       FocusScope.of(context).unfocus();
+
+                      // if (_paymentMethodDropdown == null) {
+                      //   Alert.showerrorDialog(
+                      //     context: context,
+                      //     text: 'Pick a payment method',
+                      //     onPressed: () {
+                      //       Navigator.of(context).pop();
+                      //     },
+                      //   );
+                      // }
+
                       if (_dropDownValue == 'USD') {
-                        _addUsdMoney(_paymentMethodDropdown!);
+                        _addUsdMoney();
                       } else {
                         _addNairaMoney();
                       }

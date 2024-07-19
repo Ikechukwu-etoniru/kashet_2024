@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cloudinary_sdk/cloudinary_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kasheto_flutter/provider/auth_provider.dart';
@@ -8,7 +9,6 @@ import 'package:kasheto_flutter/screens/initialization_screen.dart';
 import 'package:kasheto_flutter/screens/login_screen.dart';
 import 'package:kasheto_flutter/utils/alerts.dart';
 import 'package:kasheto_flutter/utils/api_url.dart';
-import 'package:kasheto_flutter/utils/cloudinary_helper.dart';
 import 'package:kasheto_flutter/utils/my_colors.dart';
 import 'package:kasheto_flutter/widgets/loading_spinner.dart';
 import 'package:kasheto_flutter/widgets/submit_button.dart';
@@ -29,12 +29,31 @@ class UpdateImageScreen extends StatefulWidget {
 class _UpdateImageScreenState extends State<UpdateImageScreen> {
   var _isLoading = false;
   String? _imageUrl;
+
+  Future<CloudinaryResponse> sendImage(
+      {required String filePath, required String fileName}) async {
+    const _folder = 'kasheto';
+
+    final cloudinary = Cloudinary.full(
+      apiKey: '633481269226496',
+      apiSecret: '5TCgN26fHgfDPuehbjTuNN43b2U',
+      cloudName: 'ictnetworld',
+    );
+    final response = await cloudinary.uploadResource(CloudinaryUploadResource(
+      filePath: filePath,
+      resourceType: CloudinaryResourceType.image,
+      folder: _folder,
+      fileName: fileName,
+    ));
+
+    return response;
+  }
+
   Future<bool> _saveToCloudinary(String filePath, String fileName) async {
     setState(() {
       _isLoading = true;
     });
-    final isSent = await CloudinaryHelper.sendImage(
-        filePath: filePath, fileName: fileName);
+    final isSent = await sendImage(filePath: filePath, fileName: fileName);
     if (isSent.statusCode == 200) {
       _imageUrl = isSent.secureUrl;
       setState(() {

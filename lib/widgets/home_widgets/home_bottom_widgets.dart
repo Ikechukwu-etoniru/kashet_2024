@@ -70,7 +70,6 @@ class VerifyIdWidget extends StatelessWidget {
               Navigator.of(context).pushNamed(VerifyIdCardScreen.routeName);
             },
             child: Container(
-              height: 130,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.white,
@@ -85,14 +84,15 @@ class VerifyIdWidget extends StatelessWidget {
                         spreadRadius: 20)
                   ]),
               padding: const EdgeInsets.symmetric(
-                horizontal: 15,
-                vertical: 10,
+                horizontal: 5,
+                vertical: 15,
               ),
               margin: const EdgeInsets.symmetric(
                 horizontal: 15,
                 vertical: 10,
               ),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SvgPicture.asset(
                     'images/cert.svg',
@@ -126,15 +126,10 @@ class VerifyIdWidget extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const Column(
-                    children: [
-                      Icon(
-                        Icons.lightbulb,
-                        color: Colors.red,
-                        size: 20,
-                      ),
-                      Expanded(child: SizedBox())
-                    ],
+                  const Icon(
+                    Icons.lightbulb,
+                    color: Colors.red,
+                    size: 20,
                   ),
                 ],
               ),

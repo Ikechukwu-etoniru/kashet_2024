@@ -23,7 +23,7 @@ class AuthProvider with ChangeNotifier {
   }
 
   IdModel? userId;
-  IDStatus? userVerified;
+  IDStatus? userVerified = IDStatus.notSubmitted;
 
   String get userCurrency {
     if (_userList[0].userCurrency == 'NGN') {
@@ -144,6 +144,7 @@ class AuthProvider with ChangeNotifier {
       final _header = await ApiUrl.setHeaders();
       final httpResponse = await http.get(url, headers: _header);
       final res = json.decode(httpResponse.body);
+
       if (httpResponse.statusCode == 200 && res['success'] == 'true') {
         // Delete user from list and add another user
         _userList.clear();
@@ -155,7 +156,8 @@ class AuthProvider with ChangeNotifier {
           phoneNumber: res['user Details']['details']['phone'],
           id: res['user Details']['id'].toString(),
           imageUrl: res['user Details']['photo'],
-          isBvnVerified: res['user Details']['bvn_verified_at'],
+          // isVerified: res['user Details']['verification'],
+          isVerified: null,
           isEmailVerified: res['user Details']['email_verified_at'],
           isNumberVerified: res['user Details']['phone_verified_at'],
           dob: res['user Details']['details']['dob'],
@@ -178,9 +180,8 @@ class AuthProvider with ChangeNotifier {
       } else {
         throw AppException('An error occurred');
       }
-    } on SocketException {
-      throw AppException(ApiUrl.internetErrorString);
     } catch (error) {
+      // print(error);
       throw AppException('An error occurred');
     }
   }
@@ -198,58 +199,6 @@ class AuthProvider with ChangeNotifier {
       }
     } catch (error) {
       return false;
-    }
-  }
-
-  Future checkVerificationStatus() async {
-    try {
-      final url = Uri.parse('${ApiUrl.baseURL}user/profile/verification');
-      final _header = await ApiUrl.setHeaders();
-      final response = await http.get(
-        url,
-        headers: _header,
-      );
-      final res = json.decode(response.body);
-      if (res['data'] == null) {
-        userVerified = IDStatus.notSubmitted;
-        return;
-      }
-      if (response.statusCode == 200 &&
-          res['data'] != null &&
-          (res['data']['status'] == '1' || res['data']['status'] == '0')) {
-        userId = IdModel(
-          id: res['data']['id'],
-          userId: res['data']['user_id'],
-          type: res['data']['type'],
-          frontImage: res['data']['doc_front'],
-          backImage: res['data']['doc_back'],
-          documentNumber: res['data']['doc_number'],
-          status: res['data']['status'],
-        );
-        if (res['data']['status'] == '1') {
-          userVerified = IDStatus.pending;
-        } else if (res['data']['status'] == '0') {
-          userVerified = IDStatus.approved;
-        }
-      } else if (response.statusCode == 200 &&
-          res['data'] != null &&
-          res['data']['status'] == '2') {
-        userId = IdModel(
-          id: res['data']['id'],
-          userId: res['data']['user_id'],
-          type: res['data']['type'],
-          frontImage: res['data']['doc_front'],
-          backImage: res['data']['doc_back'],
-          documentNumber: res['data']['doc_number'],
-          status: res['data']['status'],
-          remark: res['data']['remark'],
-        );
-        userVerified = IDStatus.declined;
-      }
-    } catch (error) {
-      print(error);
-    } finally {
-      notifyListeners();
     }
   }
 }
