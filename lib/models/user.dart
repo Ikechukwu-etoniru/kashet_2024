@@ -16,7 +16,7 @@ class User {
   final String? countryInitial;
   final String? isEmailVerified;
   final String? isNumberVerified;
-  final bool? isVerified;
+  final Map? isVerified;
   final String? userCurrency;
 
   User(

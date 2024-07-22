@@ -23,7 +23,7 @@ class AuthProvider with ChangeNotifier {
   }
 
   IdModel? userId;
-  IDStatus? userVerified = IDStatus.notSubmitted;
+  IDStatus? userVerified;
 
   String get userCurrency {
     if (_userList[0].userCurrency == 'NGN') {
@@ -79,8 +79,6 @@ class AuthProvider with ChangeNotifier {
       final response =
           await http.post(_uri, body: _body, headers: _setHeaders());
       final res = json.decode(response.body);
-      print(res);
-
       //  If response is successfull, i add token and save user details
       if (response.statusCode == 200) {
         SharedPreferences localStorage = await SharedPreferences.getInstance();
@@ -156,8 +154,7 @@ class AuthProvider with ChangeNotifier {
           phoneNumber: res['user Details']['details']['phone'],
           id: res['user Details']['id'].toString(),
           imageUrl: res['user Details']['photo'],
-          // isVerified: res['user Details']['verification'],
-          isVerified: null,
+          isVerified: res['user Details']['verification'],
           isEmailVerified: res['user Details']['email_verified_at'],
           isNumberVerified: res['user Details']['phone_verified_at'],
           dob: res['user Details']['details']['dob'],
@@ -177,6 +174,14 @@ class AuthProvider with ChangeNotifier {
         _userList.add(newUser);
         faStatus = null;
         faStatus = int.parse(res['user Details']['two_fa_status'].toString());
+
+        // Set user verification status
+
+        if (newUser.isVerified == null) {
+          userVerified = IDStatus.notSubmitted;
+        } else {
+          userVerified = IDStatus.approved;
+        }
       } else {
         throw AppException('An error occurred');
       }

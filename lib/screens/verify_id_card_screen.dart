@@ -25,6 +25,10 @@ class _VerifyIdCardScreenState extends State<VerifyIdCardScreen> {
 
   var _isCancelledStatus = false;
   var _urAccountIsVerified = false;
+  var _verificationComplete = false;
+  var _screenLoadingError = false;
+  var _verriffError = false;
+  String? errormessge;
 
   @override
   void initState() {
@@ -35,7 +39,11 @@ class _VerifyIdCardScreenState extends State<VerifyIdCardScreen> {
   Future getVeriffLink() async {
     try {
       setState(() {
-        _isCancelledStatus = true;
+        _isCancelledStatus = false;
+        _urAccountIsVerified = false;
+        _verificationComplete = false;
+        _screenLoadingError = false;
+        _verriffError = false;
         _isLoading = true;
       });
       final url =
@@ -47,9 +55,9 @@ class _VerifyIdCardScreenState extends State<VerifyIdCardScreen> {
       );
       final res = json.decode(response.body);
       print(res);
+
       if ((response.statusCode == 200 || response.statusCode == 201) &&
           res['status'] == false) {
-        print('yes');
         setState(() {
           _urAccountIsVerified = true;
         });
@@ -59,6 +67,9 @@ class _VerifyIdCardScreenState extends State<VerifyIdCardScreen> {
         startVeriffVerification(sessionUrl);
       }
     } catch (error) {
+      setState(() {
+        _screenLoadingError = true;
+      });
     } finally {
       setState(() {
         _isLoading = false;
@@ -72,17 +83,32 @@ class _VerifyIdCardScreenState extends State<VerifyIdCardScreen> {
 
     try {
       Result result = await veriff.start(config);
-      print(
-          '${result.status}   fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff');
-      print(
-          '${result.error}   fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff');
+
       if (result.status == Status.canceled) {
         setState(() {
           _isCancelledStatus = true;
         });
+      } else if (result.status == Status.done) {
+        setState(() {
+          _verificationComplete = true;
+        });
+      } else if (result.error != null) {
+        setState(() {
+          _verriffError = true;
+        });
+
+        if (result.error == Error.cameraUnavailable) {
+          errormessge = "User did not give permission for the camera";
+        } else if (result.error == Error.microphoneUnavailable) {
+          errormessge = "User did not give permission for the microphone.";
+        } else if (result.error == Error.networkError) {
+          errormessge = "Network error occurred.";
+        }
       }
     } catch (e) {
-      print(e);
+      setState(() {
+        _verriffError = true;
+      });
     }
   }
 
@@ -233,104 +259,222 @@ class _VerifyIdCardScreenState extends State<VerifyIdCardScreen> {
                             ),
                           ],
                         )
-                      : Padding(
-                          padding: MyPadding.screenPadding,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [],
-                          ),
-                        )),
+                      : _verificationComplete
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Center(
+                                  child: Icon(
+                                    Icons.verified_rounded,
+                                    color: MyColors.primaryColor,
+                                    size: 100,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                const Text(
+                                  'Your Account has been verified',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                    // Remember Change user id status to verified
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 10,
+                                      horizontal: 15,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.red,
+                                    ),
+                                    child: const Text(
+                                      'Go Back',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 40,
+                                ),
+                              ],
+                            )
+                          : _screenLoadingError
+                              ? Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(
+                                        Icons.error,
+                                        size: 100,
+                                        color: Colors.red,
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      const Text(
+                                        'Error occured while loading this screen',
+                                      ),
+                                      const SizedBox(
+                                        height: 50,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          getVeriffLink();
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 10,
+                                            horizontal: 15,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: MyColors.primaryColor,
+                                          ),
+                                          child: const Text(
+                                            'Reload Screen',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 10,
+                                            horizontal: 15,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: Colors.red,
+                                          ),
+                                          child: const Text(
+                                            'Go Back',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 40,
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : _verriffError
+                                  ? Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const Icon(
+                                            Icons.error,
+                                            size: 100,
+                                            color: Colors.red,
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          const Text(
+                                            'Error occured, verification incomplete',
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          if (errormessge != null)
+                                            Text(
+                                              errormessge!,
+                                            ),
+                                          const SizedBox(
+                                            height: 50,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              getVeriffLink();
+                                            },
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                vertical: 10,
+                                                horizontal: 15,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: MyColors.primaryColor,
+                                              ),
+                                              child: const Text(
+                                                'Restart Verification',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                vertical: 10,
+                                                horizontal: 15,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: Colors.red,
+                                              ),
+                                              child: const Text(
+                                                'Go Back',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 40,
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : Padding(
+                                      padding: MyPadding.screenPadding,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [],
+                                      ),
+                                    )),
     );
   }
 }
-
-// 
-// String? webLink;
-// String? webToken;
-// late WebViewControllerPlus _controller;
-
-// String hmacUserIdCode() {
-//   String base64Key = 'base64:o2cj8ZFMg8WGttwgNUJmBfEjUWgYmaI3DEUVIJ1QQTY=';
-//   String message =
-//       Provider.of<AuthProvider>(context, listen: false).userList.first.uid;
-
-//   List<int> messageBytes = utf8.encode(message);
-//   List<int> key = utf8.encode(base64Key);
-//   Hmac hmac = Hmac(sha256, key);
-//   Digest digest = hmac.convert(messageBytes);
-//   return digest.toString();
-// }
-
-// Future getVerificationLink() async {
-//   setState(() {
-//     _isLoading = true;
-//   });
-//   Dio dio = Dio();
-//   FormData formData = FormData.fromMap({
-//     'user_id':
-//         Provider.of<AuthProvider>(context, listen: false).userList.first.uid
-//   });
-
-//   try {
-//     Response response = await dio.post(
-//       'https://kasheto.com/api/entrance-scene',
-//       data: formData,
-//       options: Options(
-//         headers: {
-//           "Accept": "application/json",
-//           "X-KASH-SIGNATURE": hmacUserIdCode()
-//         },
-//       ),
-//     );
-//     final res = response.data;
-//     if (response.statusCode == 200 && res['status'] == 'success') {
-//       webLink = res['data']['url'];
-//       webToken = res['data']['token'];
-//       Map<String, String> headers = {"Authorization": "Bearer $webToken"};
-
-//       _controller = WebViewControllerPlus()
-//         ..setJavaScriptMode(JavaScriptMode.unrestricted)
-//         ..setBackgroundColor(const Color(0x00000000))
-//         ..setNavigationDelegate(
-//           NavigationDelegate(
-//             onNavigationRequest: (request) {
-//               if (request.url.contains('${ApiUrl.baseURL}user/transaction')) {
-//                 Navigator.pop(context);
-//                 // do not navigate
-//                 return NavigationDecision.prevent;
-//               } else if (request.url
-//                   .contains('${ApiUrl.baseURL}user/pay/success')) {
-//                 setState(() {
-//                   // _dstReached = true;
-//                 });
-//                 // do not navigate
-//                 return NavigationDecision.prevent;
-//               } else {
-//                 return NavigationDecision.navigate;
-//               }
-//             },
-//             onPageFinished: (url) {
-//               setState(() {
-//                 _isLoading = false;
-//               });
-//             },
-//             onPageStarted: (url) {
-//               setState(() {
-//                 _isLoading = true;
-//               });
-//             },
-//             onProgress: (url) {},
-//           ),
-//         )
-//         ..loadRequest(Uri.parse(webLink!),
-//             headers: {"Authorization": "Bearer $webToken"});
-//     }
-//   } catch (error) {
-//     print(error);
-//   } finally {
-//     setState(() {
-//       _isLoading = false;
-//     });
-//   }
-// }
