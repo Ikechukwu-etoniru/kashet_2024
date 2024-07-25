@@ -111,7 +111,7 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
           _paymentMethodDropdown!.toLowerCase() == 'card') {
         final cashappWebviewLink = res['details']['href'];
         Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-          return WebViewPagesPaypal(
+          return WebViewPagesStripe(
             appbarTitle: 'Add Money (Card Payment)',
             url: cashappWebviewLink,
             amount: 'USD ${_amountController.text}',
