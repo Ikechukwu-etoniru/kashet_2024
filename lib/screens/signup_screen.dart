@@ -9,7 +9,6 @@ import 'package:kasheto_flutter/widgets/text_field_text.dart';
 import 'package:provider/provider.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 
-import '/models/user.dart';
 import '/screens/login_screen.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -32,6 +31,8 @@ class _SignupScreenState extends State<SignupScreen> {
   var _hidePassword1 = true;
   final phoneNumberController = TextEditingController();
   String countryCode = '+1';
+
+  bool checkBoxVal = false;
 
   var _isLoading = false;
 
@@ -380,6 +381,31 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                         ),
                       ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          Checkbox(
+                              value: checkBoxVal,
+                              onChanged: (val) {
+                                setState(() {
+                                  checkBoxVal = val!;
+                                });
+                              },
+                              activeColor: MyColors.primaryColor,
+                              ),
+                          const Expanded(
+                            child: Text(
+                              'Confirm if you would like to receive SMS notifications from us.',
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          )
+                        ],
+                      )
                     ],
                   ),
                 ),
@@ -418,8 +444,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         'Login',
                         style: TextStyle(
                           fontSize: 12,
-                          decoration: TextDecoration.underline,
-                          decorationColor: Colors.green,
+                          color: Colors.green,
                           decorationThickness: 2,
                         ),
                       ),

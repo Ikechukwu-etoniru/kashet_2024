@@ -83,15 +83,15 @@ class _EditEmailScreenState extends State<EditEmailScreen> {
                 onFieldSubmitted: (value) {
                   FocusScope.of(context).unfocus();
                 },
-                decoration: InputDecoration(
+                decoration: const  InputDecoration(
                   filled: true,
                   fillColor: MyColors.textFieldColor,
                   isDense: true,
                   contentPadding: MyPadding.textFieldContentPadding,
                   hintText: 'Example@gmail.com',
                   hintStyle:
-                      const TextStyle(color: Colors.grey, letterSpacing: 5),
-                  border: const OutlineInputBorder(
+                      TextStyle(color: Colors.grey, letterSpacing: 5),
+                  border: OutlineInputBorder(
                     borderSide: BorderSide.none,
                   ),
                 ),

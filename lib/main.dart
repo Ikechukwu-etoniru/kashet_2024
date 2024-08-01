@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-
 // import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,7 +27,6 @@ import 'package:kasheto_flutter/screens/verify_email_screen.dart';
 import 'package:kasheto_flutter/screens/verify_id_card_screen.dart';
 import 'package:kasheto_flutter/screens/verify_number_screen.dart';
 import 'package:kasheto_flutter/utils/my_colors.dart';
-import 'package:kasheto_flutter/utils/notifications.dart';
 import 'package:provider/provider.dart';
 // import 'package:upgrader/upgrader.dart';
 import '/screens/betting_screen.dart';

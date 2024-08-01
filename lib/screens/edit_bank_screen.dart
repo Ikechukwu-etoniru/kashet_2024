@@ -8,7 +8,6 @@ import 'package:kasheto_flutter/provider/bank_provider.dart';
 import 'package:kasheto_flutter/screens/user_bank_list.dart';
 import 'package:kasheto_flutter/utils/alerts.dart';
 import 'package:kasheto_flutter/utils/api_url.dart';
-import 'package:kasheto_flutter/utils/my_colors.dart';
 import 'package:kasheto_flutter/utils/my_padding.dart';
 import 'package:kasheto_flutter/widgets/error_widget.dart';
 import 'package:kasheto_flutter/widgets/loading_spinner.dart';

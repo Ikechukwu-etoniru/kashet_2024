@@ -180,8 +180,6 @@ class _WebViewTransferPageState extends State<WebViewTransferPage> {
   }
 }
 
-//  https://api.kasheto.com/payment-verification?reference=cs_test_a16GBzkTozrrgLJVj31q3O3gNeFXz1xStb9hRmvbqSfr9X63zyArcuDVp2
-
 class WebViewPagesPaypal extends StatefulWidget {
   final String appbarTitle;
   final String url;
@@ -307,8 +305,6 @@ class _WebViewPagesStripeState extends State<WebViewPagesStripe> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (request) {
-            print(
-                'vvvvvvxvxvxvxvxvxvxvxvxvxvxvxvvvxvxvxvvxvxvx   ${request.url}');
             if (request.url.contains('${ApiUrl.baseURL}user/transaction')) {
               Navigator.pop(context);
               // do not navigate
@@ -325,7 +321,7 @@ class _WebViewPagesStripeState extends State<WebViewPagesStripe> {
                 .contains('https://api.kasheto.com/payment-verification?')) {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) {
                 return WebViewPagesStripeCont(
-                    appbarTitle: widget.appbarTitle, url: request.url);
+                    appbarTitle: widget.appbarTitle, url:  convertUrl(request.url));
               }));
               // do not navigate
               return NavigationDecision.prevent;
@@ -576,6 +572,18 @@ String removeApiPrefix(String url) {
   return url.replaceFirst('api.', '');
 }
 
+String convertUrl(String responseUrl) {
+  // Parse the response URL
+  Uri uri = Uri.parse(responseUrl);
 
-//  https://api.kasheto.com/payment-verification?reference=cs_test_a1md4mFxebLrM9vLdlmkR4zLvafGZPsNGm9xQNNlqdim3BmQzZKYRzqUbz
-//  https://kasheto.com/payment-verification?reference=cs_test_a1md4mFxebLrM9vLdlmkR4zLvafGZPsNGm9xQNNlqdim3BmQzZKYRzqUbz
+  // Extract the reference parameter
+  String? reference = uri.queryParameters['reference'];
+
+  // Construct the new URL with the reference parameter
+  if (reference != null) {
+    String newUrl = 'http://kasheto.com/user/pay/payment-verification?reference=$reference';
+    return newUrl;
+  } else {
+    throw Exception('Reference not found in the response URL');
+  }
+}
