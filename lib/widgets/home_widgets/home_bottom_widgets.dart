@@ -1,6 +1,5 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kasheto_flutter/models/currency.dart';
 import 'package:kasheto_flutter/provider/auth_provider.dart';
@@ -63,7 +62,7 @@ class VerifyIdWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Provider.of<AuthProvider>(context).userVerified ==
+    return Provider.of<AuthProvider>(context, listen: false).userVerified ==
             IDStatus.notSubmitted
         ? GestureDetector(
             onTap: () {
@@ -135,161 +134,7 @@ class VerifyIdWidget extends StatelessWidget {
               ),
             ),
           )
-        : Provider.of<AuthProvider>(context).userVerified == IDStatus.pending
-            ? GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pushNamed(VerifyIdCardScreen.routeName);
-                },
-                child: Container(
-                  height: 130,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.grey.withOpacity(0.07),
-                            blurRadius: 3,
-                            spreadRadius: 5),
-                        BoxShadow(
-                            color: Colors.grey.withOpacity(0.02),
-                            blurRadius: 10,
-                            spreadRadius: 20)
-                      ]),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 15,
-                    vertical: 10,
-                  ),
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 15,
-                    vertical: 10,
-                  ),
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(
-                        'images/cert.svg',
-                        height: 100,
-                        width: 100,
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      const Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Your Identity Verification is Pending',
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.yellow,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "We're currently reviewing your submitted ID, and we kindly request 24-48 hours to complete the verification process.",
-                              style: TextStyle(
-                                fontSize: 11,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      const Column(
-                        children: [
-                          Icon(
-                            Icons.lightbulb,
-                            color: Colors.yellow,
-                            size: 30,
-                          ),
-                          Expanded(child: SizedBox())
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            : Provider.of<AuthProvider>(context).userVerified ==
-                    IDStatus.declined
-                ? GestureDetector(
-                    onTap: () {
-                      Navigator.of(context)
-                          .pushNamed(IdDeclinedScreen.routeName);
-                    },
-                    child: Container(
-                      height: 130,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.grey.withOpacity(0.07),
-                                blurRadius: 3,
-                                spreadRadius: 5),
-                            BoxShadow(
-                                color: Colors.grey.withOpacity(0.02),
-                                blurRadius: 10,
-                                spreadRadius: 20)
-                          ]),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 15,
-                        vertical: 10,
-                      ),
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 15,
-                        vertical: 10,
-                      ),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            'images/cert.svg',
-                            height: 100,
-                            width: 100,
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          const Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Identity Card Verification Declined',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  "We regret to inform you that the ID you submitted has been disapproved.",
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          const Column(
-                            children: [
-                              Icon(
-                                Icons.lightbulb,
-                                color: Colors.red,
-                                size: 30,
-                              ),
-                              Expanded(child: SizedBox())
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                : const SizedBox();
+        : const SizedBox();
   }
 }
 

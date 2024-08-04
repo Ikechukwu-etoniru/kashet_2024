@@ -159,9 +159,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       child: const Text(
                         'Login',
                         style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          decorationColor: Colors.green,
-                          decorationThickness: 2,
+                          color: Colors.green,
                         ),
                       ),
                     )

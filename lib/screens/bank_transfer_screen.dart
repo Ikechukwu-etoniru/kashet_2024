@@ -17,7 +17,6 @@ import 'package:kasheto_flutter/widgets/my_dropdown.dart';
 import 'package:kasheto_flutter/widgets/submit_button.dart';
 import 'package:kasheto_flutter/widgets/text_field_text.dart';
 import 'package:provider/provider.dart';
-
 import '../provider/bank_provider.dart';
 
 class BankTransfer extends StatefulWidget {

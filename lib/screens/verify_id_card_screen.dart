@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
@@ -248,7 +247,7 @@ class _VerifyIdCardScreenState extends State<VerifyIdCardScreen> {
                               height: 15,
                             ),
                             Text(
-                              'Your Account is already verified',
+                              'Congratulations! Your document has been approved. You can now access the full powers of your dashboard.',
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
