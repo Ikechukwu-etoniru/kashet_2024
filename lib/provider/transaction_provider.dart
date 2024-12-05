@@ -50,26 +50,25 @@ class TransactionProvider extends ChangeNotifier {
       final response = await http.get(url, headers: _header);
       if (response.statusCode == 200) {
         final res = json.decode(response.body);
-
         final txList = res as List;
         _transactionList.clear();
         for (var element in txList) {
           final _newTx = Transaction(
-              id: int.parse(element['id'].toString()),
-              userId: int.parse(element['user_id'].toString()),
-              type: element['type'] == 'credit'
-                  ? TransactionType.credit
-                  : TransactionType.debit,
-              amount: element['amount'],
-              ktcValue: element['ktc_value'],
-              paymentType: element['payment_type'],
-              description: element['description'],
-              status: element['status'],
-              currency: element['currency'],
-              charges: element['charges'],
-              createDate: element['created_at'],
-              updatedDate: element['updated_at'],
-              personInvoled: element['person_involved']);
+            id: int.parse(element['id'].toString()),
+            userId: int.parse(element['user_id'].toString()),
+            type: element['type'] == 'credit'
+                ? TransactionType.credit
+                : TransactionType.debit,
+            amount: element['amount'].toString(),
+            ktcValue: element['ktc_value'].toString(),
+            paymentType: element['payment_type'],
+            description: element['description'],
+            status: element['status'],
+            currency: element['currency'],
+            charges: element['charges'],
+            createDate: element['created_at'],
+            updatedDate: element['updated_at'],
+          );
           _transactionList.add(_newTx);
         }
       } else {
@@ -134,12 +133,10 @@ class TransactionProvider extends ChangeNotifier {
       required String user}) async {
     try {
       var _body = {
-        "email": email,
-        "name": name,
         "amount": amount,
-        // "ktc_value": ktcValue,
         "currency": currency,
-        "user": user
+        "user": user,
+        "recipient_type": "kasheto"
       };
 
       final _header = await ApiUrl.setHeaders();
@@ -148,6 +145,7 @@ class TransactionProvider extends ChangeNotifier {
       var _httpResponse = await http.post(Uri.parse(url),
           body: json.encode(_body), headers: _header);
       final _response = json.decode(_httpResponse.body);
+     
       if (_httpResponse.statusCode == 200) {
         return _response;
       } else {

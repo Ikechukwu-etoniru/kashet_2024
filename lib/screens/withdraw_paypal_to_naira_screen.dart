@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kasheto_flutter/provider/auth_provider.dart';
-import 'package:kasheto_flutter/screens/bank_transfer_screen.dart';
 import 'package:kasheto_flutter/screens/bill_payment_scren.dart';
 import 'package:kasheto_flutter/screens/initialization_screen.dart';
+import 'package:kasheto_flutter/screens/verify_bank_transfer_account.dart';
 import 'package:kasheto_flutter/screens/withdraw_money_screen.dart';
 import 'package:kasheto_flutter/utils/alerts.dart';
 import 'package:provider/provider.dart';
@@ -88,7 +88,8 @@ class _WithdrawPaypalToNairaState extends State<WithdrawPaypalToNaira> {
               ),
               WhatNextContainer(
                 onpressed: () {
-                  Navigator.of(context).pushNamed(BankTransfer.routeName);
+                  Navigator.of(context)
+                      .pushNamed(VerifyBankTransferAccount.routeName);
                 },
                 title: 'Send Money',
               ),

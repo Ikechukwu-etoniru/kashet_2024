@@ -22,6 +22,7 @@ import 'package:kasheto_flutter/screens/paypal_tx_screen.dart';
 import 'package:kasheto_flutter/screens/support_screen.dart';
 import 'package:kasheto_flutter/screens/update_image_screen.dart';
 import 'package:kasheto_flutter/screens/user_bank_list.dart';
+import 'package:kasheto_flutter/screens/verify_bank_transfer_account.dart';
 import 'package:kasheto_flutter/screens/verify_bvn_screen.dart';
 import 'package:kasheto_flutter/screens/verify_email_screen.dart';
 import 'package:kasheto_flutter/screens/verify_id_card_screen.dart';
@@ -50,7 +51,6 @@ import '/screens/login_screen.dart';
 import '/screens/notification_settings_screen.dart';
 import '/screens/language_location_screen.dart';
 import '/screens/all_transactions_screen.dart';
-import '/screens/bank_transfer_screen.dart';
 import '/screens/personal_details_screen.dart';
 import '/screens/security_settings_screen.dart';
 import '/screens/update_password_screen.dart';
@@ -121,9 +121,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   void navToHomePage(BuildContext context) {
-    // navigatorKey.currentState!.pushAndRemoveUntil(
-    //     MaterialPageRoute(builder: (context) => const LoginScreen()),
-    //     (Route<dynamic> route) => false);
+    navigatorKey.currentState!.pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+        (Route<dynamic> route) => false);
   }
 
   @override
@@ -268,7 +268,6 @@ class _MyAppState extends State<MyApp> {
                 const NotificationSettings(),
             LanguageLocationScreen.routeName: (ctx) =>
                 const LanguageLocationScreen(),
-            BankTransfer.routeName: (ctx) => const BankTransfer(),
             AllTransactionScreen.routeName: (ctx) =>
                 const AllTransactionScreen(),
             PersonalDetailScreen.routeName: (ctx) =>
@@ -298,6 +297,8 @@ class _MyAppState extends State<MyApp> {
             PaypalTxScreen.routeName: (ctx) => const PaypalTxScreen(),
             VerifyIdCardScreen.routeName: (ctx) => const VerifyIdCardScreen(),
             IdDeclinedScreen.routeName: (ctx) => const IdDeclinedScreen(),
+            VerifyBankTransferAccount.routeName: (ctx) =>
+                const VerifyBankTransferAccount(),
           },
         ),
       ),

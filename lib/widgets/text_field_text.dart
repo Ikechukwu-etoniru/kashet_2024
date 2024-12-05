@@ -6,12 +6,15 @@ class TextFieldText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: const TextStyle(
-        fontWeight: FontWeight.bold,
-        letterSpacing: 1.5,
-        fontSize: 12,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 7),
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          letterSpacing: 1.5,
+          fontSize: 12,
+        ),
       ),
     );
   }

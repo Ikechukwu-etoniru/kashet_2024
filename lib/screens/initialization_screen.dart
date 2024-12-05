@@ -11,6 +11,7 @@ import 'package:kasheto_flutter/screens/login_screen.dart';
 import 'package:kasheto_flutter/screens/main_screen.dart';
 import 'package:kasheto_flutter/screens/update_image_screen.dart';
 import 'package:kasheto_flutter/screens/verify_email_screen.dart';
+import 'package:kasheto_flutter/screens/verify_id_card_screen.dart';
 import 'package:kasheto_flutter/screens/verify_number_screen.dart';
 import 'package:kasheto_flutter/utils/notifications.dart';
 import 'package:kasheto_flutter/widgets/error_widget.dart';
@@ -32,14 +33,17 @@ class _InitializationScreenState extends State<InitializationScreen> {
   var _checkEmail = false;
   var _checkNumber = false;
   var _checkImage = false;
-  var _verified = false;
+  var _checkId = false;
+
   var errorr = '';
 
   Future<void> _initializeApp() async {
     // Making all this false else even when verified, verify screen will still show up
+    var allVerificationComplete = false;
     _checkEmail = false;
     _checkNumber = false;
     _checkImage = false;
+    _checkId = false;
     setState(() {
       _isLoading = true;
     });
@@ -57,11 +61,15 @@ class _InitializationScreenState extends State<InitializationScreen> {
         _checkNumber = true;
       } else if (user.isEmailVerified == null) {
         _checkEmail = true;
+      } else if (Provider.of<AuthProvider>(context, listen: false)
+              .userVerified ==
+          IDStatus.notSubmitted) {
+        _checkId = true;
       } else {
-        _verified = true;
+        allVerificationComplete = true;
       }
 
-      if (_verified = false) {
+      if (allVerificationComplete = false) {
         return;
       }
       await Provider.of<TransactionProvider>(context, listen: false)
@@ -95,7 +103,6 @@ class _InitializationScreenState extends State<InitializationScreen> {
             body: '${_pendingMr.length} users have requested payment from you');
       }
     } catch (error) {
-      print(error);
       setState(() {
         _isError = true;
       });
@@ -132,14 +139,16 @@ class _InitializationScreenState extends State<InitializationScreen> {
                     ? const VerifyEmailScreen()
                     : _checkImage
                         ? const UpdateImageScreen()
-                        : _isError
-                            ? IsErrorScreen(
-                                onPressed: () {
-                                  Navigator.of(context)
-                                      .pushNamed(LoginScreen.routeName);
-                                },
-                              )
-                            : const MainScreen(),
+                        : _checkId
+                            ? const VerifyIdCardScreen()
+                            : _isError
+                                ? IsErrorScreen(
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pushNamed(LoginScreen.routeName);
+                                    },
+                                  )
+                                : const MainScreen(),
       ),
     );
   }

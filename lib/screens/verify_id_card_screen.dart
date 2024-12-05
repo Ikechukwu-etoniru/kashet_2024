@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
+import 'package:kasheto_flutter/screens/initialization_screen.dart';
+import 'package:kasheto_flutter/screens/login_screen.dart';
 import 'package:kasheto_flutter/screens/main_screen.dart';
 import 'package:kasheto_flutter/utils/api_url.dart';
 import 'package:kasheto_flutter/utils/my_colors.dart';
@@ -53,7 +55,6 @@ class _VerifyIdCardScreenState extends State<VerifyIdCardScreen> {
         headers: _header,
       );
       final res = json.decode(response.body);
-      print(res);
 
       if ((response.statusCode == 200 || response.statusCode == 201) &&
           res['status'] == false) {
@@ -139,10 +140,8 @@ class _VerifyIdCardScreenState extends State<VerifyIdCardScreen> {
                       if (localStorage.containsKey('token')) {
                         localStorage.remove('token');
                       }
-                      Navigator.of(context).pop(true);
-
                       Navigator.of(context).pushNamedAndRemoveUntil(
-                          MainScreen.routeName, (route) => false);
+                          LoginScreen.routeName, (route) => false);
                     },
                     child: const Text('Yes'),
                   )
@@ -205,8 +204,14 @@ class _VerifyIdCardScreenState extends State<VerifyIdCardScreen> {
                             height: 20,
                           ),
                           GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).pop();
+                            onTap: () async {
+                              SharedPreferences localStorage =
+                                  await SharedPreferences.getInstance();
+                              if (localStorage.containsKey('token')) {
+                                localStorage.remove('token');
+                              }
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  LoginScreen.routeName, (route) => false);
                             },
                             child: Container(
                               padding: const EdgeInsets.symmetric(
@@ -285,8 +290,8 @@ class _VerifyIdCardScreenState extends State<VerifyIdCardScreen> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    Navigator.of(context).pop();
-                                    // Remember Change user id status to verified
+                                    Navigator.pushReplacementNamed(context,
+                                        InitializationScreen.routeName);
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
@@ -298,7 +303,7 @@ class _VerifyIdCardScreenState extends State<VerifyIdCardScreen> {
                                       color: Colors.red,
                                     ),
                                     child: const Text(
-                                      'Go Back',
+                                      'Continue',
                                       style: TextStyle(
                                         color: Colors.white,
                                       ),
@@ -464,7 +469,7 @@ class _VerifyIdCardScreenState extends State<VerifyIdCardScreen> {
                                         ],
                                       ),
                                     )
-                                  : Padding(
+                                  : const Padding(
                                       padding: MyPadding.screenPadding,
                                       child: Column(
                                         crossAxisAlignment:

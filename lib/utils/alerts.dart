@@ -5,6 +5,7 @@ import 'package:kasheto_flutter/screens/add_bank_screen.dart';
 import 'package:kasheto_flutter/screens/bank_transfer_screen.dart';
 import 'package:kasheto_flutter/screens/main_screen.dart';
 import 'package:kasheto_flutter/screens/personal_details_screen.dart';
+import 'package:kasheto_flutter/screens/withdraw_money_screen.dart';
 import 'package:kasheto_flutter/utils/my_colors.dart';
 import 'package:kasheto_flutter/widgets/dialog_chip.dart';
 import 'package:kasheto_flutter/widgets/dialog_row.dart';
@@ -557,6 +558,7 @@ class Alert {
                     child: InkWell(
                       onTap: (() {
                         Navigator.pop(context);
+                        Navigator.pop(context);
                       }),
                       child: Chip(
                         backgroundColor: Colors.green[500],
@@ -715,6 +717,91 @@ class Alert {
                           ConfirmColumn('Amount', amount),
                         ],
                       ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      DialogChip(
+                          onTap: () {
+                            Navigator.of(context).pop(false);
+                          },
+                          text: 'Cancel',
+                          color: Colors.red),
+                      DialogChip(
+                        onTap: () {
+                          Navigator.of(context).pop(true);
+                        },
+                        text: 'Continue',
+                        color: Colors.green,
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  static Future<bool?> showVerifyAcctDialog({
+    required BuildContext context,
+    required String name,
+    required Bank bank,
+  }) {
+    return showDialog<bool>(
+        // barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return Dialog(
+            elevation: 30,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(top: 5, bottom: 10),
+                    height: 3,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                  const Text(
+                    'Confirm Account Details',
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                  ),
+                  // Text(
+                  //   name,
+                  //   textAlign: TextAlign.center,
+                  //   style: const TextStyle(
+                  //     fontWeight: FontWeight.bold,
+                  //     fontSize: 18,
+                  //   ),
+                  // ),
+                  const SizedBox(height: 20),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 10),
+                    decoration: BoxDecoration(
+                        color: Colors.green[50],
+                        borderRadius: BorderRadius.circular(5)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ConfirmColumn('Beneficiary Name',
+                            capitalizeFirstLetterOfEachWord(name)),
+                        const Divider(),
+                        ConfirmColumn('Beneficiary Bank', bank.name),
+                      ],
                     ),
                   ),
                   const SizedBox(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kasheto_flutter/screens/book_flight_screen.dart';
 import 'package:kasheto_flutter/screens/buy_sell_crypto_screen.dart';
+import 'package:kasheto_flutter/screens/verify_bank_transfer_account.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -23,9 +24,6 @@ class ServiceIcons extends StatelessWidget {
     'Bill Payment',
     'Send/Request Money',
     'Paypal Transactions',
-    // 'Book Flight',
-    // 'Buy/Sell Crypto',
-    // 'Sport Betting',
     'Bank Transfer'
   ];
 
@@ -34,9 +32,6 @@ class ServiceIcons extends StatelessWidget {
     'images/bill_payment.png',
     'images/send_money.png',
     'images/paypal.png',
-    // 'images/book_flight.png',
-    // 'images/crypto.png',
-    // 'images/sport_betting.png'
   ];
 
   @override
@@ -65,7 +60,7 @@ class ServiceIcons extends StatelessWidget {
           // } else if (index == 6) {
           //   Navigator.of(context).pushNamed(FutureUpdate.routeName);
         } else if (index == 4) {
-          Navigator.of(context).pushNamed(BankTransfer.routeName);
+          Navigator.of(context).pushNamed(VerifyBankTransferAccount.routeName);
         }
       },
       child: Container(

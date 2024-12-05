@@ -37,10 +37,10 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
- void changeVerificationStatus () {
-  userVerified = IDStatus.approved;
-  notifyListeners();
- }
+  void changeVerificationStatus() {
+    userVerified = IDStatus.approved;
+    notifyListeners();
+  }
 
   Future<String> getDeviceInfo() async {
     if (Platform.isAndroid) {
@@ -183,7 +183,7 @@ class AuthProvider with ChangeNotifier {
         // Set user verification status
 
         if (newUser.isVerified == null) {
-          userVerified = IDStatus.notSubmitted;
+        userVerified = IDStatus.notSubmitted;
         } else if (!newUser.isVerified!['is_approved']) {
           userVerified = IDStatus.notSubmitted;
         } else {

@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:kasheto_flutter/utils/my_colors.dart';
 import 'package:kasheto_flutter/widgets/text_field_text.dart';
 import 'package:provider/provider.dart';
 
@@ -88,29 +90,27 @@ class _AddBankScreenState extends State<AddBankScreen> {
         final _header = await ApiUrl.setHeaders();
         final response = await http.post(url,
             headers: _header,
-            body: json.encode({
-              "account_name": _acctName,
-              "account_number": _acctNumber,
-              "bank": _bankId
-            }));
+            body:
+                json.encode({"account_number": _acctNumber, "bank": _bankId}));
         final res = json.decode(response.body);
         if (response.statusCode == 201 || response.statusCode == 200) {
           await Provider.of<BankProvider>(context, listen: false)
               .getUserBanksInformation();
-          Alert.successDialogAddBank(context);
-          Navigator.of(context).pop();
+          await Alert.successDialogAddBank(context);
+          // Navigator.of(context).pop();
         } else if (response.statusCode == 422) {
           Alert.showerrorDialog(
-              context: context, text: res['message'], onPressed: () {});
+              context: context,
+              text: res['message'],
+              onPressed: () {
+                Navigator.of(context).pop();
+              });
         }
-      } on SocketException {
-        ScaffoldMessenger.of(context).showSnackBar(
-          Alert.snackBar(message: ApiUrl.internetErrorString, context: context),
-        );
       } catch (error) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          Alert.snackBar(message: ApiUrl.errorString, context: context),
-        );
+        Alert.showerrorDialog(
+            context: context,
+            text: 'An error occured, bank details wasn\'t added',
+            onPressed: () {});
       } finally {
         setState(() {
           _isButtonLoading = false;
@@ -324,15 +324,12 @@ class _AddBankScreenState extends State<AddBankScreen> {
                                         size: 13,
                                       ),
                                     ),
-                                    prefixIconConstraints: const BoxConstraints(
-                                      maxHeight: 30,
-                                      maxWidth: 50,
-                                    ),
                                     isDense: true,
                                     contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 3,
-                                      vertical: 8,
+                                      horizontal: 10,
+                                      vertical: 10,
                                     ),
+                                    filled: true,
                                     fillColor: Colors.white,
                                     hintText: 'Search',
                                     hintStyle: const TextStyle(fontSize: 12),
@@ -351,6 +348,61 @@ class _AddBankScreenState extends State<AddBankScreen> {
                               }
                             },
                           ),
+                          // DropdownSearch<String>(
+                          //   validator: (value) {
+                          //     if (value == null) {
+                          //       return 'Choose a Bank';
+                          //     } else {
+                          //       return null;
+                          //     }
+                          //   },
+                          //   popupProps: PopupProps.menu(
+                          //     showSearchBox: true,
+                          //     showSelectedItems: true,
+                          //     searchFieldProps: TextFieldProps(
+                          //       decoration: InputDecoration(
+                          //         contentPadding:
+                          //             MyPadding.textFieldContentPadding,
+                          //         isDense: true,
+                          //         hintText: 'Search',
+                          //         hintStyle: const TextStyle(
+                          //           color: Colors.grey,
+                          //           fontSize: 13,
+                          //         ),
+                          //         filled: true,
+                          //         fillColor: MyColors.textFieldColor,
+                          //         border: OutlineInputBorder(
+                          //             borderRadius: BorderRadius.circular(5),
+                          //             borderSide: BorderSide.none),
+                          //       ),
+                          //     ),
+                          //   ),
+                          //   items: _isoBankListString!,
+                          //   dropdownDecoratorProps: DropDownDecoratorProps(
+                          //     dropdownSearchDecoration: InputDecoration(
+                          //       contentPadding: MyPadding.textFieldContentPadding,
+                          //       isDense: true,
+                          //       hintText: 'Choose a bank',
+                          //       hintStyle: const TextStyle(
+                          //         color: Colors.grey,
+                          //         fontSize: 12,
+                          //       ),
+                          //       filled: true,
+                          //       fillColor: _textFieldColor,
+                          //       border: OutlineInputBorder(
+                          //           borderRadius: BorderRadius.circular(5),
+                          //           borderSide: BorderSide.none),
+                          //     ),
+                          //   ),
+                          //   onChanged: (value) {
+                          //     setState(
+                          //       () {
+                          //         _dropDownValue = value.toString();
+                          //         _getBankId(value.toString());
+                          //       },
+                          //     );
+                          //   },
+                          // ),
                           const Spacer(),
                           if (_isButtonLoading)
                             const LoadingSpinnerWithMargin(),

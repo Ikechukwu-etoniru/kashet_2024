@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:kasheto_flutter/utils/my_colors.dart';
 import 'package:kasheto_flutter/widgets/balance_box.dart';
 import 'package:provider/provider.dart';
@@ -42,7 +43,7 @@ class BlackBox extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      'K ${walletBalance.toStringAsFixed(2)}',
+                      'K ${formatCurrency(walletBalance.toStringAsFixed(2))}',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 20,
@@ -77,5 +78,18 @@ class BlackBox extends StatelessWidget {
         );
       }),
     );
+  }
+}
+
+String formatCurrency(String amount) {
+  try {
+    // Parse the string to a double
+    double value = double.parse(amount);
+
+    // Format the double using NumberFormat
+    final formatter = NumberFormat("#,##0.00", "en_US");
+    return formatter.format(value);
+  } catch (e) {
+    throw FormatException("Invalid input: $amount");
   }
 }

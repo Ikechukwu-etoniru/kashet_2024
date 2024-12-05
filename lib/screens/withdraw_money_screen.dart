@@ -97,7 +97,7 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
               "bank": _selectedBank,
               "amount": _amountController.text,
             }));
-        final res = json.decode(_response.body);
+        final res = json.decode(_response.body);  
         if (_response.statusCode == 200 && res['status'] == 'success') {
           Alert.showSuccessDialog2(context);
         } else if (_response.statusCode == 422) {
@@ -112,6 +112,7 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
           Alert.snackBar(message: ApiUrl.internetErrorString, context: context),
         );
       } catch (error) {
+        print(error);
         ScaffoldMessenger.of(context).showSnackBar(
           Alert.snackBar(message: ApiUrl.errorString, context: context),
         );

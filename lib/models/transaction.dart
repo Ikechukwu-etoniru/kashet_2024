@@ -13,7 +13,6 @@ class Transaction {
   final num? charges;
   final String createDate;
   final String? updatedDate;
-  final String personInvoled;
 
   Transaction(
       {required this.id,
@@ -28,5 +27,5 @@ class Transaction {
       required this.charges,
       required this.createDate,
       required this.updatedDate,
-      required this.personInvoled});
+      });
 }
