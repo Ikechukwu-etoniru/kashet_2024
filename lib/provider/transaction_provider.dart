@@ -100,9 +100,6 @@ class TransactionProvider extends ChangeNotifier {
       var response = await http.post(Uri.parse(url),
           body: json.encode(_body), headers: _header);
       final res = json.decode(response.body);
-      print('start');
-      print(res);
-
       if (response.statusCode == 200) {
         final String ee = res['details']['original']['Response Body'];
 

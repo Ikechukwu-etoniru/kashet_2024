@@ -91,7 +91,6 @@ class _BankTransferState extends State<BankTransfer> {
       });
       final response = await http.post(url, body: _body, headers: _header);
       final res = json.decode(response.body);
-      print(res);
       if (res['success'] == true) {
         Alert.showSuccessDialog(
             context: context,

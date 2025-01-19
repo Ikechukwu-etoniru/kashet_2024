@@ -31,7 +31,8 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
   final _textFieldColor = Colors.grey[200];
   final _formKey = GlobalKey<FormState>();
   final _amountController = TextEditingController();
-  String _paymentMethodDropdown = 'Choose a withdrawal method';
+  final _paypalEmailController = TextEditingController();
+  String? paymentMethodDropdown;
   var _isLoading = false;
   var _isError = false;
   String? _ktcAmount = '0.00';
@@ -43,18 +44,27 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
   }
 
   bool _isDetailsValid() {
-    final _validateDetails = _formKey.currentState!.validate();
-    if (_validateDetails && _selectedBank != null) {
-      return true;
-    } else if (_selectedBank == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        Alert.snackBar(
-            message: 'Select a bank account to receive funds',
-            context: context),
-      );
-      return false;
+    if (paymentMethodDropdown == 'NGN') {
+      final _validateDetails = _formKey.currentState!.validate();
+      if (_validateDetails && _selectedBank != null) {
+        return true;
+      } else if (_selectedBank == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          Alert.snackBar(
+              message: 'Select a bank account to receive funds',
+              context: context),
+        );
+        return false;
+      } else {
+        return false;
+      }
     } else {
-      return false;
+      final _validateDetails = _formKey.currentState!.validate();
+      if (_validateDetails) {
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 
@@ -84,8 +94,7 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
         _isLoading = true;
       });
       try {
-        const _currency =
-            'NGN'; // Provider.of<AuthProvider>(context, listen: false).userList[0].userCurrency;
+        const _currency = 'NGN';
         final _url = Uri.parse(
             '${ApiUrl.baseURL}user/withdraw/process-withdraw-to-bank');
         final _header = await ApiUrl.setHeaders();
@@ -97,22 +106,75 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
               "bank": _selectedBank,
               "amount": _amountController.text,
             }));
-        final res = json.decode(_response.body);  
+        final res = json.decode(_response.body);
+        // print('res -- $res');
         if (_response.statusCode == 200 && res['status'] == 'success') {
           Alert.showSuccessDialog2(context);
         } else if (_response.statusCode == 422) {
-          ScaffoldMessenger.of(context).showSnackBar(Alert.snackBar(
-              message: res['errors']['amount'][0], context: context));
+          ScaffoldMessenger.of(context).showSnackBar(
+              Alert.snackBar(message: res['message'], context: context));
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
               Alert.snackBar(message: 'Withdrawal failed', context: context));
         }
-      } on SocketException {
-        ScaffoldMessenger.of(context).showSnackBar(
-          Alert.snackBar(message: ApiUrl.internetErrorString, context: context),
-        );
       } catch (error) {
-        print(error);
+        ScaffoldMessenger.of(context).showSnackBar(
+          Alert.snackBar(message: ApiUrl.errorString, context: context),
+        );
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _withdrawUsdMoney() async {
+    FocusScope.of(context).unfocus();
+    final _isValid = _isDetailsValid();
+    if (!_isValid) {
+      return;
+    } else {
+      final confirm = await Alert.confirmationDialogUSD(
+        context: context,
+        charges: _totalCharge,
+        amount: _ktcAmount.toString(),
+        payPalName: _paypalEmailController.text,
+      );
+
+      if (confirm == null || !confirm) {
+        return;
+      }
+
+      setState(() {
+        _isLoading = true;
+      });
+
+      try {
+        const _currency = 'USD';
+        final _url = Uri.parse(
+            '${ApiUrl.baseURL}user/withdraw/process-withdraw-to-paypal');
+        final _header = await ApiUrl.setHeaders();
+
+        final _response = await http.post(_url,
+            headers: _header,
+            body: json.encode({
+              "currency": _currency,
+              "paypal_email": _paypalEmailController.text,
+              "amount": _amountController.text,
+            }));
+
+        final res = json.decode(_response.body);
+        if (_response.statusCode == 200 && res['status'] == 'success') {
+          Alert.showSuccessDialog2(context);
+        } else if (_response.statusCode == 422 || res['status'] == 'failed') {
+          ScaffoldMessenger.of(context).showSnackBar(Alert.snackBar(
+              message: res['message'], context: context));
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+              Alert.snackBar(message: 'Withdrawal failed', context: context));
+        }
+      } catch (error) {
         ScaffoldMessenger.of(context).showSnackBar(
           Alert.snackBar(message: ApiUrl.errorString, context: context),
         );
@@ -127,11 +189,19 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
   void _getKtcAmount() {
     if (_amountController.text.isEmpty) {
       _ktcAmount = '0.00';
+    } else if (paymentMethodDropdown == 'NGN') {
+      final _naira2ktc =
+          Provider.of<PlatformChargesProvider>(context, listen: false)
+              .nairaToKtc;
+      final _amount = double.parse(_amountController.text) * _naira2ktc;
+      _ktcAmount = _amount.toString();
+    } else {
+      final _usd2ktc =
+          Provider.of<PlatformChargesProvider>(context, listen: false)
+              .dollarsToKtc;
+      final _amount = double.parse(_amountController.text) * _usd2ktc;
+      _ktcAmount = _amount.toString();
     }
-    final _naira2ktc =
-        Provider.of<PlatformChargesProvider>(context, listen: false).nairaToKtc;
-    final _amount = double.parse(_amountController.text) * _naira2ktc;
-    _ktcAmount = _amount.toString();
   }
 
   num get _walletBalance {
@@ -204,6 +274,57 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                                 const SizedBox(
                                   height: 20,
                                 ),
+                                const TextFieldText(text: 'Withdrawal Method'),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                MyDropDown(
+                                  items: ['Local Bank', 'PayPal'].map(
+                                    (val) {
+                                      return DropdownMenuItem<String>(
+                                        value: val,
+                                        child: Text(
+                                          val,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ).toList(),
+                                  onChanged: (val) {
+                                    if (val == 'Local Bank') {
+                                      setState(
+                                        () {
+                                          paymentMethodDropdown = 'NGN';
+                                        },
+                                      );
+                                    } else {
+                                      setState(
+                                        () {
+                                          paymentMethodDropdown = 'USD';
+                                        },
+                                      );
+                                    }
+                                  },
+                                  hint: const Text(
+                                    'Choose a Withdrawal Method',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                  validator: (val) {
+                                    if (val == null) {
+                                      return 'Pick a withdrawal method';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
                                 const TextFieldText(text: 'Amount'),
                                 const SizedBox(
                                   height: 5,
@@ -249,11 +370,13 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                                       height: double.minPositive,
                                     ),
                                     counterText: "",
-                                    prefixIcon: const Padding(
-                                      padding: EdgeInsets.all(12.0),
+                                    prefixIcon: Padding(
+                                      padding: const EdgeInsets.all(12.0),
                                       child: Text(
-                                        '₦',
-                                        style: TextStyle(
+                                        paymentMethodDropdown == "USD"
+                                            ? '\$'
+                                            : '₦',
+                                        style: const TextStyle(
                                             fontFamily: '',
                                             fontSize: 15,
                                             color: Colors.grey),
@@ -331,97 +454,57 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                                 const SizedBox(
                                   height: 15,
                                 ),
-                                const TextFieldText(text: 'Withdrawal Method'),
+                                if (paymentMethodDropdown != null)
+                                  TextFieldText(
+                                      text: paymentMethodDropdown == "NGN"
+                                          ? 'Select Account'
+                                          : 'Enter PayPal Email'),
                                 const SizedBox(
                                   height: 5,
                                 ),
-                                MyDropDown(
-                                  items: ['Local Bank'].map(
-                                    (val) {
-                                      return DropdownMenuItem<String>(
-                                        value: val,
-                                        child: Text(
-                                          val,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
+                                if (paymentMethodDropdown == "NGN")
+                                  Container(
+                                    padding: const EdgeInsets.only(
+                                      left: 10,
+                                    ),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        color: MyColors.textFieldColor),
+                                    child: Row(
+                                      children: [
+                                        const Text(
+                                          'Choose Bank Account',
+                                          style: TextStyle(
                                             fontSize: 12,
                                           ),
                                         ),
-                                      );
-                                    },
-                                  ).toList(),
-                                  onChanged: (val) {
-                                    if (val == 'Local Bank') {
-                                      setState(
-                                        () {
-                                          _paymentMethodDropdown =
-                                              'flutterwave';
-                                        },
-                                      );
-                                    }
-                                  },
-                                  hint: const Text(
-                                    'Choose a Withdrawal Method',
-                                    style: TextStyle(
-                                      fontSize: 12,
+                                        const Spacer(),
+                                        IconButton(
+                                          padding: EdgeInsets.zero,
+                                          onPressed: () {
+                                            if (!_showBanks) {
+                                              setState(() {
+                                                _showBanks = true;
+                                              });
+                                            } else {
+                                              setState(() {
+                                                _showBanks = false;
+                                              });
+                                            }
+                                          },
+                                          icon: Icon(
+                                            Icons.arrow_drop_down_circle,
+                                            size: 17,
+                                            color: _showBanks
+                                                ? Colors.grey
+                                                : MyColors.primaryColor,
+                                          ),
+                                        )
+                                      ],
                                     ),
                                   ),
-                                  validator: (val) {
-                                    if (val == null) {
-                                      return 'Pick a withdrawal method';
-                                    } else {
-                                      return null;
-                                    }
-                                  },
-                                ),
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                const TextFieldText(text: 'Select Account'),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.only(
-                                    left: 10,
-                                  ),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: MyColors.textFieldColor),
-                                  child: Row(
-                                    children: [
-                                      const Text(
-                                        'Choose Bank Account',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                      const Spacer(),
-                                      IconButton(
-                                        padding: EdgeInsets.zero,
-                                        onPressed: () {
-                                          if (!_showBanks) {
-                                            setState(() {
-                                              _showBanks = true;
-                                            });
-                                          } else {
-                                            setState(() {
-                                              _showBanks = false;
-                                            });
-                                          }
-                                        },
-                                        icon: Icon(
-                                          Icons.arrow_drop_down_circle,
-                                          size: 17,
-                                          color: _showBanks
-                                              ? Colors.grey
-                                              : MyColors.primaryColor,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                if (_showBanks)
+                                if (_showBanks &&
+                                    paymentMethodDropdown == "NGN")
                                   SizedBox(
                                     height: 120,
                                     child: ListView.builder(
@@ -527,6 +610,43 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                                           );
                                         }),
                                   ),
+                                if (paymentMethodDropdown == "USD")
+                                  TextFormField(
+                                    controller: _paypalEmailController,
+                                    validator: ((value) {
+                                      if ((value == null || value.isEmpty) &&
+                                          paymentMethodDropdown == "USD") {
+                                        return 'This field cannot be empty';
+                                      } else {
+                                        return null;
+                                      }
+                                    }),
+                                    onFieldSubmitted: (value) {
+                                      FocusScope.of(context).unfocus();
+                                    },
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                    ),
+                                    decoration: InputDecoration(
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 12,
+                                      ),
+                                      filled: true,
+                                      fillColor: _textFieldColor,
+                                      isDense: true,
+                                      hintText: 'Enter paypal email',
+                                      hintStyle: const TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 13,
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: BorderSide.none,
+                                      ),
+                                    ),
+                                  ),
                                 const SizedBox(
                                   height: 15,
                                 ),
@@ -577,7 +697,13 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                           ),
                           SubmitButton(
                               action: () {
-                                _withdrawMoney();
+                                if (paymentMethodDropdown == null) {
+                                  return;
+                                } else if (paymentMethodDropdown == "NGN") {
+                                  _withdrawMoney();
+                                } else {
+                                  _withdrawUsdMoney();
+                                }
                               },
                               title: 'Continue')
                         ],

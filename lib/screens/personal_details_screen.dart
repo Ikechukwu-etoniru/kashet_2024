@@ -86,6 +86,7 @@ class _PersonalDetailScreenState extends State<PersonalDetailScreen> {
   Widget build(BuildContext context) {
     final _user = Provider.of<AuthProvider>(context, listen: false).userList[0];
     final userIdStatus = Provider.of<AuthProvider>(context).userVerified;
+    print(_user.userCurrency);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -107,18 +108,18 @@ class _PersonalDetailScreenState extends State<PersonalDetailScreen> {
                               fontWeight: FontWeight.bold, fontSize: 14),
                         ),
                         const Spacer(),
-                        if (userIdStatus != IDStatus.approved)
-                          IconButton(
-                            onPressed: () {
-                              Navigator.of(context).pushNamed(
-                                  EditPersonalDetailsScreen.routeName);
-                            },
-                            icon: const Icon(
-                              Icons.mode_edit,
-                              size: 18,
-                              color: MyColors.primaryColor,
-                            ),
-                          )
+                        // if (userIdStatus == IDStatus.approved && _user.userCurrency != null)
+                        IconButton(
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushNamed(EditPersonalDetailsScreen.routeName);
+                          },
+                          icon: const Icon(
+                            Icons.mode_edit,
+                            size: 18,
+                            color: MyColors.primaryColor,
+                          ),
+                        )
                       ],
                     ),
                     const SizedBox(

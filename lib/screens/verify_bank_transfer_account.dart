@@ -76,7 +76,6 @@ class _VerifyBankTransferAccountState extends State<VerifyBankTransferAccount> {
       });
       final response = await http.post(url, body: _body, headers: _header);
       final res = json.decode(response.body);
-      print(res);
       if (res["status"] == true && res['account_name'] != null) {
         _beneName = res['account_name'];
 

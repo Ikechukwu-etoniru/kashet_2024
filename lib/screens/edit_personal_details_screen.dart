@@ -167,7 +167,7 @@ class _EditPersonalDetailsScreenState extends State<EditPersonalDetailsScreen> {
             ? const IsErrorScreen()
             : SafeArea(
                 child: Scaffold(
-                  resizeToAvoidBottomInset: false,
+                  // resizeToAvoidBottomInset: false,
                   appBar: AppBar(
                     title: const Text('Edit your Personal Details'),
                   ),
@@ -187,6 +187,7 @@ class _EditPersonalDetailsScreenState extends State<EditPersonalDetailsScreen> {
                                   height: 5,
                                 ),
                                 TextFormField(
+                                  enabled: false,
                                   initialValue: _user.firstName,
                                   textCapitalization: TextCapitalization.words,
                                   onSaved: (value) {
@@ -227,6 +228,7 @@ class _EditPersonalDetailsScreenState extends State<EditPersonalDetailsScreen> {
                                   height: 5,
                                 ),
                                 TextFormField(
+                                  enabled: false,
                                   initialValue: _user.lastName,
                                   textCapitalization: TextCapitalization.words,
                                   onSaved: (value) {
@@ -510,19 +512,6 @@ class _EditPersonalDetailsScreenState extends State<EditPersonalDetailsScreen> {
                           if (!_isButtonLoading)
                             SubmitButton(
                               action: () {
-                                if (Provider.of<AuthProvider>(context)
-                                        .userVerified ==
-                                    IDStatus.approved) {
-                                  Alert.showerrorDialog(
-                                      context: context,
-                                      text:
-                                          'You cant change your personal details after your identity has been verified',
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      });
-                                  return;
-                                }
-
                                 _updateProfile();
                               },
                               title: 'Update Profile',

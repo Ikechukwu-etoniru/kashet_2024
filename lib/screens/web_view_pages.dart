@@ -408,8 +408,6 @@ class _WebViewPagesStripeContState extends State<WebViewPagesStripeCont> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (request) {
-            print(
-                'vvvvvvxvxvxvxvxvxvxvxvxvxvxvxvvvxvxvxvvxvxvx   ${request.url}');
             if (request.url.contains('${ApiUrl.baseURL}user/pay/success')) {
               setState(() {
                 _dstReached = true;

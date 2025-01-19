@@ -147,7 +147,6 @@ class AuthProvider with ChangeNotifier {
       final _header = await ApiUrl.setHeaders();
       final httpResponse = await http.get(url, headers: _header);
       final res = json.decode(httpResponse.body);
-
       if (httpResponse.statusCode == 200 && res['success'] == 'true') {
         // Delete user from list and add another user
         _userList.clear();
@@ -176,14 +175,19 @@ class AuthProvider with ChangeNotifier {
               : res['user Details']['details']['country']['currency'],
         );
 
+        print(res['user Details']['details']);
+        print(res['user Details']['details']['country']);
+
         _userList.add(newUser);
         faStatus = null;
         faStatus = int.parse(res['user Details']['two_fa_status'].toString());
 
+        print(newUser.isVerified!['is_approved']);
+
         // Set user verification status
 
         if (newUser.isVerified == null) {
-        userVerified = IDStatus.notSubmitted;
+          userVerified = IDStatus.notSubmitted;
         } else if (!newUser.isVerified!['is_approved']) {
           userVerified = IDStatus.notSubmitted;
         } else {

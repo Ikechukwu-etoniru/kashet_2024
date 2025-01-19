@@ -110,7 +110,6 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
       final response = await http.post(_url, body: _body, headers: _header);
 
       final res = json.decode(response.body);
-      print(res);
       if (response.statusCode == 200 && res['success'] == true) {
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(

@@ -511,6 +511,76 @@ class Alert {
         });
   }
 
+  static Future<bool?> confirmationDialogUSD(
+      {required BuildContext context,
+      required String charges,
+      required String amount,
+      required String payPalName}) {
+    var totalAmount = double.parse(amount) + double.parse(charges);
+    return showDialog<bool>(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return Dialog(
+            elevation: 30,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Confirm Withdrawal !!!',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Divider(thickness: 1),
+                  DialogRow(title: 'Amount Requested', content: 'KTC $amount'),
+                  const Divider(thickness: 1),
+                  DialogRow(title: 'Charges', content: 'KTC $charges'),
+                  const Divider(thickness: 1),
+                  DialogRow(title: 'Total Amount', content: 'KTC $totalAmount'),
+                  const Divider(thickness: 1),
+                  DialogRow(title: 'Paypal Address', content: payPalName),
+                  const Divider(thickness: 1),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    children: [
+                      const Spacer(),
+                      DialogChip(
+                          onTap: () {
+                            Navigator.of(context).pop(false);
+                          },
+                          text: 'Cancel',
+                          color: Colors.red),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      DialogChip(
+                          onTap: () {
+                            Navigator.of(context).pop(true);
+                          },
+                          text: 'Continue',
+                          color: Colors.green),
+                      const Spacer(),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
   static Future<void> successDialogAddBank(BuildContext context) async {
     showDialog(
         context: context,
